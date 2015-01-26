@@ -47,12 +47,12 @@ if(not os.path.isdir(installationImgDir)):
 """
 Get file list
 """
-srcList = [file for file in os.listdir(path=sourceDir) if file.endswith('.py')]
-jsonList = [file for file in os.listdir(path=sourceDir + "/json") if file.endswith('.json')]
-loadersList = [file for file in os.listdir(path=sourceDir + "/loaders") if file.endswith('.py')]
-beeConList = [file for file in os.listdir(path=sourceDir + "/BeeConnect") if file.endswith('.py')]
-fontsList = [file for file in os.listdir(path=sourceDir + "/Fonts") if file.endswith('.ttf')]
-imgList = [file for file in os.listdir(path=sourceDir + "/Images")]
+srcList = [file for file in os.listdir(sourceDir) if file.endswith('.py')]
+jsonList = [file for file in os.listdir(sourceDir + "/json") if file.endswith('.json')]
+loadersList = [file for file in os.listdir(sourceDir + "/loaders") if file.endswith('.py')]
+beeConList = [file for file in os.listdir(sourceDir + "/BeeConnect") if file.endswith('.py')]
+fontsList = [file for file in os.listdir(sourceDir + "/Fonts") if file.endswith('.ttf')]
+imgList = [file for file in os.listdir(sourceDir + "/Images")]
 
 """
 Copy files to BeePanel dir
