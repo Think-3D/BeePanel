@@ -1,0 +1,13 @@
+{
+    "interfaces":[
+        {
+            "InterfaceName":"Settings"
+        },
+        {
+            "InterfaceName":"FileBrowser"
+        },
+        {
+            "InterfaceName":"About"
+        }
+    ]
+}
