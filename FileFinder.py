@@ -36,10 +36,13 @@ class FileFinder():
         loads system folders path and platform type
         
         """
+        pMachine = platform.machine()
+        self.homePath = os.path.expanduser("~")
+
+        if(pMachine == 'armv6l'):       #assume we're using a raspberri pi
+            self.homePath = "/home/pi"
         
         self.currentDir = os.getcwd()
-        
-        self.homePath = os.path.expanduser("~")
         
         self.pSystem = platform.system()
             
