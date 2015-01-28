@@ -1,35 +1,14 @@
+#!/usr/bin/env python
 
-from distutils.core import setup
-from shutil import copyfile
+
 import os
-import platform
-import getpass
-#import BeeConnect
-#import Loaders
-
-setup(
-      name='BeePanel',
-      description='Python BeeTheFirst Panel',
-      author='BVC Electronic Systems',
-      author_email='mgomes@beeverycreative.com',
-      license = '',
-      url='https://github.com/beeverycreative/BeePanel',
-      packages=['BeeConnect', 'Loaders'],
-      )
+import shutil
+from shutil import copyfile
 
 """
 Directories definitions
 """
-pMachine = platform.machine()
-user = getpass.getuser()
-
 homeDir = os.path.expanduser("~")
-
-if(pMachine == 'armv6l'):       #assume we're using a raspberri pi
-    homeDir = "/home/pi"
-
-print('home Dir: ',homeDir)
-
 installationDir = homeDir + "/BeePanel"
 sourceDir = os.getcwd()
 installationJsonDir = installationDir + "/Json"
@@ -75,9 +54,6 @@ beeConList = [file for file in os.listdir(sourceDir + "/BeeConnect") if file.end
 fontsList = [file for file in os.listdir(sourceDir + "/Fonts") if file.endswith('.ttf')]
 imgList = [file for file in os.listdir(sourceDir + "/Images")]
 
-print()
-print(srcList)
-print()
 """
 Copy files to BeePanel dir
 """
@@ -87,11 +63,11 @@ for src in srcList:
 for json in jsonList:
     copyfile(sourceDir + "/Json/" + str(json), installationJsonDir + "/" + str(json))
 
-#for loader in loadersList:
-#    copyfile(sourceDir + "/Loaders/" + str(loader), installationLoadersDir + "/" + str(loader))
+for loader in loadersList:
+    copyfile(sourceDir + "/Loaders/" + str(loader), installationLoadersDir + "/" + str(loader))
     
-#for con in beeConList:
-#    copyfile(sourceDir + "/BeeConnect/" + str(con), installationBeeConnectDir + "/" + str(con))
+for con in beeConList:
+    copyfile(sourceDir + "/BeeConnect/" + str(con), installationBeeConnectDir + "/" + str(con))
 
 for font in fontsList:
     copyfile(sourceDir + "/Fonts/" + str(font), installatonFontsDir + "/" + str(font))
