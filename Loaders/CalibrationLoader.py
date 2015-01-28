@@ -1,44 +1,37 @@
 #!/usr/bin/env python
 
-"""
-BEETFT v0.1
+r"""
 
-BEETFT creates a simple interface to control basic function of the BEETHEFIRST 3D printer.
-BEETFT requires Pygame to be installed. Pygame can be downloaded from http://pygame.org
-BEETFT is developed by Marcos Gomes
-https://github.com/marcosfg/BEETFT
+CalibrationLoader Class
 
+This class is responsible for loading the interface components configuration 
+from the .json configuration file.
 
-The MIT License (MIT)
+This class exports the following methods:
 
-Copyright (c) 2014 Marcos Gomes
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,p
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
+__init__()            Initializes current class
+GetFont(fType,fSyze)    returns pygame font from a given font type and syze
+GetLeftButtonList()        returns interface button list
+GetLblsFont()            returns interface labels font list
+GetLblsFontColor()            returns interface labels font color list
+GetLblsXPos()            returns interface labels X coordinate list
+GetLblsYPos()            returns interface labels Y coordinate list
+GetLeftImagePath()        returns left image path
+GetRightImagePath()        returns right image path
+GetLeftImgX()        returns left image X coordinate
+GetLeftImgY()        returns left image Y coordinate
+GetRightImgX()        returns right image X coordinate
+GetRightImgY()        returns right image Y coordinate
 """
 
-__author__ = "Marcos Gomes"
-__license__ = "MIT"
+
+__author__ = "BVC Electronic Solutions"
+__license__ = ""
 
 import json
 
-import src.BeePanel_Button as BeePanel_Button
-import src.FileFinder as FileFinder
+import BeePanel_Button
+import FileFinder
 import pygame
 
 class CalibrationLoader():
@@ -66,9 +59,14 @@ class CalibrationLoader():
     """*************************************************************************
                                 Init Method 
     
-    Inits current screen components
+    
     *************************************************************************"""
     def __init__(self, interfaceJson):
+        r"""
+        __init__ method
+        
+        Initialization method. Loads configurations from the json file
+        """
         
         ff = FileFinder.FileFinder()
         
@@ -155,9 +153,10 @@ class CalibrationLoader():
             
         return
     
-    """
-    GetFont
-    """
+    """*************************************************************************
+                                GetFont Method 
+    
+    *************************************************************************"""
     def GetFont(self,fontType,fontSize):
         r"""
         GetFont method
@@ -184,76 +183,173 @@ class CalibrationLoader():
             
         return font
     
-    """
-    GetLeftButtonsList(self)
+    """*************************************************************************
+                                GetButtonsList Method 
     
-    returns the list with the jog buttons
-    """
-    def GetLeftButtonsList(self,calibrationState):
+    *************************************************************************"""
+    def GetButtonsList(self,calibrationState):
+        r"""
+        GetLeftButtonsList method
+        
+        returns buttons list for the selected interface state
+        
+        arguments:
+            calibrationState - interface state
+            
+        returns:
+            buttons list
+        """
         
         return self.interfaceButtons[calibrationState]
     
-    """
-    GetlblFont
-    """
+    """*************************************************************************
+                                GetlblFont Method 
+    
+    *************************************************************************"""
     def GetlblFont(self,calibrationState):
+        r"""
+        GetlblFont method
+        
+        returns label font list for the selected interface state
+        
+        arguments:
+            calibrationState - interface state
+            
+        returns:
+            labels font list
+        """
         return self.lblFont[calibrationState]
     
-    """
-    GetlblFontColor
-    """
+    """*************************************************************************
+                                GetlblFontColor Method 
+    
+    *************************************************************************"""
     def GetlblFontColor(self,calibrationState):
+        r"""
+        GetlblFontColor method
+        
+        returns label font color list for the selected interface state
+        
+        arguments:
+            calibrationState - interface state
+            
+        returns:
+            labels font color list
+        """
         return self.lblFontColor[calibrationState]
     
     
-    """
-    GetlblXPos
-    """
+    """*************************************************************************
+                                GetlblXPos Method 
+    
+    *************************************************************************"""
     def GetlblXPos(self,calibrationState):
+        r"""
+        GetlblXPos method
+        
+        returns label x coordinates list for the selected interface state
+        
+        arguments:
+            calibrationState - interface state
+            
+        returns:
+            labels x coordinate list
+        """
         return self.lblXPos[calibrationState]
     
-    """
-    GetlblYPos
-    """
-    def GetlblYPos(self,calibrationState):
-        return self.lblYPos[calibrationState]
     
     """*************************************************************************
-                                IMAGES
+                                GetlblYPos Method 
+    
+    *************************************************************************"""
+    def GetlblYPos(self,calibrationState):
+        r"""
+        GetlblYPos method
+        
+        returns label Y coordinates list for the selected interface state
+        
+        arguments:
+            calibrationState - interface state
+            
+        returns:
+            labels Y coordinate list
+        """
+        return self.lblYPos[calibrationState]
+    
+    
+    """*************************************************************************
+    ****************************IMAGES******************************************
     *************************************************************************"""
     
-    """
-    GetLeftImgPath
-    """
+    """*************************************************************************
+                                GetLeftImgPath Method 
+    
+    *************************************************************************"""
     def GetLeftImgPath(self):
+        r"""
+        GetLeftImgPath method
+        
+        returns left image path
+        """
         return self.leftImgPath
     
-    """
-    GetRightImgPath
-    """
+    """*************************************************************************
+                                GetRightImgPath Method 
+    
+    *************************************************************************"""
     def GetRightImgPath(self):
+        r"""
+        GetRightImgPath method
+        
+        returns right image path
+        """
         return self.rightImgPath
     
-    """
-    GetLeftImgX
-    """
+    
+    """*************************************************************************
+                                GetLeftImgX Method 
+    
+    *************************************************************************"""
     def GetLeftImgX(self):
+        r"""
+        GetLeftImgX method
+        
+        returns left image X coordinate
+        """
         return self.leftImgX
     
-    """
-    GetLeftImgY
-    """
+    """*************************************************************************
+                                GetLeftImgY Method 
+    
+    *************************************************************************"""
     def GetLeftImgY(self):
+        r"""
+        GetLeftImgY method
+        
+        returns left image Y coordinate
+        """
         return self.leftImgY
     
-    """
-    GetRightImgX
-    """
+    """*************************************************************************
+                                GetRightImgX Method 
+    
+    *************************************************************************"""
     def GetRightImgX(self):
+        r"""
+        GetRightImgX method
+        
+        returns Right image X coordinate
+        """
         return self.rightImgX
     
-    """
-    GetRightImgY
-    """
+    """*************************************************************************
+                                GetRightImgY Method 
+    
+    *************************************************************************"""
     def GetRightImgY(self):
+        r"""
+        GetRightImgY method
+        
+        returns Right image Y coordinate
+        """
         return self.rightImgY

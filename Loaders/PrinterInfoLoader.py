@@ -37,22 +37,28 @@ __license__ = "MIT"
 
 import json
 
-import src.BeePanel_Button as BeePanel_Button
-import src.FileFinder as FileFinder
+import FileFinder
 import pygame
 
-class JogLoader():
+class PrinterInfoLoader():
     
     interfaceJson = None
+    
     lblJson = None
-    ButtonsJson = None
+    lblValJson = None
     
     lblFont = None
     lblFontColor = None
     lblXPos = None
     lblYPos = None
+    lblText = None
     
-    interfaceButtons = []
+    lblValFont = None
+    lblValFontColor = None
+    
+    lblValXPos = None
+    lblValFont = None
+    lblValFontColor = None
     
     """*************************************************************************
                                 Init Method 
@@ -62,59 +68,53 @@ class JogLoader():
     def __init__(self, interfaceJson):
         
         self.interfaceJson = interfaceJson
-        self.lblJson = json.loads(json.dumps(self.interfaceJson['TopLabel']))
-        self.ButtonsJson = json.loads(json.dumps(self.interfaceJson['Buttons']))
-        
-        lblFontType = self.lblJson['FontType']
-        lblFontSize = int(self.lblJson['FontSize'])
-        lblFColor = self.lblJson['lblFontColor']
-        self.lblXPos = int(self.lblJson['X'])
-        self.lblYPos = int(self.lblJson['Y'])
-        
-        self.lblFont = self.GetFont(lblFontType,lblFontSize)
-        
-        splitColor = lblFColor.split(",")
-        self.lblFontColor = pygame.Color(int(splitColor[0]),int(splitColor[1]),int(splitColor[2]))
         
         
-        for btn in self.ButtonsJson:
-            btnX = int(btn['X'])
-            btnY = int(btn['Y'])
-            btnWidth = int(btn['Width'])
-            btnHeight = int(btn['Height'])
-            btnType = btn['ButtonType']
+        self.lblJson = json.loads(json.dumps(self.interfaceJson['Labels']))
+        self.lblValJson = json.loads(json.dumps(self.interfaceJson['ValuesSettings']))
+        
+        """
+        Values Labels Configuration
+        
+        "X":"220",
+                    "FontType":"Bold",
+                    "FontSize":"12",
+                    "FontColor":"0,0,0"
+        """
+        self.lblValXPos = int(self.lblValJson['X'])
+        lblValFontType = self.lblValJson['FontType']
+        lblValFontSize = int(self.lblValJson['FontSize'])
+        self.lblValFont = self.GetFont(lblValFontType,lblValFontSize)
+        lblValFColor = self.lblValJson['FontColor']
+        splitColor = lblValFColor.split(",")
+        self.lblValFontColor = pygame.Color(int(splitColor[0]),int(splitColor[1]),int(splitColor[2]))
+        
+        """
+        Load Labels Configuration
+        """
+        self.lblText = []
+        self.lblXPos = []
+        self.lblYPos = []
+        self.lblFont = []
+        self.lblFontColor = []
+        
+        for lbl in self.lblJson:
+            lblFontType = lbl['FontType']
+            lblFontSize = int(lbl['FontSize'])
+            lblFColor = lbl['FontColor']
             
-            if btnType == "Text":
-                btnTitle = btn['Title']
-                bgColor = btn['bgColor'].split(",")
-                fColor = btn['FontColor'].split(",")
-                fType = btn['FontType']
-                fSize = int(btn['FontSize'])
-                btnName = btn['ButtonName']
-                
-                jogBtn = BeePanel_Button.Button(btnX,btnY,btnWidth,btnHeight,btnTitle,
-                                                int(bgColor[0]),int(bgColor[2]),int(bgColor[2]),
-                                                int(fColor[0]),int(fColor[2]),int(fColor[2]),
-                                                fType,fSize, None, None, None, btnName)
-                newBtn = jogBtn.GetTextButton()
-                newBtn._propSetName(btnTitle)
-                self.interfaceButtons.append(newBtn)
-            elif btnType == "Img":
-                btnTitle = btn['Title']
-                normalPath = btn['NormalPath']
-                downPath = btn['DownPath']
-                highlightedPath = btn['HighlightedPath']
-                btnName = btn['ButtonName']
-                
-                jogBtn = BeePanel_Button.Button(btnX,btnY,btnWidth,btnHeight,None,
-                                                None,None,None,None,None,None,
-                                                None,None,
-                                                normalPath,downPath,highlightedPath,
-                                                btnName)
-                newBtn = jogBtn.GetImageButton()
-                newBtn._propSetName(btnTitle)
-                self.interfaceButtons.append(newBtn)
-                
+            self.lblXPos.append(int(lbl['X']))
+            self.lblYPos.append(int(lbl['Y']))
+            self.lblText.append(lbl['Text'])
+            
+            font = self.GetFont(lblFontType,lblFontSize)
+            
+            self.lblFont.append(font)
+            
+            splitColor = lblFColor.split(",")
+            fontColor = pygame.Color(int(splitColor[0]),int(splitColor[1]),int(splitColor[2]))
+            self.lblFontColor.append(fontColor)
+        
         return
     
     """
@@ -147,13 +147,12 @@ class JogLoader():
         return font
     
     """
-    GetLeftButtonsList(self)
+    GetlblText(self)
     
-    returns the list with the jog buttons
+    returns the list with the label text
     """
-    def GetLeftButtonsList(self):
-        
-        return self.interfaceButtons
+    def GetlblText(self):
+        return self.lblText
     
     """
     GetlblFont
@@ -180,3 +179,21 @@ class JogLoader():
     def GetlblYPos(self):
         return self.lblYPos
     
+    """
+    GetlblValFont
+    """
+    def GetlblValFont(self):
+        return self.lblValFont
+    
+    """
+    GetlblValFontColor
+    """
+    def GetlblValFontColor(self):
+        return self.lblValFontColor
+    
+    
+    """
+    GetlblValXPos
+    """
+    def GetlblValXPos(self):
+        return self.lblValXPos

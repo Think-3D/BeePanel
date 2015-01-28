@@ -1,18 +1,29 @@
-#!/usr/bin/env python
 
-
-import os
-import shutil
+from distutils.core import setup
 from shutil import copyfile
+import os
+
+import BeeConnect
+import Loaders
+
+setup(
+      name='BeePanel',
+      description='Python BeeTheFirst Panel',
+      author='BVC Electronic Systems',
+      author_email='mgomes@beeverycreative.com',
+      license = '',
+      url='',
+      packages=['BeeConnect', 'Loaders'],
+      )
 
 """
 Directories definitions
 """
 homeDir = os.path.expanduser("~")
 installationDir = homeDir + "/BeePanel"
-sourceDir = os.getcwd() + "/src"
-installationJsonDir = installationDir + "/json"
-installationLoadersDir = installationDir + "/loaders"
+sourceDir = os.getcwd()
+installationJsonDir = installationDir + "/Json"
+installationLoadersDir = installationDir + "/Loaders"
 installationBeeConnectDir = installationDir + "/BeeConnect"
 installatonFontsDir = installationDir + "/Fonts"
 installationImgDir = installationDir + "/Images"
@@ -48,8 +59,8 @@ if(not os.path.isdir(installationImgDir)):
 Get file list
 """
 srcList = [file for file in os.listdir(sourceDir) if file.endswith('.py')]
-jsonList = [file for file in os.listdir(sourceDir + "/json") if file.endswith('.json')]
-loadersList = [file for file in os.listdir(sourceDir + "/loaders") if file.endswith('.py')]
+jsonList = [file for file in os.listdir(sourceDir + "/Json") if file.endswith('.json')]
+loadersList = [file for file in os.listdir(sourceDir + "/Loaders") if file.endswith('.py')]
 beeConList = [file for file in os.listdir(sourceDir + "/BeeConnect") if file.endswith('.py')]
 fontsList = [file for file in os.listdir(sourceDir + "/Fonts") if file.endswith('.ttf')]
 imgList = [file for file in os.listdir(sourceDir + "/Images")]
@@ -61,10 +72,10 @@ for src in srcList:
     copyfile(sourceDir + "/" + str(src), installationDir + "/" + str(src))
 
 for json in jsonList:
-    copyfile(sourceDir + "/json/" + str(json), installationJsonDir + "/" + str(json))
+    copyfile(sourceDir + "/Json/" + str(json), installationJsonDir + "/" + str(json))
 
 for loader in loadersList:
-    copyfile(sourceDir + "/loaders/" + str(loader), installationLoadersDir + "/" + str(loader))
+    copyfile(sourceDir + "/Loaders/" + str(loader), installationLoadersDir + "/" + str(loader))
     
 for con in beeConList:
     copyfile(sourceDir + "/BeeConnect/" + str(con), installationBeeConnectDir + "/" + str(con))

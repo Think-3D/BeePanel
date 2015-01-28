@@ -37,10 +37,10 @@ __license__ = "MIT"
 
 import json
 
-import src.BeePanel_Button as BeePanel_Button
-import src.FileFinder as FileFinder
+import BeePanel_Button
+import FileFinder
 import pygame
-import src.ProgressBar as ProgressBar
+import ProgressBar
 
 class FileBrowserLoader():
     

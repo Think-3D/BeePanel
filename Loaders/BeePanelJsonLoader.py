@@ -1,76 +1,63 @@
 #!/usr/bin/env python
 
-"""
-BEETFT v0.1
-
-BEETFT creates a simple interface to control basic function of the BEETHEFIRST 3D printer.
-BEETFT requires Pygame to be installed. Pygame can be downloaded from http://pygame.org
-BEETFT is developed by Marcos Gomes
-https://github.com/marcosfg/BEETFT
-
-
-The MIT License (MIT)
-
-Copyright (c) 2014 Marcos Gomes
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,p
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-"""
-
 r"""
 
+BeePanelJsonLoadder Class
+
+This class is responsible for loading the interface loaders with the correct
+json configuration file
+
+This class exports the following methods:
+
+__init__()            Initializes current class
+GetLeftMenuLoader()     returns LeftMenuInterface Object
+GetPrinterInfoLoader()     returns PrinterInfoInterface Object
+GetJogLoader()         returns JogInterface Object
+GetCalibrationLoader()     returns CalibrationInterface Object
+GetSettingsLoader()     returns SettingsInterface Object
+GetFileBrowserLoader()     returns FileBrowserInterface Object
+GetAboutLoader()     returns AboutInterface Object
+GetPrintingLoader()     returns PrintingInterface Object
+
+GetDefaultScreen()        returns default start screen Name
 """
 
-__author__ = "Marcos Gomes"
-__license__ = "MIT"
+
+__author__ = "BVC Electronic Solutions"
+__license__ = ""
 
 
 import json
-import src.BeePanelDisplay as BeePanelDisplay
-import src.FileFinder as FileFinder
+import BeePanelDisplay
+import FileFinder
 
-import src.loaders.AboutLoader as AboutLoader
-import src.loaders.CalibrationLoader as CalibrationLoader
-import src.loaders.FilamentChangeLoader as FilamentChangeLoader
-import src.loaders.FileBrowserLoader as FileBrowserLoader
-import src.loaders.JogLoader as JogLoader
-import src.loaders.LeftMenuLoader as LeftMenuLoader
-import src.loaders.PrinterInfoLoader as PrinterInfoLoader
-import src.loaders.PrintingLoader as PrintingLoader
-import src.loaders.SettingsLoader as SettingsLoader
+import Loaders.AboutLoader as AboutLoader
+import Loaders.CalibrationLoader as CalibrationLoader
+import Loaders.FilamentChangeLoader as FilamentChangeLoader
+import Loaders.FileBrowserLoader as FileBrowserLoader
+import Loaders.JogLoader as JogLoader
+import Loaders.LeftMenuLoader as LeftMenuLoader
+import Loaders.PrinterInfoLoader as PrinterInfoLoader
+import Loaders.PrintingLoader as PrintingLoader
+import Loaders.SettingsLoader as SettingsLoader
+
 
 class jsonLoader():
     
     """
     Json vars
     """
-    #jsonPath = "BEETFTConfig.json"
     
-    displayJsonPath = "/json/DisplayConfig.json"
-    leftMenuJsonPath = "/json/LeftMenuButtonsConfiguration.json"
-    printerInfoJsonPath = "/json/PrinterInfoConfiguration.json"
-    jogJsonPath = "/json/JogConfiguration.json"
-    calibrationJsonPath = "/json/CalibrationConfiguration.json"
-    filamentChangeJsonPath = "/json/FilamentChangeConfiguration.json"
-    settingsJsonPath = "/json/SettingsConfiguration.json"
-    fileBrowserJsonPath = "/json/FileBrowserConfiguration.json"
-    aboutJsonPath = "/json/AboutConfiguration.json"
-    printingJsonPath = "/json/PrintingConfiguration.json"
+    displayJsonPath = "/Json/DisplayConfig.json"
+    leftMenuJsonPath = "/Json/LeftMenuButtonsConfiguration.json"
+    printerInfoJsonPath = "/Json/PrinterInfoConfiguration.json"
+    jogJsonPath = "/Json/JogConfiguration.json"
+    calibrationJsonPath = "/Json/CalibrationConfiguration.json"
+    filamentChangeJsonPath = "/Json/FilamentChangeConfiguration.json"
+    settingsJsonPath = "/Json/SettingsConfiguration.json"
+    fileBrowserJsonPath = "/Json/FileBrowserConfiguration.json"
+    aboutJsonPath = "/Json/AboutConfiguration.json"
+    printingJsonPath = "/Json/PrintingConfiguration.json"
     
     """
     Display Configuration class
@@ -103,9 +90,13 @@ class jsonLoader():
     """*************************************************************************
                                 Init Method 
     
-    Loads Json file
     *************************************************************************"""
     def __init__(self):
+        r"""
+        __init__ method
+        
+        This method loads every interface loader and its interfaces objects
+        """
     
         ff = FileFinder.FileFinder()
         
@@ -218,103 +209,132 @@ class jsonLoader():
         
         return
     
-    """
-    GetLeftMenuLoader(self)
+    """*************************************************************************
+                                GetLeftMenuLoader Method 
     
-    returns Left Menu Loader Class
-    """
+    *************************************************************************"""
     def GetLeftMenuLoader(self):
+        r"""
+        GetLeftMenuLoader method
+        
+        returns LeftMenuLoader Object
+        """
         
         return self.leftMenuLoader
     
-    """
-    GetPrinterInfoInterface(self)
+    """*************************************************************************
+                                GetPrinterInfoInterface Method 
     
-    Loads configuration for Printer Info Screen
-    """
+    *************************************************************************"""
     def GetPrinterInfoInterface(self):
+        r"""
+        GetPrinterInfoInterface method
         
+        returns PrinterInfo Interface object
+        """
         return self.printerInfoInterface
     
-    """
-    GetJogInterface(self)
+    """*************************************************************************
+                                GetJogInterface Method 
     
-    Loads configuration or Jog Screen
-    """
+    *************************************************************************"""
     def GetJogInterface(self):
+        r"""
+        GetJogInterface method
+        
+        returns Jog Interface Object
+        """
         
         return self.jogInterface
     
-    """
-    GetCalibrationInterface(self)
+    """*************************************************************************
+                                GetCalibrationInterface Method 
     
-    Loads configuration or Calibration Screen
-    """
+    *************************************************************************"""
     def GetCalibrationInterface(self):
+        r"""
+        GetCalibrationInterface method
+        
+        returns Calibration Interface Object
+        """
         
         return self.calibrationInterface
     
-    """
-    GetFilamentChangeInterface(self)
+    """*************************************************************************
+                                GetFilamentChangeInterface Method 
     
-    Loads configuration or Filament Change Screen
-    """
+    *************************************************************************"""
     def GetFilamentChangeInterface(self):
+        r"""
+        GetFilamentChangeInterface method
+        
+        returns FilamentChange Interface Object
+        """
         
         return self.filamentChangeInterface
     
-    """
-    GetSettingsInterface(self)
+    """*************************************************************************
+                                GetSettingsInterface Method 
     
-    Loads configuration or Settings Screen
-    """
+    *************************************************************************"""
     def GetSettingsInterface(self):
+        r"""
+        GetSettingsInterface method
+        
+        returns Settings Interface Object
+        """
         
         return self.settingsInterface
     
-    """
-    GetFileBrowserInterface(self)
+    """*************************************************************************
+                                GetFileBrowserInterface Method 
     
-    Loads configuration or File Browser Screen
-    """
+    *************************************************************************"""
     def GetFileBrowserInterface(self):
+        r"""
+        GetFileBrowserInterface method
+        
+        returns FileBrowser Interface Object
+        """
         
         return self.fileBrowserInterface
     
-    """
-    GetAboutInterface(self)
+    """*************************************************************************
+                                GetAboutInterface Method 
     
-    Loads configuration or About Screen
-    """
+    *************************************************************************"""
     def GetAboutInterface(self):
+        r"""
+        GetAboutInterface method
+        
+        returns About Interface Object
+        """
         
         return self.aboutInterface
     
-    """
-    GetPrintingInterface(self)
+    """*************************************************************************
+                                GetPrintingInterface Method 
     
-    Loads configuration or About Screen
-    """
+    *************************************************************************"""
     def GetPrintingInterface(self):
+        r"""
+        GetPrintingInterface method
+        
+        returns Printing Interface Object
+        """
         
         return self.printingInterface
     
     
-    """
-    GetLeftButtonsList(self)
+    """*************************************************************************
+                                GetDefaultScreen Method 
     
-    returns the list with the left menu buttons
-    """
-    def GetLeftButtonsList(self):
-        
-        return self.leftMenuButtons
-    
-    
-    """
-    GetDefaultScreen(self)
-    
-    returns the default screen
-    """
+    *************************************************************************"""
     def GetDefaultScreen(self):
+        r"""
+        GetDefaultScreen method
+        
+        returns string with default start interface name
+        """
         
         return self.defaultScreen

@@ -32,15 +32,17 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 """
 
+
 __author__ = "Marcos Gomes"
 __license__ = "MIT"
 
-import src.FileFinder as FileFinder
+import BeeConnect
+
+import FileFinder
 import pygame
-import src.loaders.WaitForConnectionLoader as WaitForConnectionLoader
-import src.BeeConnect.BEEConnect as BEEConnect
-import src.BeeConnect.BEECommand as BEECommand
-from time import time
+import Loaders.WaitForConnectionLoader
+from BeeConnect import *
+import time
 
 class WaitScreen():
     """
@@ -82,7 +84,7 @@ class WaitScreen():
         self.screen = screen
         self.currentScreen = 'WaitConnection'
         
-        self.loader = WaitForConnectionLoader.WaitForConnectionLoader()
+        self.loader = Loaders.WaitForConnectionLoader.WaitForConnectionLoader()
         
         lblText = self.loader.GetLblsText()
         lblX = self.loader.GetLblsXPos()
@@ -98,10 +100,6 @@ class WaitScreen():
         self.bgImage = pygame.image.load(self.loader.GetImagePath())
         imgX = self.loader.GetImageX()
         imgY = self.loader.GetImageY()
-        
-        
-        # Start Image
-        #self.bgImage = pygame.image.load(imageSurf)
 
         # Draw Image
         self.screen.blit(self.bgImage,(imgX,imgY))
@@ -109,40 +107,44 @@ class WaitScreen():
         # update screen
         pygame.display.update()
         
-        self.nextPullTime = time() + 0.5
+        self.nextPullTime = time.time() + 0.5
         
         while (not self.connected) and (not self.exit):
             # Handle events
             self.handle_events()
             
-            t = time()
+            t = time.time()
             if t > self.nextPullTime:
                 
-                self.beeCon = BEEConnect.Connection()
+                self.beeCon = BeeConnect.Connection.Con()
                 if(self.beeCon.isConnected() == True):
-                    self.beeCmd = BEECommand.Command(self.beeCon)
+                    self.beeCmd = BeeConnect.Command.Cmd(self.beeCon)
                     resp = self.beeCmd.startPrinter()
                 
                     if('Firmware' in resp):
                         self.connected = self.beeCon.connected
-                        #self.bee.sendCmd("G28\n","3")
                     elif('Bootloader' in resp):
                         self.beeCon = None
                     else:
-                        cmdStr = "M625 " + "a"*507
-                        tries = 32
-                        print("Cleaning buffer")
-                        while(tries > 0):
-                            try:
-                                resp = self.beeCon.sendCmd(cmdStr,None,50)
-                            except:
-                                pass
-                            tries -= 1
-                        self.beeCon.close()
-                        self.beeCon = None
+                        cleaningTries = 5
+                        clean = False
+                        while(cleaningTries > 0 and clean == False):
+                            clean = self.beeCmd.cleanBuffer()
+                            time.sleep(0.5)
+                            self.beeCmd.beeCon.close()
+                            self.beeCmd.beeCon = None
+                            self.beeCmd.beeCon = BeeConnect.Connection.Con()
+
+                            cleaningTries -= 1
+
+                        if(cleaningTries <= 0 or clean == False):
+                            self.beeCon.close()
+                            self.beeCon = None
+                        else:
+                            self.beeCon = self.beeCmd.beeCon
                         #return None
                     
-                self.nextPullTime = time() + 0.5
+                self.nextPullTime = time.time() + 0.5
                 print("Wait for connection")
             
         return

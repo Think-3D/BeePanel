@@ -38,7 +38,7 @@ __license__ = "MIT"
 import os
 from time import time
 import math
-import src.FileFinder as FileFinder
+import FileFinder
 import pygame
 
 class FileBrowserScreen():

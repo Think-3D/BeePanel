@@ -35,27 +35,32 @@ THE SOFTWARE.
 __author__ = "Marcos Gomes"
 __license__ = "MIT"
 
-import src.BeeConnect.BEECommand
+import pygame
+from BeeConnect import *
 
-class AboutScreen():
+
+class CalibrationScreen():
     
-    screen = None
+    calibrationState = 0
+    
     interfaceLoader = None
-    
-    lblFontColor = None
-    lblXPos = None
-    lblYPos = None
-    lblText = None
-    lblFont = None
-    
     lbl = None
+    lblText = ["Adjust Bed Height","Adjust Left Bolt","Adjust Right Bolt"]
     
     buttons = None
     
-    updateReady = None
-    
-    exitNeedsHoming = False
+    exitNeedsHoming = True
     exitCallBackResp = None
+    
+    """
+    Images
+    """
+    rightBoltImgPath = None
+    leftBoltImgPath = None
+    rightBoltImgX = 0
+    rightBoltImgY = 0
+    leftBoltImgX = 0
+    leftBoltImgY = 0
     
     """
     BEEConnect vars
@@ -68,28 +73,33 @@ class AboutScreen():
     Inits current screen components
     *************************************************************************"""
     def __init__(self, screen, interfaceLoader, cmd):
-        """
-        .
-        """
-        print("Loading About Screen Components")
+        
+        print("Loading Calibration Screen Components")
         
         self.beeCmd = cmd
         
         self.screen = screen
         self.interfaceLoader = interfaceLoader
         
-        self.updateReady = False
+        self.calibrationState = 0
         
-        self.lblFontColor = self.interfaceLoader.GetLblsFontColor()
-        self.lblXPos = self.interfaceLoader.GetLblsXPos()
-        self.lblYPos = self.interfaceLoader.GetLblsYPos()
-        self.lblText = self.interfaceLoader.GetLblsText()
-        self.lblFont = self.interfaceLoader.GetLblsFont()
+        self.lblFont = self.interfaceLoader.GetlblFont(self.calibrationState)
+        self.lblFontColor = self.interfaceLoader.GetlblFontColor(self.calibrationState)
         
-        self.buttons = self.interfaceLoader.GetButtonsList()
+        self.buttons = self.interfaceLoader.GetButtonsList(self.calibrationState)
+        
+        self.rightBoltImg = pygame.image.load(self.interfaceLoader.GetRightImgPath())
+        self.leftBoltImg = pygame.image.load(self.interfaceLoader.GetLeftImgPath())
+        self.rightBoltImgX = self.interfaceLoader.GetRightImgX()
+        self.rightBoltImgY = self.interfaceLoader.GetRightImgY()
+        self.leftBoltImgX = self.interfaceLoader.GetLeftImgX()
+        self.leftBoltImgY = self.interfaceLoader.GetLeftImgY()
+        
+        
+        self.beeCmd.GoToFirstCalibrationPoint()
+        
         
         return
-        
 
     """*************************************************************************
                                 handle_events Method 
@@ -104,11 +114,38 @@ class AboutScreen():
                 if 'click' in btn.handleEvent(event):
                     btnName = btn._propGetName()
                     
-                    if btnName == "Check For Updates":
-                        self.updateReady = True
-                    elif btnName == "Update":
-                        print("Updating...")
-        
+                    if btnName == "Next":
+                        self.calibrationState = self.calibrationState + 1
+                        if self.calibrationState > 2:
+                            self.exitCallBackResp = "Restart"
+                            self.calibrationState = 2
+                        else:
+                            self.lblFont = None
+                            self.lblFontColor = None
+                            self.buttons = None
+                            self.lblFont = self.interfaceLoader.GetlblFont(self.calibrationState)
+                            self.lblFontColor = self.interfaceLoader.GetlblFontColor(self.calibrationState)
+                            self.buttons = self.interfaceLoader.GetButtonsList(self.calibrationState)
+                            if self.calibrationState == 1:
+                                self.beeCmd.GoToSecondCalibrationPoint()
+                            elif self.calibrationState == 2:
+                                self.beeCmd.GoToThirdCalibrationPoint()
+                            
+                            
+                    
+                    elif btnName == "+0.5mm":
+                        print("Move +0.5mm")
+                        self.beeCmd.move(None,None,float(+0.5),None)
+                    elif btnName == "+0.05mm":
+                        print("Move +0.05mm")
+                        self.beeCmd.move(None,None,float(+0.05),None)
+                    elif btnName == "-0.05mm":
+                        print("Move -0.05mm")
+                        self.beeCmd.move(None,None,float(-0.05),None)
+                    elif btnName == "-0.5mm":
+                        print("Move -0.5mm")
+                        self.beeCmd.move(None,None,float(-0.5),None)
+                    
         return
 
     """*************************************************************************
@@ -118,15 +155,10 @@ class AboutScreen():
     *************************************************************************"""
     def update(self):
         
-        self.lbls = []
-        for i in range(0,len(self.lblText)):
-            self.lbls.append(self.lblFont[i].render(self.lblText[i], 1, self.lblFontColor[i]))
+        self.lbl = self.lblFont.render(self.lblText[self.calibrationState], 1, self.lblFontColor)
         
         for btn in self.buttons:
-            if btn._propGetName() == "Update":
-                btn.visible = self.updateReady
-            else:
-                btn.visible = True
+            btn.visible = True
         
         return
 
@@ -136,13 +168,21 @@ class AboutScreen():
     Draws current screen
     *************************************************************************""" 
     def draw(self):
-            
-        for i in range(0,len(self.lblText)):
-            self.screen.blit(self.lbls[i], (self.lblXPos[i],self.lblYPos[i]))
+        
+        self.screen.blit(self.lbl, (self.interfaceLoader.GetlblXPos(self.calibrationState),
+                                            self.interfaceLoader.GetlblYPos(self.calibrationState)))
         
         for btn in self.buttons:
             btn.draw(self.screen)
-            
+        
+        if self.calibrationState == 1:
+            # Draw Image
+            self.screen.blit(self.leftBoltImg,(self.leftBoltImgX,self.leftBoltImgY))
+        elif self.calibrationState == 2:
+            # Draw Image
+            self.screen.blit(self.rightBoltImg,(self.rightBoltImgX,self.rightBoltImgY))
+        
+        
         return
     
     """*************************************************************************
@@ -152,7 +192,7 @@ class AboutScreen():
     *************************************************************************""" 
     def GetCurrentScreenName(self):
         
-        return "About"
+        return "Calibration"
     
     """*************************************************************************
                                 KillAll Method 
@@ -161,21 +201,18 @@ class AboutScreen():
     *************************************************************************""" 
     def KillAll(self):
         
-        self.screen = None
+        self.calibrationState = None
         self.interfaceLoader = None
-
-        self.lblFontColor = None
-        self.lblXPos = None
-        self.lblYPos = None
-        self.lblText = None
-        self.lblFont = None
-
         self.lbl = None
-
+        self.lblText = None
         self.buttons = None
-
-        self.updateReady = None
-    
+        self.rightBoltImgPath = None
+        self.leftBoltImgPath = None
+        self.rightBoltImgX = None
+        self.rightBoltImgY = None
+        self.leftBoltImgX = None
+        self.leftBoltImgY = None
+        
         return
     
     """*************************************************************************
@@ -194,5 +231,4 @@ class AboutScreen():
     *************************************************************************""" 
     def Pull(self):
         
-            
         return

@@ -1,39 +1,44 @@
 #!/usr/bin/env python
 
+r"""
+BeeCommand Class
+
+This class exports some methods with predefined commands to control the BTF
+
+__init__()        Initializes current class
+isConnected()    returns the connection state
+startPrinter()    Initializes the printer in firmware mode
+getStatus()        returns the status of the printer
+beep()            beep during 2s
+home()            Homes axis XYZ
+homeXY()          Homes axis XY
+homeZ()            Homes Z axis
+move(x,y,z,e)        Relatie move of axis XYZE at given feedrate
+GoToFirstCalibrationPoint()    Moves the BTF to the first calibration point
+GoToSecondCalibrationPoint()    Saves calibration offset and moves to second calibration point
+GoToThirdCalibrationPoint()    Moves the BTF to the third calibration point
+GetNozzleTemperature(T)        Defines nozzle target setpoint temperature
+SetNozzleTemperature()        Returns current nozzle temperature
+Load()                        Performs load filament operation
+Unload()                        Performs unload filament operation
+GoToHeatPos()                Moves the BTF to its heat coordinates during filament change
+GoToRestPos()                Moves the BTF to its Rest coordinates
+GetBeeCode()                Get current filament beecode
+SetBeeCode(A)                Set current filament beecode
+initSD()                    Initializes SD card
+CreateFile(f)                Creates SD file
+OpenFile(f)                    Opens file in the SD card
+StartTransfer(f,a)            prepares the printer to receive a block of messages
+startSDPrint()                Starts printing selected sd file
+cancleSDPrint()                Cancels SD print
+sendBlock()                    Sends a block of messages
+sendBlockMsg()                Sends a message from the block
+cleanBuffer()                Clears communication buffer 
+
 """
-BEETFT v0.1
 
-BEETFT creates a simple interface to control basic function of the BEETHEFIRST 3D printer.
-BEETFT requires Pygame to be installed. Pygame can be downloaded from http://pygame.org
-BEETFT is developed by Marcos Gomes
-https://github.com/marcosfg/BEETFT
-
-
-The MIT License (MIT)
-
-Copyright (c) 2014 Marcos Gomes
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,p
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-"""
-
-__author__ = "Marcos Gomes"
-__license__ = "MIT"
+__author__ = "BVC Electronic Systems"
+__license__ = ""
 
 import usb.core
 import usb.util
@@ -43,26 +48,34 @@ import time
 import time
 import math
 
-import src.BeeConnect.BEEConnect
+import BeeConnect
 
-class Command():
+class Cmd():
     
     connected = None
     beeCon = None
     
     MESSAGE_SIZE = 512
-    BLOCK_SIZE = 64
+    BLOCK_SIZE = 32
     
     transmisstionErrors = 0
 
     """*************************************************************************
                                 Init Method 
     
-    Inits current screen components
     *************************************************************************"""
-    def __init__(self, bee):
+    def __init__(self, con):
+        r"""
+        Init Method
         
-        self.beeCon = bee
+        Initializes this class
+        
+        receives as argument the BeeConnection object and verifies the 
+        connection status
+        
+        """
+        
+        self.beeCon = con
         self.connected = self.beeCon.isConnected()
         
         return
@@ -72,6 +85,13 @@ class Command():
     
     *************************************************************************"""
     def isConnected(self):
+        r"""
+        isConnected method
+        
+        return the sate of the BTF connection:
+            connected = True
+            disconnected = False
+        """
         return self.connected
     
     """*************************************************************************
@@ -79,10 +99,14 @@ class Command():
     
     *************************************************************************"""
     def startPrinter(self):
+        r"""
+        startPrinter method
         
-        #self.beeCon = BEEConnect.Connection()
+        Initializes the printer in firmware mode
+        """
+        
         resp = self.beeCon.sendCmd("M625\n")
-        #print(resp)
+        
         if('Bad M-code 625' in resp):   #printer in bootloader mode
             print("Printer running in Bootloader Mode")
             print("Changing to firmware")
@@ -98,9 +122,14 @@ class Command():
     
     """*************************************************************************
                                 getStatus Method 
-    retuns string with printer status
+    
     *************************************************************************"""
     def getStatus(self):
+        r"""
+        getStatus method
+        
+        returns the current status of the printer
+        """
         
         resp = self.beeCon.sendCmd("M625\n")
         #print(resp)
@@ -132,6 +161,11 @@ class Command():
     
     *************************************************************************"""
     def beep(self):
+        r"""
+        beep method
+        
+        performs a beep with 2 seconds duration
+        """
         
         self.beeCon.sendCmd("M300 P2000\n")
         
@@ -142,6 +176,11 @@ class Command():
     
     *************************************************************************"""
     def home(self):
+        r"""
+        home method
+        
+        homes all axis
+        """
         
         self.beeCon.sendCmd("G28\n","3")
         
@@ -152,6 +191,11 @@ class Command():
     
     *************************************************************************"""
     def homeXY(self):
+        r"""
+        homeXY method
+        
+        home axis X and Y
+        """
         
         self.beeCon.sendCmd("G28 X0 Y0\n","3")
         
@@ -162,6 +206,11 @@ class Command():
     
     *************************************************************************"""
     def homeZ(self):
+        r"""
+        homeZ method
+        
+        homes Z axis
+        """
         
         self.beeCon.sendCmd("G28 Z0\n","3")
         
@@ -171,8 +220,21 @@ class Command():
                                 move Method 
     
     *************************************************************************"""
-    def move(self,x=None,y=None,z=None,e=None):
+    def move(self,x=None,y=None,z=None,e=None,f=None):
+        r"""
+        move method
         
+        performs a relative move at a given feedrate current
+        
+        arguments:
+        x - X axis displacement
+        y - Y axis displacement
+        z - Z axis displacement
+        e - E extruder displacement
+        
+        f - feedrate
+        
+        """
         resp = self.beeCon.sendCmd("M121\n")
         #print(resp)
         
@@ -192,6 +254,8 @@ class Command():
         newZ = currentZ
         newE = currentE
         
+        commandStr = ""
+        
         if x is not None:
             newX = newX + x
         if y is not None:
@@ -200,8 +264,15 @@ class Command():
             newZ = newZ + z
         if e is not None:
             newE = newE + e
+            
+            
+        if f is not None:
+            newF = float(f)
+            commandStr = "G1 X" + str(newX) + " Y" + str(newY) + " Z" + str(newZ) + " E" + str(newE) + "F" + str(newF) + "\n"
+        else:
+            commandStr = "G1 X" + str(newX) + " Y" + str(newY) + " Z" + str(newZ) + " E" + str(newE) + "\n"
         
-        commandStr = "G1 X" + str(newX) + " Y" + str(newY) + " Z" + str(newZ) + " E" + str(newE) + "\n"
+        
         
         self.beeCon.sendCmd(commandStr,"3")
         
@@ -212,7 +283,11 @@ class Command():
     
     *************************************************************************"""
     def GoToFirstCalibrationPoint(self):
+        r"""
+        GoToFirstCalibrationPoint method
         
+        moves the printer to the first calibration point
+        """
         
         #go to home
         self.beeCon.sendCmd("G28\n","3")
@@ -239,24 +314,25 @@ class Command():
     
     *************************************************************************"""
     def GoToSecondCalibrationPoint(self):
+        r"""
+        GoToSecondCalibrationPoint method
+        
+        Saves calibration offset and moves to second calibration point
+        """
         
         #record calibration position
-        resp = self.beeCon.sendCmd("M603\n")
-        #print(resp)
-        resp = self.beeCon.sendCmd("M601\n")
-        #print(resp)
+        self.beeCon.sendCmd("M603\n")
+        self.beeCon.sendCmd("M601\n")
         
         #set feedrate
-        resp = self.beeCon.sendCmd("G1 F5000\n")
-        #print(resp)
+        self.beeCon.sendCmd("G1 F5000\n")
         #set acceleration
-        resp = self.beeCon.sendCmd("M206 X400\n")
-        #print(resp)
+        self.beeCon.sendCmd("M206 X400\n")
         
-        self.move(0,0,10,0)
+        
         #go to SECOND point
+        self.move(0,0,10,0)
         resp = self.beeCon.sendCmd("G1 X-31 Y-65\n","3")
-        #print(resp)
         self.move(0,0,-10,0)
         
         return
@@ -266,18 +342,21 @@ class Command():
     
     *************************************************************************"""
     def GoToThirdCalibrationPoint(self):
+        r"""
+        GoToThirdCalibrationPoint method
+        
+        moves the printer to the third calibration point
+        """
         
         #set feedrate
-        resp = self.beeCon.sendCmd("G1 F5000\n")
-        #print(resp)
+        self.beeCon.sendCmd("G1 F5000\n")
         #set acceleration
-        resp = self.beeCon.sendCmd("M206 X400\n")
-        #print(resp)
+        self.beeCon.sendCmd("M206 X400\n")
         
         self.move(0,0,10,0)
         #go to SECOND point
-        resp = self.beeCon.sendCmd("G1 X35 Y-65\n","3")
-        #print(resp)
+        self.beeCon.sendCmd("G1 X35 Y-65\n","3")
+        
         self.move(0,0,-10,0)
         
         return
@@ -287,6 +366,14 @@ class Command():
     
     *************************************************************************"""
     def GetNozzleTemperature(self):
+        r"""
+        GetNozzleTemperature method
+        
+        reads current nozzle temperature
+        
+        returns:
+            nozzle temperature
+        """
         
         #get Temperature
         resp = self.beeCon.sendCmd("M105\n")
@@ -307,6 +394,14 @@ class Command():
     
     *************************************************************************"""
     def SetNozzleTemperature(self, t):
+        r"""
+        SetNozzleTemperature method
+        
+        Sets nozzle target temperature
+        
+        Arguments:
+            t - nozzle temperature
+        """
         
         commandStr = "M104 S" + str(t) + "\n"
         
@@ -321,6 +416,11 @@ class Command():
     
     *************************************************************************"""
     def Load(self):
+        r"""
+        load method
+        
+        performs load filament operation
+        """
         
         self.beeCon.sendCmd("G92 E\n")
         self.beeCon.sendCmd("M300 P500\n")
@@ -338,6 +438,11 @@ class Command():
     
     *************************************************************************"""
     def Unload(self):
+        r"""
+        Unload method
+        
+        performs unload operation
+        """
         
         self.beeCon.sendCmd("G92 E\n")
         self.beeCon.sendCmd("M300 P500\n")
@@ -361,21 +466,23 @@ class Command():
     
     *************************************************************************"""
     def GoToHeatPos(self):
+        r"""
+        GoToHeatPos method
+        
+        moves the printer to the heating coordinates
+        """
         
         #set feedrate
-        resp = self.beeCon.sendCmd("G1 F15000\n")
-        #print(resp)
+        self.beeCon.sendCmd("G1 F15000\n")
         
         #set acceleration
-        resp = self.beeCon.sendCmd("M206 X400\n")
-        #print(resp)
+        self.beeCon.sendCmd("M206 X400\n")
         
         #go to first point
         self.beeCon.sendCmd("G1 X30 Y0 Z10\n")
         
         #set acceleration
-        resp = self.beeCon.sendCmd("M206 X1000\n","3")
-        #print(resp)
+        self.beeCon.sendCmd("M206 X1000\n","3")
         
         return
 
@@ -384,21 +491,23 @@ class Command():
     
     *************************************************************************"""
     def GoToRestPos(self):
+        r"""
+        GoToRestPos method
+        
+        moves the printer to the rest position
+        """
         
         #set feedrate
-        resp = self.beeCon.sendCmd("G1 F15000\n")
-        #print(resp)
+        self.beeCon.sendCmd("G1 F15000\n")
         
         #set acceleration
-        resp = self.beeCon.sendCmd("M206 X400\n")
-        #print(resp)
+        self.beeCon.sendCmd("M206 X400\n")
         
         #go to first point
         self.beeCon.sendCmd("G1 X-50 Y0 Z110\n")
         
         #set acceleration
-        resp = self.beeCon.sendCmd("M206 X1000\n","3")
-        #print(resp)
+        self.beeCon.sendCmd("M206 X1000\n","3")
         
         return
     
@@ -407,10 +516,17 @@ class Command():
     
     *************************************************************************"""
     def GetBeeCode(self):
+        r"""
+        GetBeeCode method
+        
+        reads current filament BeeCode
+        
+        returns:
+            Filament BeeCode
+        """
         
         #Get BeeCode
-        resp = self.beeCon.sendCmd("M400\n")
-        #print(resp)
+        self.beeCon.sendCmd("M400\n")
         
         splits = resp.split(" ")
         
@@ -429,11 +545,19 @@ class Command():
     
     *************************************************************************"""
     def SetBeeCode(self, code):
+        r"""
+        SetBeeCode method
+        
+        Sets filament beecode
+        
+        arguments:
+            code - filament code
+        """
         
         commandStr = "M400 " + code + "\n"
         
         #Set BeeCode
-        resp = self.beeCon.sendCmd(commandStr)
+        self.beeCon.sendCmd(commandStr)
         
         return
 
@@ -442,6 +566,11 @@ class Command():
     
     *************************************************************************"""
     def initSD(self):
+        r"""
+        initSD method
+        
+        inits Sd card
+        """
         #Init SD
         resp = self.beeCon.sendCmd("M21\n")
         
@@ -459,6 +588,14 @@ class Command():
     
     *************************************************************************"""
     def CraeteFile(self, fileName):
+        r"""
+        CraeteFile method
+        
+        Creates a file in the SD card root directory
+        
+        arguments:
+            fileName - file name
+        """
         #Init SD
         self.initSD()
         
@@ -494,6 +631,15 @@ class Command():
     
     *************************************************************************"""
     def OpenFile(self, fileName):
+        r"""
+        OpenFile method
+        
+        opens file in the sd card root dir
+        
+        arguments:
+            fileName - file name
+        """
+        
         #Init SD
         self.initSD()
         
@@ -521,6 +667,15 @@ class Command():
     
     *************************************************************************"""
     def StartTransfer(self, fSize, a):
+        r"""
+        StartTransfer method
+        
+        prepares the printer to receive a block of messages
+        
+        arguments:
+            fSize - bytes to be writen
+            a - initial write position
+        """
         
         cmdStr = "M28 D" + str(fSize - 1) + " A" + str(a) + "\n"
         #waitStr = "will write " + str(fSize) + " bytes ok"
@@ -544,6 +699,11 @@ class Command():
     
     *************************************************************************"""
     def startSDPrint(self):
+        r"""
+        startSDPrint method
+        
+        starts printing selected file
+        """
         
         self.beeCon.sendCmd("M33\n")
         
@@ -554,7 +714,11 @@ class Command():
     
     *************************************************************************"""
     def cancelSDPrint(self):
+        r"""
+        cancelSDPrint method
         
+        cancels current print and home the printer axis
+        """
         self.beeCon.sendCmd("M112\n")
         self.homeZ()
         self.homeXY()
@@ -566,6 +730,20 @@ class Command():
 
     *************************************************************************"""
     def sendBlock(self,startPos, fileObj):
+        r"""
+        sendBlock method
+        
+        writes a block of messages
+        
+        arguments:
+            startPos - starting position of block
+            fileObj - file object with file to write
+            
+        returns:
+            True if block transfered successfully
+            False if an error occurred and communication was reestablished
+            None if an error occurred and could not reestablish communication with printer
+        """
         
         fileObj.seek(startPos)
         block2write = fileObj.read(self.MESSAGE_SIZE*self.BLOCK_SIZE)
@@ -591,10 +769,8 @@ class Command():
         
         for m in msgBuf:
             mResp = self.sendBlockMsg(m)
-            if(mResp is None):
-                return None
-            elif(mResp == False):
-                return False
+            if(mResp is not True):
+                return mResp
         
         return True
 
@@ -603,6 +779,19 @@ class Command():
 
     *************************************************************************"""
     def sendBlockMsg(self,msg):
+        r"""
+        sendBlockMsg method
+        
+        sends a block message to the printer.
+        
+        arguments:
+            msg - message to be writen
+        
+        returns:
+            True if message transfered successfully
+            False if an error occurred and communication was reestablished
+            None if an error occurred and could not reestablish communication with printer
+        """
         
         #resp = self.beeCon.dispatch(msg)
         msgLen = len(msg)
@@ -633,7 +822,7 @@ class Command():
                 time.sleep(0.5)
                 self.beeCon.close()
                 self.beeCon = None
-                self.beeCon = BEEConnect.Connection()
+                self.beeCon = BeeConnect.Connection.Con()
                 
                 cleaningTries -= 1
             
@@ -650,6 +839,11 @@ class Command():
 
     *************************************************************************"""
     def cleanBuffer(self):
+        r"""
+        cleanBuffer method
+        
+        cleans communication buffer with printer
+        """
         
         cleanStr = "M625" + "a"*(self.MESSAGE_SIZE-5) + "\n"
         

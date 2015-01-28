@@ -36,70 +36,50 @@ __author__ = "Marcos Gomes"
 __license__ = "MIT"
 
 import pygame
-import src.BeeConnect.BEECommand
+from BeeConnect import *
 
-
-class CalibrationScreen():
+class JogScreen():
     
-    calibrationState = 0
+    screen = None
+    
+    lblFont = None
+    lblTop = None
+    lblFontColor = None
+    
+    jogButtons = None
+    
+    multiplier = "1"
+    multiplierRect = None
     
     interfaceLoader = None
-    lbl = None
-    lblText = ["Adjust Bed Height","Adjust Left Bolt","Adjust Right Bolt"]
     
-    buttons = None
-    
-    exitNeedsHoming = True
+    exitNeedsHoming = False
     exitCallBackResp = None
-    
-    """
-    Images
-    """
-    rightBoltImgPath = None
-    leftBoltImgPath = None
-    rightBoltImgX = 0
-    rightBoltImgY = 0
-    leftBoltImgX = 0
-    leftBoltImgY = 0
-    
-    """
-    BEEConnect vars
-    """
-    beeCmd = None
     
     """*************************************************************************
                                 Init Method 
     
     Inits current screen components
     *************************************************************************"""
-    def __init__(self, screen, interfaceLoader, cmd):
+    def __init__(self, screen, interfaceLoader, comm):
         
-        print("Loading Calibration Screen Components")
-        
-        self.beeCmd = cmd
+        self.comm = comm
         
         self.screen = screen
         self.interfaceLoader = interfaceLoader
         
-        self.calibrationState = 0
+        self.lblFont = self.interfaceLoader.GetlblFont()
+        self.lblFontColor = self.interfaceLoader.GetlblFontColor()
         
-        self.lblFont = self.interfaceLoader.GetlblFont(self.calibrationState)
-        self.lblFontColor = self.interfaceLoader.GetlblFontColor(self.calibrationState)
+        self.jogButtons = self.interfaceLoader.GetButtonsList()
         
-        self.buttons = self.interfaceLoader.GetLeftButtonsList(self.calibrationState)
+        self.multiplier = 1
         
-        self.rightBoltImg = pygame.image.load(self.interfaceLoader.GetRightImgPath())
-        self.leftBoltImg = pygame.image.load(self.interfaceLoader.GetLeftImgPath())
-        self.rightBoltImgX = self.interfaceLoader.GetRightImgX()
-        self.rightBoltImgY = self.interfaceLoader.GetRightImgY()
-        self.leftBoltImgX = self.interfaceLoader.GetLeftImgX()
-        self.leftBoltImgY = self.interfaceLoader.GetLeftImgY()
-        
-        
-        self.beeCmd.GoToFirstCalibrationPoint()
-        
+        print("Loading Jog Screen Components")
         
         return
+        
+        
 
     """*************************************************************************
                                 handle_events Method 
@@ -110,42 +90,44 @@ class CalibrationScreen():
         """handle all events."""
         for event in retVal:
             
-            for btn in self.buttons:
+            for btn in self.jogButtons:
                 if 'click' in btn.handleEvent(event):
                     btnName = btn._propGetName()
                     
-                    if btnName == "Next":
-                        self.calibrationState = self.calibrationState + 1
-                        if self.calibrationState > 2:
-                            self.exitCallBackResp = "Restart"
-                            self.calibrationState = 2
-                        else:
-                            self.lblFont = None
-                            self.lblFontColor = None
-                            self.buttons = None
-                            self.lblFont = self.interfaceLoader.GetlblFont(self.calibrationState)
-                            self.lblFontColor = self.interfaceLoader.GetlblFontColor(self.calibrationState)
-                            self.buttons = self.interfaceLoader.GetLeftButtonsList(self.calibrationState)
-                            if self.calibrationState == 1:
-                                self.beeCmd.GoToSecondCalibrationPoint()
-                            elif self.calibrationState == 2:
-                                self.beeCmd.GoToThirdCalibrationPoint()
-                            
-                            
-                    
-                    elif btnName == "+0.5mm":
-                        print("Move +0.5mm")
-                        self.beeCmd.move(None,None,float(+0.5),None)
-                    elif btnName == "+0.05mm":
-                        print("Move +0.05mm")
-                        self.beeCmd.move(None,None,float(+0.05),None)
-                    elif btnName == "-0.05mm":
-                        print("Move -0.05mm")
-                        self.beeCmd.move(None,None,float(-0.05),None)
-                    elif btnName == "-0.5mm":
-                        print("Move -0.5mm")
-                        self.beeCmd.move(None,None,float(-0.5),None)
-                    
+                    if (btnName == '0.1') or (btnName == '1') or (btnName == '10'):
+                        self.multiplier = btnName
+                    elif btnName == "HomeXY":
+                        print("G28 X0 Y0")
+                        self.comm.homeXY()
+                    elif btnName == "HomeZ":
+                        print("G28 Z0")
+                        self.comm.homeZ()
+                    elif btnName == "X+":
+                        val = float(self.multiplier)
+                        print("X",val)
+                        self.comm.move(val,None,None,None)
+                    elif btnName == "X-":
+                        val = -1 * float(self.multiplier)
+                        print("X",val)
+                        self.comm.move(val,None,None,None)
+                    elif btnName == "Y+":
+                        val = float(self.multiplier)
+                        print("Y",val)
+                        self.comm.move(None,val,None,None)
+                    elif btnName == "Y-":
+                        val = -1 * float(self.multiplier)
+                        print("Y",val)
+                        self.comm.move(None,val,None,None)
+                    elif btnName == "Z+":
+                        val = float(self.multiplier)
+                        print("Z",val)
+                        self.comm.move(None,None,val,None)
+                    elif btnName == "Z-":
+                        val = -1 * float(self.multiplier)
+                        print("Z",val)
+                        self.comm.move(None,None,val,None)
+                        
+        
         return
 
     """*************************************************************************
@@ -155,11 +137,11 @@ class CalibrationScreen():
     *************************************************************************"""
     def update(self):
         
-        self.lbl = self.lblFont.render(self.lblText[self.calibrationState], 1, self.lblFontColor)
+        self.lblTop = self.lblFont.render("Jog as you like:", 1, self.lblFontColor)
         
-        for btn in self.buttons:
+        for btn in self.jogButtons:
             btn.visible = True
-        
+
         return
 
     """*************************************************************************
@@ -169,19 +151,15 @@ class CalibrationScreen():
     *************************************************************************""" 
     def draw(self):
         
-        self.screen.blit(self.lbl, (self.interfaceLoader.GetlblXPos(self.calibrationState),
-                                            self.interfaceLoader.GetlblYPos(self.calibrationState)))
-        
-        for btn in self.buttons:
+        self.screen.blit(self.lblTop, (self.interfaceLoader.GetlblXPos(),
+                                            self.interfaceLoader.GetlblYPos()))
+                                            
+        for btn in self.jogButtons:
             btn.draw(self.screen)
+            if btn._propGetName() == str(self.multiplier):
+                pygame.draw.rect(self.screen, btn._propGetFgColor(), btn._propGetRect(), 3)
         
-        if self.calibrationState == 1:
-            # Draw Image
-            self.screen.blit(self.leftBoltImg,(self.leftBoltImgX,self.leftBoltImgY))
-        elif self.calibrationState == 2:
-            # Draw Image
-            self.screen.blit(self.rightBoltImg,(self.rightBoltImgX,self.rightBoltImgY))
-        
+        #pygame.draw.rect(screen, color, (x,y,width,height), thickness)
         
         return
     
@@ -192,7 +170,7 @@ class CalibrationScreen():
     *************************************************************************""" 
     def GetCurrentScreenName(self):
         
-        return "Calibration"
+        return "Jog"
     
     """*************************************************************************
                                 KillAll Method 
@@ -201,17 +179,16 @@ class CalibrationScreen():
     *************************************************************************""" 
     def KillAll(self):
         
-        self.calibrationState = None
+        self.lblFont = None
+        self.lblTop = None
+        self.lblFontColor = None
+        
+        self.jogButtons = None
+        
+        self.multiplier = "1"
+        self.multiplierRect = None
+        
         self.interfaceLoader = None
-        self.lbl = None
-        self.lblText = None
-        self.buttons = None
-        self.rightBoltImgPath = None
-        self.leftBoltImgPath = None
-        self.rightBoltImgX = None
-        self.rightBoltImgY = None
-        self.leftBoltImgX = None
-        self.leftBoltImgY = None
         
         return
     

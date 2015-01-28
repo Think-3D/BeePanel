@@ -1,39 +1,26 @@
 #!/usr/bin/env python
 
-"""
-BEETFT v0.1
+r"""
+BeeConnect Class
 
-BEETFT creates a simple interface to control basic function of the BEETHEFIRST 3D printer.
-BEETFT requires Pygame to be installed. Pygame can be downloaded from http://pygame.org
-BEETFT is developed by Marcos Gomes
-https://github.com/marcosfg/BEETFT
+This class provides the methods to manage and control communication with the
+BeeTheFirst 3D printer
 
-
-The MIT License (MIT)
-
-Copyright (c) 2014 Marcos Gomes
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,p
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
+__init__()        Initializes current class
+findBEE()        Searches for connected printers and establishes connection
+write(message,timeout) writes data to the communication buffer
+read()            read data from the communication buffer
+dispatch(message) writes data to the buffer and reads the response
+sendCmd(cmd,wait,to) sends a command to the 3D printer
+waitFor(cmd,s,to)        writes command to the printer and waits for the response
+waitForStatus(cmd,s,to)    writes command to the printer and waits for a give printer status
+close()            closes active communication with the printer
+isConnected()    returns the current state of the printer connection 
 """
 
-__author__ = "Marcos Gomes"
-__license__ = "MIT"
+
+__author__ = "BVC Electronic Systems"
+__license__ = ""
 
 import usb
 import usb.core
@@ -45,7 +32,7 @@ import sys
 import os
 import time
 
-class Connection():
+class Con():
     
     dev = None
     endpoint = None
@@ -66,9 +53,17 @@ class Connection():
     """*************************************************************************
                                 Init Method 
     
-    Inits current screen components
     *************************************************************************"""
     def __init__(self):
+        r"""
+        Init Method
+        
+        Initializes this class
+        
+        receives as argument the BeeConnection object ans veriffies the 
+        connection status
+        
+        """
         
         self.findBEE()
         
@@ -79,6 +74,11 @@ class Connection():
 
     *************************************************************************"""
     def findBEE(self):
+        r"""
+        findBEE method
+        
+        searches for connected printers and tries to connect to the first one.
+        """
         
         self.connected = False
         
@@ -139,6 +139,18 @@ class Connection():
 
     *************************************************************************"""
     def write(self,message,timeout=500):
+        r"""
+        write method
+        
+        writes a message to the communication buffer
+        
+        arguments:
+            message - data to be writen
+            timeout - optional communication timeout (default = 500ms)
+        
+        returns:
+            bytesWriten - bytes writen to the buffer
+        """
         bytesWriten = 0
         
         if(message == "dummy"):
@@ -156,6 +168,17 @@ class Connection():
 
     *************************************************************************"""
     def read(self,timeout=500):
+        r"""
+        read method
+        
+        reads existing data from the communication buffer
+        
+        arguments:
+            timeout - optional communication timeout (default = 500ms)
+            
+        returns:
+            sret - string with data read from the buffer
+        """
      
         sret = ""
         
@@ -173,6 +196,17 @@ class Connection():
 
     *************************************************************************"""
     def dispatch(self,message):
+        r"""
+        dispatch method
+        
+        writes data to the communication buffers and read existing data
+        
+        arguments:
+            message - data to be writen
+            
+        returns:
+            sret - string with data read from the buffer
+        """
         
         timeout = self.READ_TIMEOUT
         
@@ -198,6 +232,19 @@ class Connection():
 
     *************************************************************************"""
     def sendCmd(self,cmd,wait=None,timeout=None):
+        r"""
+        sendCmd method
+        
+        sends command to the printer
+        
+        arguments:
+            cmd - command to send
+            wait - optional wait for reply
+            timeout - optional communication timeout
+        
+        returns:
+            resp - string with data read from the buffer
+        """
 
         resp = None
 
@@ -216,6 +263,19 @@ class Connection():
 
     *************************************************************************"""
     def waitFor(self,cmd,s,timeout=None):
+        r"""
+        waitFor method
+        
+        writes command to the printer and waits for the response
+        
+        arguments:
+            cmd - commmand to send
+            s - string to be found in the response
+            timeout - optional communication timeout
+        
+        returns:
+            resp - string with data read from the buffer
+        """
         
         self.write(cmd)
         
@@ -233,6 +293,19 @@ class Connection():
 
     *************************************************************************"""
     def waitForStatus(self,cmd,s,timeout=None):
+        r"""
+        waitForStatus method
+        
+        writes command to the printer and waits for status the response
+        
+        arguments:
+            cmd - commmand to send
+            s - string to be found in the response
+            timeout - optional communication timeout
+        
+        returns:
+            resp - string with data read from the buffer
+        """
         
         self.write(cmd)
         
@@ -261,6 +334,11 @@ class Connection():
 
     *************************************************************************"""
     def close(self):
+        r"""
+        close method
+        
+        closes active connection with printer
+        """
         try:
             # release the device
             usb.util.dispose_resources(self.dev)
@@ -270,27 +348,20 @@ class Connection():
         
         return
     
-    """*************************************************************************
-                            startPrinter Method
-
-    *************************************************************************"""
-    def startPrinter(self):
-        
-        self.sendCmd("M625\n")
-        self.sendCmd("M630\n")
-        
-        self.close()
-        time.sleep(5)
-        self.findBEE()
-        
-        self.sendCmd("G28\n", "3")
-        
-        return
     
     """*************************************************************************
                             isConnected Method
     returns the connection state
     *************************************************************************"""
     def isConnected(self):
+        r"""
+        isConnected method
+        
+        returns the connection state
+        
+        returns:
+            True if connected
+            False if disconnected
+        """
         
         return self.connected

@@ -37,8 +37,8 @@ __license__ = "MIT"
 
 from time import time
 
-import src.loaders.ColorCodesLoader as ColorCodesLoader
-import src.FileFinder as FileFinder
+import Loaders.ColorCodesLoader
+import FileFinder
 import pygame
 
 class PrintScreen():
@@ -147,7 +147,7 @@ class PrintScreen():
         """
         Load Colors
         """
-        self.colorCodes = ColorCodesLoader.ColorCodes()
+        self.colorCodes = Loaders.ColorCodesLoader.ColorCodes()
         self.colorNameList = self.colorCodes.GetColorNameList()
         self.colorCodeList = self.colorCodes.GetColorCodeList()
         self.colorList = self.colorCodes.GetColorList()

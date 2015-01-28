@@ -21,20 +21,24 @@ import sys
 import pygame
 import math
 import time
-import src.BeeConnect.BEEConnect as BEEConnect
-import src.BeeConnect.BEECommand as BEECommand
-import src.BeePanel_Button as BeePanel_Button
-import src.loaders.BeePanelJsonLoader as BeePanelJsonLoader
-import src.WaitForConnection as WaitForConnection
 
-import src.About as About
-import src.Calibration as Calibration
-import src.FilamentChange as FilamentChange
-import src.FileBrowser as FileBrowser
-import src.Jog as Jog
-import src.PrinterInfo as PrinterInfo
-import src.Printing as Printing
-import src.Settings as Settings 
+
+import BeePanel_Button
+import WaitForConnection
+
+import About
+import Calibration
+import FilamentChange
+import FileBrowser
+import Jog
+import PrinterInfo
+import Printing
+import Settings
+
+import BeeConnect.Command
+import BeeConnect.Connection
+
+import Loaders.BeePanelJsonLoader as BeePanelJsonLoader
 
 os.environ["SDL_FBDEV"] = "/dev/fb1"
 os.environ["SDL_MOUSEDEV"] = "/dev/input/touchscreen"
@@ -183,7 +187,6 @@ class BeePanel():
         self.carouselFontType = self.leftMenuLoader.GetCarouselFontType()
         self.carouselFontSize = self.leftMenuLoader.GetCarouselFontSize()
         
-        #self.interfaceButtons = self.jsonLoader.GetLeftButtonsList()
         self.UpdateLeftButtons()
         
         """
@@ -218,13 +221,12 @@ class BeePanel():
             self.done = True
             
         self.beeCon = waitScreen.beeCon
-        self.beeCmd = BEECommand.Command(self.beeCon)
+        self.beeCmd = BeeConnect.Command.Cmd(self.beeCon)
         
         waitScreen.KillAll()
         waitScreen = None
         
         self.GetBEEStatus()
-        
         
         """
         Print interface screen
@@ -261,7 +263,7 @@ class BeePanel():
             # Handle events
             self.handle_events()
             if(self.exitApp):
-                return
+                break
             
             # Update buttons visibility, text, graphs etc
             self.update()

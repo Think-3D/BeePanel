@@ -1,47 +1,35 @@
 #!/usr/bin/env python
 
-"""
-BEETFT v0.1
+r"""
 
-BEETFT creates a simple interface to control basic function of the BEETHEFIRST 3D printer.
-BEETFT requires Pygame to be installed. Pygame can be downloaded from http://pygame.org
-BEETFT is developed by Marcos Gomes
-https://github.com/marcosfg/BEETFT
+AboutLoader Class
 
+This class is responsible for loading the interface components configuration 
+from the .json configuration file.
 
-The MIT License (MIT)
+This class exports the following methods:
 
-Copyright (c) 2014 Marcos Gomes
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,p
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
+__init__()            Initializes current class
+GetFont(fType,fSyze)    returns pygame font from a given font type and syze
+GetButtonList()        returns interface button list
+GetLblsText()            returns interface text labels list
+GetLblsFont()            returns interface labels font list
+GetLblsFontColor()            returns interface labels font color list
+GetLblsXPos()            returns interface labels X coordinate list
+GetLblsYPos()            returns interface labels Y coordinate list
 """
 
-__author__ = "Marcos Gomes"
-__license__ = "MIT"
+
+__author__ = "BVC Electronic Solutions"
+__license__ = ""
 
 import json
 
-import src.BeePanel_Button as BeePanel_Button
-import src.FileFinder as FileFinder
+import BeePanel_Button
+import FileFinder
 import pygame
 
-class SettingsLoader():
+class AboutLoader():
     
     interfaceJson = None
     lblsJson = None
@@ -54,13 +42,18 @@ class SettingsLoader():
     
     interfaceButtons = None
     
+    bee = None
+    
     """*************************************************************************
                                 Init Method 
     
-    Inits current screen components
     *************************************************************************"""
     def __init__(self, interfaceJson):
+        r"""
+        __init__ Method
         
+        Initializes current class
+        """
         self.interfaceJson = interfaceJson
         
         self.lblsJson = []
@@ -142,9 +135,10 @@ class SettingsLoader():
             
         return
     
-    """
-    GetFont
-    """
+    """*************************************************************************
+                                GetFont Method 
+    
+    *************************************************************************"""
     def GetFont(self,fontType,fontSize):
         r"""
         GetFont method
@@ -171,41 +165,76 @@ class SettingsLoader():
             
         return font
     
-    """
-    GetButtonsList(self)
+    """*************************************************************************
+                                GetButtonsList Method 
     
-    returns the list with buttons
-    """
+    *************************************************************************"""
     def GetButtonsList(self):
+        r"""
+        GetButtonsList method
+        
+        returns list with interface buttons
+        """
         
         return self.interfaceButtons[0]
     
-    """
-    GetLblsText
-    """
+    """*************************************************************************
+                                GetLblsText Method 
+    
+    *************************************************************************"""
     def GetLblsText(self):
+        r"""
+        GetLblsText method
+        
+        returns list with interface labels Text
+        """
+        
         return self.lblText
     
-    """
-    GetLblsFont
-    """
+    """*************************************************************************
+                                GetLblsFont Method 
+    
+    *************************************************************************"""
     def GetLblsFont(self):
+        r"""
+        GetLblsFont method
+        
+        returns list with interface labels Font
+        """
         return self.lblFont
     
-    """
-    GetLblsFontColor
-    """
+    """*************************************************************************
+                                GetLblsFontColor Method 
+    
+    *************************************************************************"""
     def GetLblsFontColor(self):
+        r"""
+        GetLblsFontColor method
+        
+        returns list with interface labels Font Color
+        """
         return self.lblFontColor
     
-    """
-    GetLblsXPos
-    """
+    """*************************************************************************
+                                GetLblsXPos Method 
+    
+    *************************************************************************"""
     def GetLblsXPos(self):
+        r"""
+        GetLblsXPos method
+        
+        returns list with interface labels X coordinates
+        """
         return self.lblXPos
     
-    """
-    GetLblsYPos
-    """
+    """*************************************************************************
+                                GetLblsYPos Method 
+    
+    *************************************************************************"""
     def GetLblsYPos(self):
+        r"""
+        GetLblsYPos method
+        
+        returns list with interface labels Y coordinates
+        """
         return self.lblYPos

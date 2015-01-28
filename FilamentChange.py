@@ -37,10 +37,10 @@ __license__ = "MIT"
 
 from time import time
 
-import src.loaders.ColorCodesLoader as ColorCodesLoader
-import src.FileFinder as FileFinder
+from Loaders import *
+import FileFinder
 import pygame
-import src.BeeConnect.BEECommand
+from BeeConnect import *
 
 class FilamentChangeScreen():
     
