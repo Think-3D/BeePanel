@@ -3,8 +3,8 @@ from distutils.core import setup
 from shutil import copyfile
 import os
 
-import BeeConnect
-import Loaders
+#import BeeConnect
+#import Loaders
 
 setup(
       name='BeePanel',
