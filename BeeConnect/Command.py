@@ -111,6 +111,9 @@ class Cmd():
             print("Printer running in Bootloader Mode")
             print("Changing to firmware")
             self.beeCon.sendCmd("M630\n")
+            self.beeCon.close()
+            time.sleep(1)
+            
             return "Bootloader"
         elif('ok Q' in resp):
             print("Printer running in firmware mode")
