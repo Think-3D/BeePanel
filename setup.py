@@ -2,7 +2,8 @@
 from distutils.core import setup
 from shutil import copyfile
 import os
-
+import platform
+import getpass
 #import BeeConnect
 #import Loaders
 
@@ -19,7 +20,16 @@ setup(
 """
 Directories definitions
 """
+pMachine = platform.machine()
+user = getpass.getuser()
+
 homeDir = os.path.expanduser("~")
+
+if(pMachine == 'armv6l'):       #assume we're using a raspberri pi
+    homeDir = "/home/pi"
+
+print('home Dir: ',homeDir)
+
 installationDir = homeDir + "/BeePanel"
 sourceDir = os.getcwd()
 installationJsonDir = installationDir + "/Json"
