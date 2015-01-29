@@ -36,6 +36,7 @@ __author__ = "Marcos Gomes"
 __license__ = "MIT"
 
 import os
+import subprocess
 from time import time
 import math
 import FileFinder
@@ -568,26 +569,44 @@ class FileBrowserScreen():
         
         partitionsFile = open("/proc/partitions")
         lines = partitionsFile.readlines()[2:]#Skips the header lines
+        
+        #SEARCH PARTITIONS FOR USB DRIVES
         for line in lines:
+            
             words = [x.strip() for x in line.split()]
             minorNumber = int(words[1])
             deviceName = words[3]
+            
+            #USB DRIVES ALLWAYS HAVE MINOR MULTIPLE OF 16
             if minorNumber % 16 == 0:
                 path = "/sys/class/block/" + deviceName
                 if os.path.islink(path):
+                    
+                    #VERIFY IF DEVICE IS CONNECTED THROUGH USB
                     if os.path.realpath(path).find("/usb") > 0:
                         devName = "/dev/%s" % deviceName
                         self.usbDev.append(devName)
                         
-                        #GET CORRESPONDING NAME AND PATH
+                        #GET CORRESPONDING PATH
                         mountsFile = open("/proc/mounts")
                         linesMount = mountsFile.readlines()
                         for l in linesMount:
                             wordsMounts = [y.strip() for y in l.split()]
                             if(devName in wordsMounts[0]):
                                 self.usbPaths.append(wordsMounts[1])
-                                pathSplit = wordsMounts[1].split('/')
-                                self.usbNames.append(pathSplit[len(pathSplit)-1])
+                        
+                                #GET CORRESPONDING NAME
+                                blkid = subprocess.check_output("blkid", universal_newlines=True)
+                                blkidLines = blkid.split('\n')
+                                for b in blkidLines:
+                                    bWords = [z.strip() for z in b.split()]
+                                    if(devName in bWords[0]):
+                                        leftSplit = b.split('LABEL="')
+                                        rightSplit = leftSplit[1].split('" UUID')
+                                        self.usbNames.append(rightSplit[0] + "/")
+                                        break
+                                break
+                                
             
             
         return self.usbNames

@@ -575,14 +575,12 @@ class Cmd():
         inits Sd card
         """
         #Init SD
-        resp = self.beeCon.sendCmd("M21\n")
+        self.beeCon.write("M21\n")
         
         tries = 10
-        while(tries > 0):
-            if("ok" in resp.lower()):
-                break
-            else:
-                resp = self.beeCon.sendCmd("\n")
+        resp = ""
+        while((tries > 0) and ("ok" not in resp.lower())):
+            resp += self.beeCon.read()
             tries -= 1
         
         return tries
