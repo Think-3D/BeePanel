@@ -110,7 +110,10 @@ class Cmd():
         if('Bad M-code 625' in resp):   #printer in bootloader mode
             print("Printer running in Bootloader Mode")
             print("Changing to firmware")
-            self.beeCon.sendCmd("M630\n")
+            self.beeCon.write("M630\n")
+            self.beeCon.close()
+            time.sleep(1)
+            
             return "Bootloader"
         elif('ok Q' in resp):
             print("Printer running in firmware mode")
@@ -526,7 +529,7 @@ class Cmd():
         """
         
         #Get BeeCode
-        self.beeCon.sendCmd("M400\n")
+        resp = self.beeCon.sendCmd("M400\n")
         
         splits = resp.split(" ")
         
@@ -582,7 +585,45 @@ class Cmd():
                 resp = self.beeCon.sendCmd("\n")
             tries -= 1
         
-        return
+        return tries
+    
+    """*************************************************************************
+                                getFileList Method 
+    
+    *************************************************************************"""
+    def getFileList(self):
+        
+        fList = []
+        
+        self.initSD()
+
+        resp = ""
+        self.beeCon.write("M20\n")
+            
+        while("end file list" not in resp.lower()):
+            resp += self.beeCon.read()
+        
+        lines = resp.split('\n')
+        
+        for l in lines:
+            
+            if("/" in l):
+                if("firmware.bck" in l.lower()):
+                    pass
+                elif("config.txt" in l.lower()):
+                    pass
+                elif("config.bck" in l.lower()):
+                    pass
+                elif(l == ""):
+                    pass
+                else:
+                    fName = l[1:len(l)-1]
+                    fList.append(fName)
+            elif("end file list" in l.lower()):
+                return fList
+            
+        return fList
+        
     """*************************************************************************
                                 CraeteFile Method 
     

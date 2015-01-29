@@ -73,9 +73,6 @@ class FileBrowserLoader():
     pickerStrlen = None
     pickerRowCount = None
     
-    rpiDir = None
-    usbDir = None
-    
     slicingImgJson = None
     transfImgJson = None
     heatImgJson = None
@@ -238,9 +235,9 @@ class FileBrowserLoader():
         """
         File Picker Configuration
         """
-        dirJson = json.loads(json.dumps(self.interfaceJson['FileFolders']))
-        self.rpiDir = dirJson['RPI']
-        self.usbDir = dirJson['USB']
+        #dirJson = json.loads(json.dumps(self.interfaceJson['FileFolders']))
+        #self.rpiDir = dirJson['RPI']
+        #self.usbDir = dirJson['USB']
         
         """
         Image Files Configuration
@@ -475,18 +472,7 @@ class FileBrowserLoader():
     """
     def GetPickerRowCount(self):
         return self.pickerRowCount
-    
-    """
-    GetRpiDir
-    """
-    def GetRpiDir(self):
-        return self.rpiDir
-    
-    """
-    GetUsbDir
-    """
-    def GetUsbDir(self):
-        return self.usbDir
+
     
     """*************************************************************************
                                 IMAGES

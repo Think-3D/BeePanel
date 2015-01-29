@@ -58,7 +58,7 @@ class FileBrowserScreen():
     
     buttons = None              #list for interface buttons
     
-    selectedRoot = "RPI"
+    selectedRoot = "BTF"
     selctedRootRect = None
     
     cancelTransfer = False
@@ -76,6 +76,9 @@ class FileBrowserScreen():
     listPosition = 0
     selectedFileIdx = 0
     pickerStrLen = 20
+    usbDev = None
+    usbPaths = None
+    usbNames = None
     
     selectedFileName = None
     
@@ -169,7 +172,7 @@ class FileBrowserScreen():
         self.progressBar = self.interfaceLoader.GetProgessBar()
         
         #FILE LIST
-        self.LoadFileList(self.interfaceLoader.GetRpiDir())
+        self.LoadFileList("BTF")
         self.pickerStrLen = self.interfaceLoader.GetPickerStrLen()
         
         self.slicingImg = pygame.image.load(self.interfaceLoader.GetSlicingImgPath())
@@ -210,12 +213,12 @@ class FileBrowserScreen():
                         self.listPosition = self.listPosition - 1
                     elif btnName == "Down":
                         self.listPosition = self.listPosition + 1
-                    elif btnName == "RPI":
+                    elif btnName == "BTF":
                         self.listPosition = 0
-                        self.LoadFileList(self.interfaceLoader.GetRpiDir())
+                        self.LoadFileList("BTF")
                         self.selectedRoot = btnName
                     elif btnName == "USB":
-                        self.LoadFileList(self.interfaceLoader.GetUsbDir())
+                        self.LoadFileList("USB")
                         self.selectedRoot = btnName
                     elif btnName == "Next":
                         self.selectedFileIdx = (2+self.listPosition) % len(self.fileList)
@@ -311,22 +314,27 @@ class FileBrowserScreen():
     *************************************************************************""" 
     def draw(self):
         
+        #DRAW TOP LABELS
         self.screen.blit(self.lblTop, (self.interfaceLoader.GetTopLblXPos(self.interfaceState),
                                             self.interfaceLoader.GetTopLblYPos(self.interfaceState)))
-                                            
+        
+        #DRAW LABELS
         for i in range(0,len(self.lblText)):
             self.screen.blit(self.lbl[i], (self.interfaceLoader.GetlblTopXPos(self.interfaceState)[i],
                                             self.interfaceLoader.GetlblTopYPos(self.interfaceState)[i]))
-            
+        #DRAW BUTTONS
         for btn in self.buttons:
             btn.draw(self.screen)
             btnName = btn._propGetName()
             if (btnName == self.selectedRoot) or (btnName == self.selectedRes) or (btnName == self.selectedFill):
                 pygame.draw.rect(self.screen, btn._propGetFgColor(), btn._propGetRect(), 3)
-                
         
+        """        
+            FILE PICKER INTERFACE
+        """
         if self.interfaceState == 0:
             
+            #LOAD FILE PICKER CONFIGURATION
             x = self.interfaceLoader.GetPickerX()
             y = self.interfaceLoader.GetPickerY()
             width = self.interfaceLoader.GetPickerWidth()
@@ -336,20 +344,25 @@ class FileBrowserScreen():
             pickerFont = self.interfaceLoader.GetPickerFont()
             lblOffset = int((height-fontSize)/2)
             
+            #CHECK IF THERE ARE MORE FILES THAN AVAILABLE PICKER LINES
             listRange = len(self.fileList)
             if listRange >= self.interfaceLoader.GetPickerRowCount():
                 listRange = self.interfaceLoader.GetPickerRowCount()
             
+            #FILL AVAILABLE LINES WITH TEXT
             for i in range(0, listRange):
+                #GET FILE PICKER POSITION
                 pos = i + self.listPosition
-
+                
+                #GET FILE LIST POSITION
                 idx = pos % len(self.fileList)
                 
+                #IF FILE NAME TOO LONG TRUNCATE
                 fileName = self.fileList[idx]
                 if len(fileName) > self.pickerStrLen:
                     fileName = fileName[:self.pickerStrLen-3] + "..."
                 lblStr = fileName
-
+                
                 fileLbl = None
                 yPos = 0
                 if ((i == int(listRange/3) + 1) and (listRange >= self.interfaceLoader.GetPickerRowCount())):
@@ -357,7 +370,8 @@ class FileBrowserScreen():
                 elif ((i == int(listRange/3)+1) and (listRange < self.interfaceLoader.GetPickerRowCount())):
                     fileLbl = pickerFont.render(lblStr, 1, pickerColor)
                 else:
-                    font = pygame.font.Font("/Fonts/DejaVuSans-Light.ttf",fontSize)
+                    ff = FileFinder.FileFinder()
+                    font = pygame.font.Font(ff.GetAbsPath("/Fonts/DejaVuSans-Light.ttf"),fontSize)
                     fileLbl = font.render(lblStr, 1, pickerColor)
                     
                 if listRange >= self.interfaceLoader.GetPickerRowCount():
@@ -374,11 +388,14 @@ class FileBrowserScreen():
 
             self.pickFileRect = pygame.draw.rect(self.screen, pickerColor, (x,y,width,height), 3)
             
+            
+        
+        #SLICE INTERFACE
         elif self.interfaceState == 2:
             # Draw Image
             self.screen.blit(self.slicingImg,(self.slicingImgX,self.slicingImgY))
         
-        #TRANSFERING
+        #TRANSFERING INTERFACE
         elif self.interfaceState == 3:
             # Draw Image
             self.screen.blit(self.transfImg,(self.transfImgX,self.transfImgY))
@@ -431,6 +448,9 @@ class FileBrowserScreen():
         self.listPosition = None
         self.selectedFileIdx = None
         self.pickerStrLen = None
+        self.usbDev = None
+        self.usbPaths = None
+        self.usbNames = None
         self.selectedFileName = None
         self.ready2Print = None
         self.selectedRes = None
@@ -515,7 +535,7 @@ class FileBrowserScreen():
             if (posX>pickerXMin) and (posX<pickerXMax) and (posY>pickerYMin) and (posY<pickerYMax):
                 relY = posY - pickerYMin
                 idxChange = -2 + int(relY/height)
-                self.listPosition = self.listPosition + idxChange
+                self.listPosition += idxChange
         
         return 
     
@@ -528,15 +548,50 @@ class FileBrowserScreen():
         
         self.fileList = []
         
-        ff = FileFinder.FileFinder()
-        
-        for file in os.listdir(ff.GetAbsPath(directory)):
-            if file.endswith(".stl") or file.endswith(".gcode"):                
-                self.fileList.append(file)
-                #print(file)
-                
+        if(directory == "BTF"):
+            print("loading BTF files")
+            self.fileList = self.beeCmd.getFileList()
+        elif(directory == "USB"):
+            self.fileList = self.FindUSBDrives()
+                            
         return
+
+    """*************************************************************************
+                                FindUSBDrives Method 
     
+    
+    *************************************************************************"""
+    def FindUSBDrives(self):
+        self.usbDev = []
+        self.usbPaths = []
+        self.usbNames = []
+        
+        partitionsFile = open("/proc/partitions")
+        lines = partitionsFile.readlines()[2:]#Skips the header lines
+        for line in lines:
+            words = [x.strip() for x in line.split()]
+            minorNumber = int(words[1])
+            deviceName = words[3]
+            if minorNumber % 16 == 0:
+                path = "/sys/class/block/" + deviceName
+                if os.path.islink(path):
+                    if os.path.realpath(path).find("/usb") > 0:
+                        devName = "/dev/%s" % deviceName
+                        self.usbDev.append(devName)
+                        
+                        #GET CORRESPONDING NAME AND PATH
+                        mountsFile = open("/proc/mounts")
+                        linesMount = mountsFile.readlines()
+                        for l in linesMount:
+                            wordsMounts = [y.strip() for y in l.split()]
+                            if(devName in wordsMounts[0]):
+                                self.usbPaths.append(wordsMounts[1])
+                                pathSplit = wordsMounts[1].split('/')
+                                self.usbNames.append(pathSplit[len(pathSplit)-1])
+            
+            
+        return self.usbNames
+
     """*************************************************************************
                                 transferFile Method 
     

@@ -48,13 +48,13 @@
                     },
             "FirstButtons":[
                 {
-                    "ButtonName":"RPI",
+                    "ButtonName":"BTF",
                     "X":"120",
                     "Y":"30",
                     "Width":"80",
                     "Height":"25",
                     "ButtonType":"Text",
-                    "Title":"RPI",
+                    "Title":"BTF",
                     "FontType":"Regular",
                     "FontSize":"12",
                     "FontColor":"0,0,0",
@@ -110,11 +110,6 @@
                     "HighlightedPath":"/Images/NextSmall.png"
                 }
             ],
-        "FileFolders":
-                {
-                    "RPI":"",
-                    "USB":"/USB"
-                },
         "FilePicker":
                 {
                     "X":"110",

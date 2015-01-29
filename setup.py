@@ -1,3 +1,4 @@
+#!/usr/local/bin/python3.4
 
 from distutils.core import setup
 from shutil import copyfile
