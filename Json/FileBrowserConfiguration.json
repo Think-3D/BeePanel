@@ -3,7 +3,7 @@
         {
             "FirstTopLabel":
                     {
-                        "Text":"Choose Root",
+                        "Text":"Browse File",
                         "X":"110",
                         "Y":"5",
                         "FontType":"Bold",
@@ -48,24 +48,11 @@
                     },
             "FirstButtons":[
                 {
-                    "ButtonName":"BTF",
+                    "ButtonName":"USB",
                     "X":"120",
                     "Y":"30",
                     "Width":"80",
-                    "Height":"25",
-                    "ButtonType":"Text",
-                    "Title":"BTF",
-                    "FontType":"Regular",
-                    "FontSize":"12",
-                    "FontColor":"0,0,0",
-                    "bgColor":"255,255,255"
-                },
-                {
-                    "ButtonName":"USB",
-                    "X":"220",
-                    "Y":"30",
-                    "Width":"80",
-                    "Height":"25",
+                    "Height":"35",
                     "ButtonType":"Text",
                     "Title":"USB",
                     "FontType":"Regular",
@@ -74,9 +61,22 @@
                     "bgColor":"255,255,255"
                 },
                 {
+                    "ButtonName":"BTF",
+                    "X":"220",
+                    "Y":"30",
+                    "Width":"80",
+                    "Height":"35",
+                    "ButtonType":"Text",
+                    "Title":"BTF",
+                    "FontType":"Regular",
+                    "FontSize":"12",
+                    "FontColor":"0,0,0",
+                    "bgColor":"255,255,255"
+                },
+                {
                     "ButtonName":"Up",
                     "X":"270",
-                    "Y":"65",
+                    "Y":"75",
                     "Width":"30",
                     "Height":"30",
                     "ButtonType":"Img",
@@ -115,12 +115,12 @@
                     "X":"110",
                     "Y":"130",
                     "Width":"150",
-                    "Height":"30",
+                    "Height":"55",
                     "FontColor":"0,0,0",
-                    "FontSize":"10",
+                    "FontSize":"12",
                     "FontType":"Bold",
                     "StringLen":"22",
-                    "RowCount":"5"
+                    "RowCount":"3"
                 },
         "FirstLabels":[
             ],

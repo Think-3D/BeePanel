@@ -59,8 +59,9 @@ class FileBrowserScreen():
     
     buttons = None              #list for interface buttons
     
-    selectedRoot = "BTF"
+    selectedRoot = "USB"
     selctedRootRect = None
+    usbOpened = False
     
     cancelTransfer = False
     initTransfer = False
@@ -80,8 +81,13 @@ class FileBrowserScreen():
     usbDev = None
     usbPaths = None
     usbNames = None
-    
+    selPickerName = None
+    pickerLabels = []
     selectedFileName = None
+    selectedFolderName = ""
+    selectedGCode = False
+    
+    pickerStateChanged = True
     
     """
     Slicer
@@ -156,6 +162,8 @@ class FileBrowserScreen():
         self.cancelTransfer = False
         self.initTransfer = False
         
+        self.pickerStateChanged = True
+        
         """
         Load lists and settings from interfaceLoader
         """
@@ -173,7 +181,13 @@ class FileBrowserScreen():
         self.progressBar = self.interfaceLoader.GetProgessBar()
         
         #FILE LIST
-        self.LoadFileList("BTF")
+        self.LoadFileList("USB")
+        #Verify if there is onlu one USB drive
+        if(len(self.fileList) == 1):
+            self.LoadFileList(self.usbPaths[0])
+            self.selectedFolderName = self.usbPaths[0]
+            self.usbOpened = True
+        
         self.pickerStrLen = self.interfaceLoader.GetPickerStrLen()
         
         self.slicingImg = pygame.image.load(self.interfaceLoader.GetSlicingImgPath())
@@ -202,10 +216,7 @@ class FileBrowserScreen():
         """handle all events."""
         for event in retVal:
             
-            if event.type == pygame.MOUSEBUTTONDOWN:
-            	self.GetSelectedIdx(event)
-                
-                
+            #VERIFY IF THE EVENT CAME FROM GUI BUTTONS
             for btn in self.buttons:
                 if 'click' in btn.handleEvent(event):
                     btnName = btn._propGetName()
@@ -215,12 +226,32 @@ class FileBrowserScreen():
                     elif btnName == "Down":
                         self.listPosition = self.listPosition + 1
                     elif btnName == "BTF":
+                        #clear whole screen
+                        self.screen.fill(pygame.Color(255,255,255))
+                        self.fileList = ['Please Wait','Loading...']
+                        self.update()
+                        self.draw()
+                        # update screen
+                        pygame.display.update()
+                        
                         self.listPosition = 0
                         self.LoadFileList("BTF")
                         self.selectedRoot = btnName
+                        self.pickerStateChanged = True
                     elif btnName == "USB":
                         self.LoadFileList("USB")
+                        self.usbOpened = False
+                        self.loadUSBDevices = True
+                        self.selectedFolderName = ""
+                        #Verify if there is onlu one USB drive
+                        if(len(self.fileList) == 1):
+                            self.LoadFileList(self.usbPaths[0])
+                            self.selectedFolderName = self.usbPaths[0]
+                            self.usbOpened = True
+                        
+                        self.selectedGCode = False
                         self.selectedRoot = btnName
+                        
                     elif btnName == "Next":
                         self.selectedFileIdx = (2+self.listPosition) % len(self.fileList)
                         self.selectedFileName = self.fileList[self.selectedFileIdx]
@@ -229,7 +260,10 @@ class FileBrowserScreen():
                         elif self.selectedFileName.endswith(".gcode"):
                             self.interfaceState = self.interfaceState + 3
                             self.initTransfer = True
-                            #self.transferFile(self.selectedFileName)
+                            if(self.selectedRoot == "USB"):
+                                self.transferFile(self.selectedFileName)
+                            elif(self.selectedRoot == "BTF"):
+                                pass
                         
                         print("Selected: ",self.selectedFileName)
                     elif btnName == "ResLow":
@@ -279,7 +313,16 @@ class FileBrowserScreen():
                     self.lblText = self.interfaceLoader.GetlblText(self.interfaceState)
                     
                     self.buttons = self.interfaceLoader.GetButtonsList(self.interfaceState)
-                    
+            
+            
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                #VERIFY IF THE USER SELECTED A FOLDE OR FILE
+                #IF A FILE IS SELECTED UPDATE THE LIST LABELS POSITION
+                #IF A FOLSER IS SELECTED UPDATE FILE LIST
+                if(self.GetPickerSelectedFolder(event)):
+                    self.GetSelectedIdx(event)
+                self.pickerStateChanged = True
+                        
             event = None
         
         return
@@ -291,14 +334,24 @@ class FileBrowserScreen():
     *************************************************************************"""
     def update(self):
         
+        #UPDATE TOP LABEL TEXT
         self.lblTop = self.lblTopFont.render(self.lblTopText, 1, self.lblTopFontColor)
         
+        #UPDARE LABELS TEXT
         self.lbl = []
         for i in range(0,len(self.lblText)):
             self.lbl.append(self.lblFont[i].render(self.lblText[i], 1, self.lblFontColor[i]))
         
+        #UPDATE BUTTONS
         for btn in self.buttons:
-            if self.interfaceState == 2:
+            #FILE BROWSER INTERFACE
+            if self.interfaceState == 0:
+                if(self.selectedRoot == "USB"):
+                    if(btn._propGetName() == "Next"):
+                        btn.visible = self.selectedGCode
+                else:
+                    btn.visible = True
+            elif self.interfaceState == 2:
                 if btn._propGetName() == "Print":
                     btn.visible = self.ready2Print
                 else:
@@ -333,6 +386,7 @@ class FileBrowserScreen():
         """        
             FILE PICKER INTERFACE
         """
+        self.pickerLabels = []
         if self.interfaceState == 0:
             
             #LOAD FILE PICKER CONFIGURATION
@@ -343,7 +397,7 @@ class FileBrowserScreen():
             pickerColor = self.interfaceLoader.GetPickerFontColor()
             fontSize = self.interfaceLoader.GetPickerFontSize()
             pickerFont = self.interfaceLoader.GetPickerFont()
-            lblOffset = int((height-fontSize)/2)
+            lblOffset = (height-fontSize)//2
             
             #CHECK IF THERE ARE MORE FILES THAN AVAILABLE PICKER LINES
             listRange = len(self.fileList)
@@ -352,41 +406,67 @@ class FileBrowserScreen():
             
             #FILL AVAILABLE LINES WITH TEXT
             for i in range(0, listRange):
+                
                 #GET FILE PICKER POSITION
                 pos = i + self.listPosition
+                
+                #CENTER POS OFFSET
+                centerOffset = 0
+                if(listRange < self.interfaceLoader.GetPickerRowCount()):
+                    halfPicker = self.interfaceLoader.GetPickerRowCount()//2
+                    topOffset = -(listRange-self.interfaceLoader.GetPickerRowCount())//2
+                    centerOffset += halfPicker - topOffset
                 
                 #GET FILE LIST POSITION
                 idx = pos % len(self.fileList)
                 
                 #IF FILE NAME TOO LONG TRUNCATE
                 fileName = self.fileList[idx]
+                lblStr = ""
+                if(self.selectedFolderName == "" and self.selectedRoot == "USB"):
+                    lblStr = "USB:"
+
                 if len(fileName) > self.pickerStrLen:
-                    fileName = fileName[:self.pickerStrLen-3] + "..."
-                lblStr = fileName
+                    lblStr += fileName[:self.pickerStrLen-3] + "..."
+                else:
+                    lblStr += fileName
                 
                 fileLbl = None
                 yPos = 0
-                if ((i == int(listRange/3) + 1) and (listRange >= self.interfaceLoader.GetPickerRowCount())):
+                
+                #CENTER ITEM SHOULD BE WRITEN IN BOLD
+                if ((i == listRange//2) and 
+                        ((listRange >= self.interfaceLoader.GetPickerRowCount()) or (listRange < self.interfaceLoader.GetPickerRowCount()))):
                     fileLbl = pickerFont.render(lblStr, 1, pickerColor)
-                elif ((i == int(listRange/3)+1) and (listRange < self.interfaceLoader.GetPickerRowCount())):
-                    fileLbl = pickerFont.render(lblStr, 1, pickerColor)
+                    #Update selected label
+                    self.selPickerName = fileName
+                    #Verify if a picker change occurred
+                    if(self.pickerStateChanged):
+                        self.isGcodeFile(self.selPickerName)
+                        self.pickerStateChanged = False
                 else:
                     ff = FileFinder.FileFinder()
                     font = pygame.font.Font(ff.GetAbsPath("/Fonts/DejaVuSans-Light.ttf"),fontSize)
                     fileLbl = font.render(lblStr, 1, pickerColor)
-                    
+                
+                #CALCULATE Y POSITION AND OFFSET LABEL FROM BORDERS
                 if listRange >= self.interfaceLoader.GetPickerRowCount():
-                    yPos = y+lblOffset+((-2+i)*height)
+                    yPos = y+lblOffset+((-1+i)*height)
                 else:
-                    yPos = y+lblOffset+((-2+i)*height)
-                    
+                    #yPos = y+lblOffset+((-(halfPicker - topOffset)+i)*height)
+                    yPos = y + lblOffset + height * (i - centerOffset)
+                
+                #DRAW FILE NAME LABEL
                 self.screen.blit(fileLbl, (x + int(0.1*height),yPos))
+                self.pickerLabels.append(fileName)
 
-                if (i>0 and i<listRange) and listRange > 2:
+                #DRAW LINES SEPARATING ENTRIES IF ENOUGH LINES
+                if (i>0 and i<listRange and self.interfaceLoader.GetPickerRowCount() > 3):
                     pygame.draw.line(self.screen, pickerColor, (x, y+((-2+i)*height)),
                                 (x+width, y+((-2+i)*height)), int(0.05*height))
-
-
+                    
+                
+            #DRAW CENTER FOCUS RECT
             self.pickFileRect = pygame.draw.rect(self.screen, pickerColor, (x,y,width,height), 3)
             
             
@@ -516,10 +596,7 @@ class FileBrowserScreen():
     
     Identifies which color the user chose by clicking the list
     *************************************************************************""" 
-    def GetSelectedIdx(self, event):
-        
-        #self.LoadFileList("/Users/marcosgomes/Downloads/",".stl")
-        
+    def GetSelectedIdx(self, event):        
         
         if self.interfaceState ==0:
             pos = pygame.mouse.get_pos()
@@ -554,6 +631,8 @@ class FileBrowserScreen():
             self.fileList = self.beeCmd.getFileList()
         elif(directory == "USB"):
             self.fileList = self.FindUSBDrives()
+        else:
+            self.fileList = [file for file in os.listdir(directory) if file.endswith('.gcode')]
                             
         return
 
@@ -600,11 +679,15 @@ class FileBrowserScreen():
                                 blkidLines = blkid.split('\n')
                                 for b in blkidLines:
                                     bWords = [z.strip() for z in b.split()]
-                                    if(devName in bWords[0]):
-                                        leftSplit = b.split('LABEL="')
-                                        rightSplit = leftSplit[1].split('" UUID')
-                                        self.usbNames.append(rightSplit[0] + "/")
-                                        break
+                                    if(len(bWords) > 0):
+                                        if(devName in bWords[0]):
+                                            leftSplit = b.split('LABEL="')
+                                            rightSplit = leftSplit[1].split('" UUID')
+                                            self.usbNames.append(rightSplit[0] + "/")
+                                            break
+                                if(len(self.usbNames) != len(self.usbPaths)):
+                                    folderName = wordsMounts[1].split('/')
+                                    self.usbNames.append(folderName[len(folderName)-1] + "/")
                                 break
                                 
             
@@ -618,18 +701,20 @@ class FileBrowserScreen():
     *************************************************************************""" 
     def transferFile(self, filename):
         
+        selectedFilePath = self.selectedFolderName + "/" + filename
+        
         self.initTransfer = False
         self.startPrint = False
         
         #check if file exists
-        if(os.path.isfile(filename) == False):
+        if(os.path.isfile(selectedFilePath) == False):
             print("File does not exist")
             return
         
         #Load File
         print("   :","Loading File")
-        f = open(filename, 'rb')
-        fSize = os.path.getsize(filename)
+        #f = open(selectedFilePath, 'rb')
+        fSize = os.path.getsize(selectedFilePath)
         print("   :","File Size: ", fSize, "bytes")
         
         blockBytes = self.beeCmd.MESSAGE_SIZE * self.beeCmd.BLOCK_SIZE
@@ -655,27 +740,26 @@ class FileBrowserScreen():
         startTime = time()
         
         #Load local file
-        with open(filename, 'rb') as f:
+        with open(selectedFilePath, 'rb') as f:
 
-            while(self.blocksTransfered < self.nBlocks and self.cancelTransfer == False):
+            self.beeCmd.transmisstionErrors = 0
 
+            while(self.blocksTransfered < self.nBlocks):
+                
                 startPos = totalBytes
-                endPos = totalBytes + blockBytes
+                #endPos = totalBytes + blockBytes
                 
-                bytes2write = endPos - startPos
+                #bytes2write = endPos - startPos
                 
-                if(self.blocksTransfered == self.nBlocks -1):
-                    self.beeCmd.StartTransfer(fSize,startPos)
-                    bytes2write = fSize - startPos
-                else:
-                    self.beeCmd.StartTransfer(endPos,startPos)
+                #if(self.blocksTransfered == self.nBlocks -1):
+                #    endPos = fSize
                     
-                msg2write = math.ceil(bytes2write/self.beeCmd.MESSAGE_SIZE)
-
-                for i in range(0,msg2write):
-                    msg = f.read(self.beeCmd.MESSAGE_SIZE)
-                    #print(msg)
-                    resp = self.beeCon.sendCmd(msg,"tog")
+                blockTransfered = False
+                while(blockTransfered == False):
+                    blockTransfered = self.beeCmd.sendBlock(startPos,f)
+                    if(blockTransfered is None):
+                        print("Transfer aborted")
+                        return False
 
                     #print(resp)
                     totalBytes += self.beeCmd.MESSAGE_SIZE
@@ -711,3 +795,99 @@ class FileBrowserScreen():
         self.interfaceState = 4
         
         return
+    
+    """*************************************************************************
+                                GetPickerSelectedEntry Method 
+    
+    
+    *************************************************************************""" 
+    def GetPickerSelectedFolder(self, event):
+        
+        
+        #VERIFY IF THE GUI IS SHOWING THE FILE PICKER
+        if self.interfaceState == 0:
+            
+            pos = pygame.mouse.get_pos()
+            posX = pos[0]
+            posY = pos[1]
+            
+            width = self.interfaceLoader.GetPickerWidth()
+            height = self.interfaceLoader.GetPickerHeight()
+            pickerXMin = self.interfaceLoader.GetPickerX()
+            pickerXMax = pickerXMin + width
+            pickerYMin = self.interfaceLoader.GetPickerY() - (2 * height)
+            pickerYMax = pickerYMin + (5 * height)
+            
+            
+            if (posX>pickerXMin) and (posX<pickerXMax) and (posY>pickerYMin) and (posY<pickerYMax):
+                relY = posY - pickerYMin
+                pickerPos = 1 - relY//height
+                
+                #IF WE'RE BROWSING THE USB (!BTF) THE INITIAL ROOT == USB 
+                if(self.selectedRoot != "BTF" and self.selectedRoot == "USB" and self.usbOpened == False):
+                    
+                    if(len(self.usbNames) <=1 ):
+                        #self.LoadFileList(self.usbPaths[0])
+                        return
+                    #Get initial path for selected drive
+                    try:
+                        selPath = self.GetUSBDrivePath(self.pickerLabels[pickerPos][:-1])
+                        self.selectedFolderName = selPath
+                        #RELOAD FILE LIST
+                        self.LoadFileList(self.selectedFolderName)
+                    except:
+                        self.LoadFileList("USB")
+                    
+                    return True
+            
+            
+        return True
+    
+    """*************************************************************************
+                                GetUSBDrivePath Method 
+    
+    
+    *************************************************************************""" 
+    def GetUSBDrivePath(self, dName):
+        
+        for i in range(len(self.usbNames)):
+            if(dName in self.usbNames[i]):
+                return self.usbPaths[i]
+            
+        return None
+    
+    """*************************************************************************
+                                isGcodeFile Method 
+    
+    
+    *************************************************************************""" 
+    def isGcodeFile(self, fName):
+        
+        #IF SEARCHING BTF FILES IGNORE AND EXIT
+        if(self.selectedRoot == "BTF"):
+            self.selectedGCode = False
+            return True
+        
+        #IF THERE IS NO DRIVE SEELCTED, DISABLE PRINT AND EXIT
+        if(self.selectedFolderName == ""):
+            self.selectedGCode = False
+            return False
+        
+        try:
+            selectedFilePath = self.selectedFolderName + "/" + self.selPickerName
+        except:
+            selectedFilePath = ""
+        
+        #VERIFY IF FILE EXISTS
+        if(not os.path.isfile(selectedFilePath)):
+            print("File does not exist: ", selectedFilePath)
+            self.selectedGCode = False
+            return False
+        
+        print("isGcode: ", selectedFilePath)
+        self.selectedGCode = True
+        
+        return True
+    
+    
+    
