@@ -83,9 +83,9 @@ class Con():
         self.connected = False
         
         # find our device
-        #self.dev = usb.core.find(idVendor=0xffff, idProduct=0x014e,backend=libusb1.get_backend())
+        self.dev = usb.core.find(idVendor=0xffff, idProduct=0x014e,backend=libusb1.get_backend())
         #self.dev = usb.core.find(idVendor=0xffff, idProduct=0x014e,backend=libusb0.get_backend())
-        self.dev = usb.core.find(idVendor=0xffff, idProduct=0x014e,backend=openusb.get_backend())
+        #self.dev = usb.core.find(idVendor=0xffff, idProduct=0x014e,backend=openusb.get_backend())
         
         # was it found? no, try the other device
         if self.dev is None:
@@ -183,6 +183,7 @@ class Con():
         sret = ""
         
         try:
+            self.write("")
             ret = self.ep_in.read(self.DEFAULT_READ_LENGTH, timeout)
             sret = ''.join([chr(x) for x in ret])
         except usb.core.USBError as e:

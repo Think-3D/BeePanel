@@ -56,7 +56,7 @@ class Cmd():
     beeCon = None
     
     MESSAGE_SIZE = 512
-    BLOCK_SIZE = 32
+    BLOCK_SIZE = 64
     
     transmisstionErrors = 0
 
@@ -591,7 +591,9 @@ class Cmd():
     *************************************************************************"""
     def getFileList(self):
         
-        fList = []
+        fList = {}
+        fList['FileNames'] = []
+        fList['FilePaths'] = []
         
         self.initSD()
 
@@ -608,6 +610,8 @@ class Cmd():
             if("/" in l):
                 if("firmware.bck" in l.lower()):
                     pass
+                elif("firmware.bin" in l.lower()):
+                    pass
                 elif("config.txt" in l.lower()):
                     pass
                 elif("config.bck" in l.lower()):
@@ -616,7 +620,9 @@ class Cmd():
                     pass
                 else:
                     fName = l[1:len(l)-1]
-                    fList.append(fName)
+                    fList['FileNames'].append(fName)
+                    fList['FilePaths'].append('')
+                    
             elif("end file list" in l.lower()):
                 return fList
             
@@ -758,7 +764,7 @@ class Cmd():
         
         cancels current print and home the printer axis
         """
-        self.beeCon.sendCmd("M112\n")
+        self.beeCon.write("M112\n")
         self.homeZ()
         self.homeXY()
         
@@ -898,6 +904,7 @@ class Cmd():
             print("Cleaning")
             try:
                 self.beeCon.write(cleanStr,50)
+                self.beeCon.write("",50)
                 resp = self.beeCon.read(50)
                 acc_resp += resp
                 print(resp)

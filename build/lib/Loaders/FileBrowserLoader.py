@@ -106,27 +106,19 @@ class FileBrowserLoader():
         self.topLblJson.append(json.loads(json.dumps(self.interfaceJson['FirstTopLabel'])))
         self.topLblJson.append(json.loads(json.dumps(self.interfaceJson['SecondTopLabel'])))
         self.topLblJson.append(json.loads(json.dumps(self.interfaceJson['ThirdTopLabel'])))
-        self.topLblJson.append(json.loads(json.dumps(self.interfaceJson['FourthTopLabel'])))
-        self.topLblJson.append(json.loads(json.dumps(self.interfaceJson['FifthTopLabel'])))
         
         self.buttonsJson.append(json.loads(json.dumps(self.interfaceJson['FirstButtons'])))
         self.buttonsJson.append(json.loads(json.dumps(self.interfaceJson['SecondButtons'])))
         self.buttonsJson.append(json.loads(json.dumps(self.interfaceJson['ThirdButtons'])))
-        self.buttonsJson.append(json.loads(json.dumps(self.interfaceJson['FourthButtons'])))
-        self.buttonsJson.append(json.loads(json.dumps(self.interfaceJson['FifthButtons'])))
         
+        """
         self.lblsJson.append(json.loads(json.dumps(self.interfaceJson['FirstLabels'])))
         self.lblIndexes.append(len(self.lblsJson[0]))
         self.lblsJson.append(json.loads(json.dumps(self.interfaceJson['SecondLabels'])))
         self.lblIndexes.append(len(self.lblsJson[1]))
         self.lblsJson.append(json.loads(json.dumps(self.interfaceJson['ThirdLabels'])))
-        self.lblIndexes.append(len(self.lblsJson[2]))
-        self.lblsJson.append(json.loads(json.dumps(self.interfaceJson['FourthLabels'])))
-        self.lblIndexes.append(len(self.lblsJson[3]))
-        self.lblsJson.append(json.loads(json.dumps(self.interfaceJson['FifthLabels'])))
-        self.lblIndexes.append(len(self.lblsJson[4]))
+        """
         
-        self.slicingImgJson = json.loads(json.dumps(self.interfaceJson['SlicingImage']))
         self.transfImgJson = json.loads(json.dumps(self.interfaceJson['TransfImage']))
         self.heatImgJson = json.loads(json.dumps(self.interfaceJson['HeatImage']))
         
@@ -149,6 +141,7 @@ class FileBrowserLoader():
         """
         Load Labels Configuration
         """
+        """
         for lbls in self.lblsJson:
             lblJson = json.loads(json.dumps(lbls))
             for lbl in lblJson:
@@ -163,6 +156,7 @@ class FileBrowserLoader():
                 splitColor = lblFColor.split(",")
                 fontColor = pygame.Color(int(splitColor[0]),int(splitColor[1]),int(splitColor[2]))
                 self.lblFontColor.append(fontColor)
+        """
         
         """
         Load Buttons Configuration
@@ -242,12 +236,8 @@ class FileBrowserLoader():
         """
         Image Files Configuration
         """
-        self.slicingImgPath = ff.GetAbsPath(self.slicingImgJson['ImgPath'])
         self.transfImgPath = ff.GetAbsPath(self.transfImgJson['ImgPath'])
         self.heatImgPath = ff.GetAbsPath(self.heatImgJson['ImgPath'])
-        
-        self.slicingImgX = int(self.slicingImgJson['X'])
-        self.slicingImgY = int(self.slicingImgJson['Y'])
         
         self.transfImgX = int(self.transfImgJson['X'])
         self.transfImgY = int(self.transfImgJson['Y'])
@@ -368,52 +358,37 @@ class FileBrowserLoader():
     returns the list with the label text
     """
     def GetlblText(self,BrowserState):
-        startIdx = 0
-        for i in range(0,BrowserState):
-            startIdx = startIdx + self.lblIndexes[i]
-        endIdx = startIdx + self.lblIndexes[BrowserState]        
-        return self.lblText[startIdx:endIdx]
+                
+        return self.lblText[BrowserState]
     
     """
     GetlblFont
     """
     def GetlblFont(self,BrowserState):
-        startIdx = 0
-        for i in range(0,BrowserState):
-            startIdx = startIdx + self.lblIndexes[i]
-        endIdx = startIdx + self.lblIndexes[BrowserState]
-        return self.lblFont[startIdx:endIdx]
+        
+        return self.lblFont[BrowserState]
     
     """
     GetlblFontColor
     """
     def GetlblFontColor(self,BrowserState):
-        startIdx = 0
-        for i in range(0,BrowserState):
-            startIdx = startIdx + self.lblIndexes[i]
-        endIdx = startIdx + self.lblIndexes[BrowserState]
-        return self.lblFontColor[startIdx:endIdx]
+        
+        return self.lblFontColor[BrowserState]
     
     
     """
     GetlblTopXPos
     """
     def GetlblTopXPos(self,BrowserState):
-        startIdx = 0
-        for i in range(0,BrowserState):
-            startIdx = startIdx + self.lblIndexes[i]
-        endIdx = startIdx + self.lblIndexes[BrowserState]
-        return self.lblXPos[startIdx:endIdx]
+        
+        return self.lblXPos[BrowserState]
     
     """
     GetlblTopYPos
     """
     def GetlblTopYPos(self,BrowserState):
-        startIdx = 0
-        for i in range(0,BrowserState):
-            startIdx = startIdx + self.lblIndexes[i]
-        endIdx = startIdx + self.lblIndexes[BrowserState]
-        return self.lblYPos[startIdx:endIdx]
+        
+        return self.lblYPos[BrowserState]
     
     """*************************************************************************
                                 FILE PICKER

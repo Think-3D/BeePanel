@@ -3,7 +3,6 @@
 	<name>BeePanel</name>
 	<comment></comment>
 	<projects>
-		<project>BeeTFPythonConsole</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

@@ -215,6 +215,8 @@ class BeePanel():
         """
         Wait For Connection
         """
+        
+        
         waitScreen = WaitForConnection.WaitScreen(self.screen)
         #If the user closes the windows without a connection
         if not waitScreen.connected:
@@ -228,6 +230,7 @@ class BeePanel():
         
         self.GetBEEStatus()
         
+        
         """
         Print interface screen
         """
@@ -239,6 +242,10 @@ class BeePanel():
             Init Interfaces Screens
             """
             self.beeCmd.home()
+            self.currentScreenName = self.jsonLoader.GetDefaultScreen()
+            self.LoadCurrentScreen(self.currentScreenName)
+        else:
+            print("COULD NOT GET STATUS, Connection Wait happened???")
             self.currentScreenName = self.jsonLoader.GetDefaultScreen()
             self.LoadCurrentScreen(self.currentScreenName)
         
@@ -258,6 +265,10 @@ class BeePanel():
         
         print("Starting BeePanel")
         
+        #CLEAR EXISTING EVENTS
+        retVal = pygame.event.get()
+        retVal = None
+        
         while not self.done:
             
             # Handle events
@@ -275,16 +286,20 @@ class BeePanel():
             pullRes = self.currentScreen.Pull()
             
             #check for gobal actions
+            
             if(pullRes is not None):
                 print(pullRes)
-                if(pullRes == "Transfer"):
-                    #init print screen in Transfer state
-                    self.BeeState = "Transfer"
-                    self.cancelTransfer = False
-                    fileName = self.currentScreen.selectedFileName
-                    self.LoadCurrentScreen("Print", 5)
-                    self.transferFile(fileName)
-                
+                if(pullRes == "Printing"):
+                    self.restart = True
+                    self.currentScreen.KillAll()
+                    self.currentScreen = None
+                    self.beeCmd = None
+                    self.beeCon.close()
+                    self.beeCon = None
+                    self.done = True
+                    time.sleep(1)
+                    break
+            
             
             # Check for interface CallBack
             if((self.currentScreen.ExitCallBack() is not None)):
@@ -313,7 +328,9 @@ class BeePanel():
         
         retVal = pygame.event.get()
         """handle all events."""
+        buttonEvent = False
         for event in retVal:
+            
             if event.type == pygame.QUIT:
                 print("quit")
                 self.restart = False
@@ -325,27 +342,39 @@ class BeePanel():
                     btnName = btn._propGetName()
                     if btnName == "MenuUp":
                         self.currentIdx = self.currentIdx - 1
+                        buttonEvent = True
                     elif btnName == "MenuDown":
                         self.currentIdx = self.currentIdx + 1
+                        buttonEvent = True
                     self.UpdateLeftButtons()
+            
+            if(buttonEvent == True):
+                break
             
             setScreen = None
             for btn in self.leftMenuButtons:
                 if 'click' in btn.handleEvent(event):
                     if btn._propGetName() == "Printer Info":
                         setScreen = "PrinterInfo"
+                        buttonEvent = True
                     elif btn._propGetName() == "Jog":
                         setScreen = "Jog"
+                        buttonEvent = True
                     elif btn._propGetName() == "Calibration":
                         setScreen = "Calibration"
+                        buttonEvent = True
                     elif btn._propGetName() == "Filament":
                         setScreen = "FilamentChange"
+                        buttonEvent = True
                     elif btn._propGetName() == "Settings":
                         setScreen = "Settings"
+                        buttonEvent = True
                     elif btn._propGetName() == "Browser":
                         setScreen = "FileBrowser"
+                        buttonEvent = True
                     elif btn._propGetName() == "About":
                         setScreen = "About"
+                        buttonEvent = True
                     
             
             if (not (setScreen is None)) and (not setScreen==self.currentScreen.GetCurrentScreenName()):
@@ -353,7 +382,9 @@ class BeePanel():
                     self.beeCmd.home()
                 self.LoadCurrentScreen(setScreen)
                 
-            
+        if(buttonEvent == True):
+            return
+        
         respEvent = self.currentScreen.handle_events(retVal)
         
         if(self.BeeState == "Transfer" and respEvent == "Cancel"):

@@ -174,7 +174,7 @@ class PrintScreen():
                         if(self.interfaceState == 0):
                             self.beeCmd.cancelSDPrint()
                         self.exitCallBackResp = "Restart"
-                        return "Cancel"
+                        break
                     elif btnName == "Resume":
                         self.interfaceState = 0
                         print("\n//TODO: SEND RESUME PRINT\n")
@@ -492,4 +492,4 @@ class PrintScreen():
                 idxChange = -2 + int(relY/height)
                 self.listPosition = self.listPosition + idxChange
         
-        return 
+        return

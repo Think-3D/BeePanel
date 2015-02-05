@@ -45,6 +45,7 @@ Added Methods and propoerty for name var, which allow to add a name to the butto
 """
 import pygame
 from pygame.locals import *
+#import pygame.locals
 
 pygame.font.init()
 PYGBUTTON_FONT = pygame.font.Font('freesansbold.ttf', 14)
