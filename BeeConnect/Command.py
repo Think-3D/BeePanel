@@ -580,8 +580,11 @@ class Cmd():
         tries = 10
         resp = ""
         while((tries > 0) and ("ok" not in resp.lower())):
-            resp += self.beeCon.read()
-            tries -= 1
+            try:
+                resp += self.beeCon.read()
+                tries -= 1
+            except:
+                pass
         
         return tries
     
