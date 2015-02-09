@@ -1,4 +1,5 @@
 #!/usr/local/bin/python3
+from Onboard.OnboardGtk import app
 
 
 r"""
@@ -228,8 +229,23 @@ class BeePanel():
         waitScreen.KillAll()
         waitScreen = None
         
-        self.GetBEEStatus()
         
+
+        
+        return
+        
+    """*************************************************************************
+                                Start Method 
+    
+    *************************************************************************"""
+    def start(self):
+        """
+        BeePanel Infinite Loop
+        
+        
+        """
+        
+        self.GetBEEStatus()
         
         """
         Print interface screen
@@ -246,28 +262,19 @@ class BeePanel():
             self.LoadCurrentScreen(self.currentScreenName)
         else:
             print("COULD NOT GET STATUS, Connection Wait happened???")
-            self.currentScreenName = self.jsonLoader.GetDefaultScreen()
-            self.LoadCurrentScreen(self.currentScreenName)
-        
-        return
-        
-    """*************************************************************************
-                                Start Method 
-    
-    *************************************************************************"""
-    def start(self):
-        """
-        BeePanel Infinite Loop
-        
-        
-        
-        """
+            #self.currentScreenName = self.jsonLoader.GetDefaultScreen()
+            #self.LoadCurrentScreen(self.currentScreenName)
+            
+            return None
         
         print("Starting BeePanel")
         
         #CLEAR EXISTING EVENTS
         retVal = pygame.event.get()
         retVal = None
+        
+        self.exitApp = False
+        self.restart = False
         
         while not self.done:
             
@@ -291,6 +298,8 @@ class BeePanel():
                 print(pullRes)
                 if(pullRes == "Printing"):
                     self.restart = True
+                    """
+                    self.restart = True
                     self.currentScreen.KillAll()
                     self.currentScreen = None
                     self.beeCmd = None
@@ -298,6 +307,7 @@ class BeePanel():
                     self.beeCon = None
                     self.done = True
                     time.sleep(1)
+                    """
                     break
             
             
@@ -313,7 +323,7 @@ class BeePanel():
                 self.beeCon = None
                 self.done = True
             
-        pygame.quit()
+        #pygame.quit()
         
         return
         
@@ -329,6 +339,13 @@ class BeePanel():
         retVal = pygame.event.get()
         """handle all events."""
         buttonEvent = False
+        
+        respEvent = self.currentScreen.handle_events(retVal)
+        
+        if(self.BeeState == "Transfer" and respEvent == "Cancel"):
+            self.cancelTransfer = True
+        
+        
         for event in retVal:
             
             if event.type == pygame.QUIT:
@@ -384,11 +401,6 @@ class BeePanel():
                 
         if(buttonEvent == True):
             return
-        
-        respEvent = self.currentScreen.handle_events(retVal)
-        
-        if(self.BeeState == "Transfer" and respEvent == "Cancel"):
-            self.cancelTransfer = True
         
         return
         
@@ -555,7 +567,16 @@ def restart_app():
 *************************************************************************"""  
 if __name__ == '__main__':
     app = BeePanel()
-    app.start()
+    while(app.exitApp == False):
+        try:
+            app.start()
+        except:
+            app = BeePanel()
+            print('Application error occurred')
+    
+    pygame.quit()
+    """
     if(app.restart == True):
         app = None
         restart_app()
+    """

@@ -48,7 +48,7 @@ import time
 import time
 import math
 
-import BeeConnect
+import BeeConnect.Connection
 
 class Cmd():
     
@@ -580,8 +580,11 @@ class Cmd():
         tries = 10
         resp = ""
         while((tries > 0) and ("ok" not in resp.lower())):
-            resp += self.beeCon.read()
-            tries -= 1
+            try:
+                resp += self.beeCon.read()
+                tries -= 1
+            except:
+                pass
         
         return tries
     
@@ -764,9 +767,22 @@ class Cmd():
         
         cancels current print and home the printer axis
         """
-        self.beeCon.write("M112\n")
-        self.homeZ()
-        self.homeXY()
+        
+        print('Cancelling print')
+        self.beeCon.write("M112\n",100)
+        print(self.beeCon.read(100))
+        
+        self.beeCon.write("G28 Z \n",100)
+        self.beeCon.read(100)
+        
+        self.beeCon.write("G28\n",100)
+        print(self.beeCon.read(100))
+        
+        print(self.beeCon.read())
+        
+        #self.beeCon.read()
+        #self.homeZ()
+        #self.homeXY()
         
         return True
 
@@ -903,8 +919,9 @@ class Cmd():
         while("ok" not in acc_resp.lower() and tries > 0):
             print("Cleaning")
             try:
-                self.beeCon.write(cleanStr,50)
-                resp = self.beeCon.read(50)
+                self.beeCon.write(cleanStr,25)
+                self.beeCon.write("",25)
+                resp = self.beeCon.read(25)
                 acc_resp += resp
                 print(resp)
                 tries -= 1

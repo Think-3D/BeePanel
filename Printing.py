@@ -100,7 +100,7 @@ class PrintScreen():
     """
     Color Picker vars
     """
-    pickColorRect = None        #Rect for selected color
+    pickColorRect = None  # Rect for selected color
     colorCodes = None
     colorNameList = None
     colorCodeList = None
@@ -111,7 +111,7 @@ class PrintScreen():
     """
     BEEConnect vars
     """
-    #conn = None
+    # conn = None
     beeCon = None
     beeCmd = None
     
@@ -123,7 +123,7 @@ class PrintScreen():
     
     Inits current screen components
     *************************************************************************"""
-    def __init__(self, screen, interfaceLoader, cmd, interfaceState = 0):
+    def __init__(self, screen, interfaceLoader, cmd, interfaceState=0):
         """
         .
         """
@@ -132,12 +132,12 @@ class PrintScreen():
         self.beeCmd = cmd
         self.beeCon = self.beeCmd.beeCon
         
-        self.interfaceState = interfaceState         #set interface state
+        self.interfaceState = interfaceState  # set interface state
         
         self.screen = screen
         self.interfaceLoader = interfaceLoader
         
-        #TODO UPDATE TIME REMAINING
+        # TODO UPDATE TIME REMAINING
         self.timeRemaining = 0
         
         self.UpdateVars()
@@ -163,8 +163,7 @@ class PrintScreen():
         
         """handle all events."""
         for event in retVal:
-            if event.type == pygame.MOUSEBUTTONDOWN:
-            	self.GetSelectedIdx(event)
+            buttonEvent = False
 
             for btn in self.buttons:
                 if 'click' in btn.handleEvent(event):
@@ -173,6 +172,7 @@ class PrintScreen():
                     if btnName == "Cancel":
                         if(self.interfaceState == 0):
                             self.beeCmd.cancelSDPrint()
+                        buttonEvent = True
                         self.exitCallBackResp = "Restart"
                         break
                     elif btnName == "Resume":
@@ -201,11 +201,14 @@ class PrintScreen():
                     elif btnName == "Down":
                         self.listPosition = self.listPosition + 1
                     elif btnName == "Next":
-                        self.selectedColoridx = (2+self.listPosition) % len(self.colorList)
+                        self.selectedColoridx = (2 + self.listPosition) % len(self.colorList)
                         self.interfaceState = 3
-                        print("\n//TODO: SEND COLOR CODE: ", self.colorCodeList[self.selectedColoridx],"\n")
+                        print("\n//TODO: SEND COLOR CODE: ", self.colorCodeList[self.selectedColoridx], "\n")
                 
                 self.UpdateVars()
+                
+            if(event.type == pygame.MOUSEBUTTONUP and buttonEvent == False and self.interfaceState == 0):
+                self.GetSelectedIdx(event)
         
         return
 
@@ -216,14 +219,14 @@ class PrintScreen():
     *************************************************************************"""
     def update(self):
         
-        #Update Top label
+        # Update Top label
         self.lbl = self.lblFont.render(self.lblText, 1, self.lblFontColor)
         
-        #Update Time Label
+        # Update Time Label
         if self.interfaceState == 0:
             lblStr = self.timeLblText + str(self.timeRemaining)
             self.timeLbl = self.timeLblFont.render(lblStr, 1, self.timeLblFontColor)
-        #Update Color Label
+        # Update Color Label
         elif self.interfaceState == 3:
             lblStr = self.colorLblText + self.colorNameList[self.selectedColoridx]
             self.colorLbl = self.colorLblFont.render(lblStr, 1, self.colorLblFontColor)
@@ -243,23 +246,23 @@ class PrintScreen():
     Draws current screen
     *************************************************************************""" 
     def draw(self):        
-        #clear whole screen
-        #self.screen.fill(self.BEEDisplay.GetbgColor())
+        # clear whole screen
+        # self.screen.fill(self.BEEDisplay.GetbgColor())
         
-        #Draw Top label
-        self.screen.blit(self.lbl, (self.lblXPos,self.lblYPos))
+        # Draw Top label
+        self.screen.blit(self.lbl, (self.lblXPos, self.lblYPos))
         
-        #Draw Time label
+        # Draw Time label
         if self.interfaceState == 0:
-            self.screen.blit(self.timeLbl, (self.timeLblXPos,self.timeLblYPos))
+            self.screen.blit(self.timeLbl, (self.timeLblXPos, self.timeLblYPos))
             
             # Draw Progress Bar
             self.progressBar.DrawRect(self.screen)
-            self.screen.blit(self.progressBar.GetSurface(self.printPercent,100),
+            self.screen.blit(self.progressBar.GetSurface(self.printPercent, 100),
                                 self.progressBar.GetPos())
-        #Draw Time label
+        # Draw Time label
         elif self.interfaceState == 3:
-            self.screen.blit(self.colorLbl, (self.colorLblXPos,self.colorLblYPos))
+            self.screen.blit(self.colorLbl, (self.colorLblXPos, self.colorLblYPos))
             
         elif self.interfaceState == 4:
             x = self.interfaceLoader.GetPickerX()
@@ -269,50 +272,50 @@ class PrintScreen():
             pickerColor = self.interfaceLoader.GetPickerFontColor()
             fontSize = self.interfaceLoader.GetPickerFontSize()
             pickerFont = self.interfaceLoader.GetPickerFont()
-            lblOffset = int((height-fontSize)/2)
+            lblOffset = int((height - fontSize) / 2)
             
             for i in range(0, 5):
                 pos = i + self.listPosition
                 
                 idx = pos % len(self.colorList)   
                 
-                colorSurf = pygame.Surface((height*0.8,height*0.8))
+                colorSurf = pygame.Surface((height * 0.8, height * 0.8))
                 colorSurf.fill(self.colorList[idx])
-                self.screen.blit(colorSurf, (x+(int(0.1*height)),y+((-2+i)*height)+(int(0.1*height))))
+                self.screen.blit(colorSurf, (x + (int(0.1 * height)), y + ((-2 + i) * height) + (int(0.1 * height))))
                 
                 colorLbl = None
                 if i == 2:
                     colorLbl = pickerFont.render(self.colorNameList[idx], 1, pickerColor)
                 else:
                     ff = FileFinder.FileFinder()
-                    font = pygame.font.Font(ff.GetAbsPath("/Fonts/DejaVuSans-Light.ttf"),fontSize)
+                    font = pygame.font.Font(ff.GetAbsPath("/Fonts/DejaVuSans-Light.ttf"), fontSize)
                     colorLbl = font.render(self.colorNameList[idx], 1, pickerColor)
                     
-                self.screen.blit(colorLbl, (x + height +5,y+lblOffset+((-2+i)*height)))
+                self.screen.blit(colorLbl, (x + height + 5, y + lblOffset + ((-2 + i) * height)))
                 
-                if i>0 and i<5:
-                    pygame.draw.line(self.screen, pickerColor, (x, y+((-2+i)*height)),
-                                (x+width, y+((-2+i)*height)), int(0.05*height))
+                if i > 0 and i < 5:
+                    pygame.draw.line(self.screen, pickerColor, (x, y + ((-2 + i) * height)),
+                                (x + width, y + ((-2 + i) * height)), int(0.05 * height))
             
             
-            self.pickColorRect = pygame.draw.rect(self.screen, pickerColor, (x,y,width,height), 3)
+            self.pickColorRect = pygame.draw.rect(self.screen, pickerColor, (x, y, width, height), 3)
         
         elif(self.interfaceState == 5):
-            #Transfering
+            # Transfering
             # Draw Progress Bar
             self.progressBar.DrawRect(self.screen)
-            self.screen.blit(self.progressBar.GetSurface(self.blocksTransfered,self.totalBlocks),
+            self.screen.blit(self.progressBar.GetSurface(self.blocksTransfered, self.totalBlocks),
                                 self.progressBar.GetPos())
         elif(self.interfaceState == 6):
-            #Heating
+            # Heating
             # Draw Progress Bar
             self.progressBar.DrawRect(self.screen)
-            self.screen.blit(self.progressBar.GetSurface(self.nozzleTemperature,self.targetTemperature),
+            self.screen.blit(self.progressBar.GetSurface(self.nozzleTemperature, self.targetTemperature),
                                 self.progressBar.GetPos())
                                 
-        #Draw Image
+        # Draw Image
         if (self.interfaceState != 3) and (self.interfaceState != 4):
-            self.screen.blit(self.image,(self.imageX,self.imageY))
+            self.screen.blit(self.image, (self.imageX, self.imageY))
         
         for btn in self.buttons:
             btn.draw(self.screen)
@@ -320,7 +323,7 @@ class PrintScreen():
         
         
         # update screen
-        #pygame.display.update()
+        # pygame.display.update()
         
         return
     
@@ -398,7 +401,7 @@ class PrintScreen():
     
     Pull variables
     *************************************************************************""" 
-    def Pull(self,arg=None):
+    def Pull(self, arg=None):
         
         if(self.interfaceState == 5 and arg is not None):
             self.blocksTransfered = int(arg[0])
@@ -475,7 +478,7 @@ class PrintScreen():
     *************************************************************************""" 
     def GetSelectedIdx(self, event):
         
-        if self.interfaceState ==4:
+        if self.interfaceState == 4:
             pos = pygame.mouse.get_pos()
             posX = pos[0]
             posY = pos[1]
@@ -487,9 +490,11 @@ class PrintScreen():
             pickerYMin = self.interfaceLoader.GetPickerY() - (2 * height)
             pickerYMax = pickerYMin + (5 * height)
             
-            if (posX>pickerXMin) and (posX<pickerXMax) and (posY>pickerYMin) and (posY<pickerYMax):
+            if (posX > pickerXMin) and (posX < pickerXMax) and (posY > pickerYMin) and (posY < pickerYMax):
                 relY = posY - pickerYMin
-                idxChange = -2 + int(relY/height)
+                idxChange = -2 + int(relY / height)
                 self.listPosition = self.listPosition + idxChange
         
         return
+    
+    

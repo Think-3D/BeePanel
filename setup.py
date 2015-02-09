@@ -1,7 +1,7 @@
 #!/usr/local/bin/python3.4
 
 from distutils.core import setup
-from shutil import copyfile
+import shutil
 import os
 import platform
 import getpass
@@ -37,6 +37,7 @@ installationLoadersDir = installationDir + "/Loaders"
 installationBeeConnectDir = installationDir + "/BeeConnect"
 installatonFontsDir = installationDir + "/Fonts"
 installationImgDir = installationDir + "/Images"
+installationEstimatorDir = installationDir + "/estimator"
 
 """
 Check/create dirs
@@ -64,6 +65,10 @@ if(not os.path.isdir(installatonFontsDir)):
 if(not os.path.isdir(installationImgDir)):
     print("Creating Images directory")
     os.makedirs(installationImgDir)
+
+if(not os.path.isdir(installationEstimatorDir)):
+    print("Creating estimator directory")
+    os.makedirs(installationEstimatorDir)
             
 """
 Get file list
@@ -74,24 +79,31 @@ loadersList = [file for file in os.listdir(sourceDir + "/Loaders") if file.endsw
 beeConList = [file for file in os.listdir(sourceDir + "/BeeConnect") if file.endswith('.py')]
 fontsList = [file for file in os.listdir(sourceDir + "/Fonts") if file.endswith('.ttf')]
 imgList = [file for file in os.listdir(sourceDir + "/Images")]
+estimatorList = [file for file in os.listdir(sourceDir + "/estimator")]
+
 
 """
 Copy files to BeePanel dir
 """
 for src in srcList:
-    copyfile(sourceDir + "/" + str(src), installationDir + "/" + str(src))
+    shutil.copyfile(sourceDir + "/" + str(src), installationDir + "/" + str(src))
 
 for json in jsonList:
-    copyfile(sourceDir + "/Json/" + str(json), installationJsonDir + "/" + str(json))
+    shutil.copyfile(sourceDir + "/Json/" + str(json), installationJsonDir + "/" + str(json))
 
 for loader in loadersList:
-    copyfile(sourceDir + "/Loaders/" + str(loader), installationLoadersDir + "/" + str(loader))
+    shutil.copyfile(sourceDir + "/Loaders/" + str(loader), installationLoadersDir + "/" + str(loader))
     
 for con in beeConList:
-    copyfile(sourceDir + "/BeeConnect/" + str(con), installationBeeConnectDir + "/" + str(con))
+    shutil.copyfile(sourceDir + "/BeeConnect/" + str(con), installationBeeConnectDir + "/" + str(con))
 
 for font in fontsList:
-    copyfile(sourceDir + "/Fonts/" + str(font), installatonFontsDir + "/" + str(font))
+    shutil.copyfile(sourceDir + "/Fonts/" + str(font), installatonFontsDir + "/" + str(font))
     
 for img in imgList:
-    copyfile(sourceDir + "/Images/" + str(img), installationImgDir + "/" + str(img))
+    shutil.copyfile(sourceDir + "/Images/" + str(img), installationImgDir + "/" + str(img))
+
+for est in estimatorList:
+    if(os.path.isfile(sourceDir + "/estimator/" + str(est))):
+        shutil.copyfile(sourceDir + "/estimator/" + str(est), installationEstimatorDir + "/" + str(est))
+

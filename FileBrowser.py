@@ -135,7 +135,7 @@ class FileBrowserScreen():
     nextPullTime = 0
     sdFileName = ""
     pullInterval = 2
-    targetTemperature = 220
+    targetTemperature = 100
     nozzleTemperature = 0
     
     """*************************************************************************
@@ -257,18 +257,7 @@ class FileBrowserScreen():
                         buttonEvent = True
                         break
                     elif btnName == "Print":
-                        #GET FILE LIST POSITION
-                        idx = self.listPosition % len(self.pickerList['FileNameBuffer'])
-                        pickerCenterIdx = (self.interfaceLoader.GetPickerRowCount()//2 + idx) % len(self.pickerList['FileNameBuffer'])
-                        self.selectedFileName = self.pickerList['FileNameBuffer'][pickerCenterIdx]
-                        self.selectedFilePath = self.pickerList['FilePathBuffer'][pickerCenterIdx]
-                        
-                        print('Selected File: ', self.selectedFileName)
-                        print('With path: ',self.selectedFilePath)
-                        
-                        self.interfaceState = 1
-                        self.LoadInterfaceComponents()
-                        self.StartTransfer()
+                        self.StartPrint()
                         
                         buttonEvent = True
                         break
@@ -610,6 +599,7 @@ class FileBrowserScreen():
                     self.nozzleTemperature = self.targetTemperature
                     
                     self.beeCmd.home()
+                    self.beeCmd.SetNozzleTemperature(self.targetTemperature)
                     self.beeCmd.startSDPrint();
                     return "Printing"
             
@@ -640,6 +630,8 @@ class FileBrowserScreen():
         print("   :","Number of Blocks: ", self.nBlocks)
         
         #RUN ESTIMATOR
+        
+        
         #TODO SEND M31 WITH ESTIMATED TIME
         
         fnSplit = self.selectedFileName.split(".")
@@ -660,7 +652,7 @@ class FileBrowserScreen():
         
         self.beeCmd.transmisstionErrors = 0
         #START PRE-HEAT
-        self.beeCmd.SetNozzleTemperature(self.targetTemperature)
+        self.beeCmd.SetNozzleTemperature(self.targetTemperature + 25)
         
         return
     
@@ -720,6 +712,38 @@ class FileBrowserScreen():
         self.beeCmd.SetNozzleTemperature(0)
         self.interfaceState = 0
         self.LoadInterfaceComponents()
+        
+        return
+    
+    """*************************************************************************
+                                StartPrint Method 
+    
+    Identifies the selected file and proceeds with transfer/print
+    *************************************************************************"""
+    def StartPrint(self):
+        
+        
+        print("TODO - CHANGE NOZZLE TEMPERATURE!!!!")
+        
+        #GET FILE LIST POSITION
+        idx = self.listPosition % len(self.pickerList['FileNameBuffer'])
+        pickerCenterIdx = (self.interfaceLoader.GetPickerRowCount()//2 + idx) % len(self.pickerList['FileNameBuffer'])
+        self.selectedFileName = self.pickerList['FileNameBuffer'][pickerCenterIdx]
+        self.selectedFilePath = self.pickerList['FilePathBuffer'][pickerCenterIdx]
+        
+        print('Selected File: ', self.selectedFileName)
+        print('With path: ',self.selectedFilePath)
+        
+        #PRINT FILE FROM BTF MEMORY
+        if(self.selectedRoot =="BTF"):
+            self.beeCmd.OpenFile(self.selectedFileName)
+            self.beeCmd.SetNozzleTemperature(self.targetTemperature)
+            self.interfaceState = 2
+            self.LoadInterfaceComponents()
+        else:
+            self.interfaceState = 1
+            self.LoadInterfaceComponents()
+            self.StartTransfer()
         
         return
     
