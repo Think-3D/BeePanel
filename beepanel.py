@@ -316,6 +316,7 @@ class BeePanel():
             if((self.currentScreen.ExitCallBack() is not None)):
                 if(self.currentScreen.exitCallBackResp == "Restart"):
                     self.restart = True
+                    self.currentScreenName = self.jsonLoader.GetDefaultScreen()
                 """
                 self.currentScreen.KillAll()
                 self.currentScreen = None
