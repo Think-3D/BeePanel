@@ -51,6 +51,7 @@ class FileBrowserScreen():
     exit = False
     interfaceState = 0
     exitCallBackResp = None
+    exitNeedsHoming = False
     
     """
     BEEConnect vars
@@ -471,6 +472,9 @@ class FileBrowserScreen():
         pickerXMax = pickerXMin + width
         pickerYMin = self.interfaceLoader.GetPickerY() - (self.interfaceLoader.GetPickerRowCount()/2 * height)
         pickerYMax = pickerYMin + (self.interfaceLoader.GetPickerRowCount() * height)
+        
+        if(posX < pickerXMin or posX > pickerXMax or posY < pickerYMin or posY > pickerYMax):
+            return
         
         idxChange = 0
         self.verifyGCode = False

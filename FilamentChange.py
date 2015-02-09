@@ -64,7 +64,7 @@ class FilamentChangeScreen():
     
     targetTemperature = 220     
     nozzleTemperature = 0
-    pullInterval = 1         #pull interval for simulation mode
+    pullInterval = 5         #pull interval for simulation mode
     nextPullTime = None
     
     firstNextReady = False      #true when target temperature is established

@@ -203,6 +203,8 @@ class BeePanel():
         
         self.printingScreenLoader = self.jsonLoader.GetPrintingInterface()
         
+        self.currentScreenName = self.jsonLoader.GetDefaultScreen()
+        
         """
         Init pygame
         """
@@ -258,7 +260,6 @@ class BeePanel():
             Init Interfaces Screens
             """
             self.beeCmd.home()
-            self.currentScreenName = self.jsonLoader.GetDefaultScreen()
             self.LoadCurrentScreen(self.currentScreenName)
         else:
             print("COULD NOT GET STATUS, Connection Wait happened???")
@@ -315,6 +316,7 @@ class BeePanel():
             if((self.currentScreen.ExitCallBack() is not None)):
                 if(self.currentScreen.exitCallBackResp == "Restart"):
                     self.restart = True
+                """
                 self.currentScreen.KillAll()
                 self.currentScreen = None
                 self.beeCmd.homeZ()
@@ -322,6 +324,8 @@ class BeePanel():
                 self.beeCon.close()
                 self.beeCon = None
                 self.done = True
+                """
+                break
             
         #pygame.quit()
         
@@ -340,20 +344,17 @@ class BeePanel():
         """handle all events."""
         buttonEvent = False
         
-        respEvent = self.currentScreen.handle_events(retVal)
-        
-        if(self.BeeState == "Transfer" and respEvent == "Cancel"):
-            self.cancelTransfer = True
-        
+        self.currentScreen.handle_events(retVal)
         
         for event in retVal:
+            eventName =  pygame.event.event_name(event.type)
+            if(eventName in ['ActiveEvent','MouseMotion']):        #MOUSE MOOVEMENT
+                break
             
-            if event.type == pygame.QUIT:
-                print("quit")
-                self.restart = False
-                self.exitApp = True
-                #self.done = True
-                
+            
+            """
+            CARROUSEL MENU UP/DOWN BUTTONS
+            """
             for btn in self.carouselButtons:
                 if 'click' in btn.handleEvent(event):
                     btnName = btn._propGetName()
@@ -368,28 +369,33 @@ class BeePanel():
             if(buttonEvent == True):
                 break
             
+            
+            """
+            CARROUSEL INTERFACE SELECTION BUTTONS
+            """
             setScreen = None
             for btn in self.leftMenuButtons:
+                btnName = btn._propGetName()
                 if 'click' in btn.handleEvent(event):
-                    if btn._propGetName() == "Printer Info":
+                    if btnName == "Printer Info":
                         setScreen = "PrinterInfo"
                         buttonEvent = True
-                    elif btn._propGetName() == "Jog":
+                    elif btnName == "Jog":
                         setScreen = "Jog"
                         buttonEvent = True
-                    elif btn._propGetName() == "Calibration":
+                    elif btnName == "Calibration":
                         setScreen = "Calibration"
                         buttonEvent = True
-                    elif btn._propGetName() == "Filament":
+                    elif btnName == "Filament":
                         setScreen = "FilamentChange"
                         buttonEvent = True
-                    elif btn._propGetName() == "Settings":
+                    elif btnName == "Settings":
                         setScreen = "Settings"
                         buttonEvent = True
-                    elif btn._propGetName() == "Browser":
+                    elif btnName == "Browser":
                         setScreen = "FileBrowser"
                         buttonEvent = True
-                    elif btn._propGetName() == "About":
+                    elif btnName == "About":
                         setScreen = "About"
                         buttonEvent = True
                     
@@ -570,7 +576,7 @@ if __name__ == '__main__':
     while(app.exitApp == False):
         try:
             app.start()
-        except:
+        except ValueError:
             app = BeePanel()
             print('Application error occurred')
     
