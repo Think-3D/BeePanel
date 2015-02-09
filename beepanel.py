@@ -1,5 +1,5 @@
 #!/usr/local/bin/python3
-from Onboard.OnboardGtk import app
+#from Onboard.OnboardGtk import app
 
 
 r"""
