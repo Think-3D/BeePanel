@@ -348,8 +348,8 @@ class BeePanel():
         
         for event in retVal:
             eventName =  pygame.event.event_name(event.type)
-            if(eventName in ['ActiveEvent','MouseMotion']):        #MOUSE MOOVEMENT
-                break
+            #if(eventName in ['ActiveEvent','MouseMotion']):        #MOUSE MOOVEMENT
+            #    break
             
             
             """
