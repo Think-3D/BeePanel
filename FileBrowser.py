@@ -136,7 +136,7 @@ class FileBrowserScreen():
     nextPullTime = 0
     sdFileName = ""
     pullInterval = 2
-    targetTemperature = 100
+    targetTemperature = 220
     nozzleTemperature = 0
     
     """*************************************************************************
@@ -656,7 +656,7 @@ class FileBrowserScreen():
         
         self.beeCmd.transmisstionErrors = 0
         #START PRE-HEAT
-        self.beeCmd.SetNozzleTemperature(self.targetTemperature + 25)
+        self.beeCmd.SetNozzleTemperature(self.targetTemperature)
         
         return
     
