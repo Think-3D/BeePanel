@@ -726,9 +726,6 @@ class FileBrowserScreen():
     *************************************************************************"""
     def StartPrint(self):
         
-        
-        print("TODO - CHANGE NOZZLE TEMPERATURE!!!!")
-        
         #GET FILE LIST POSITION
         idx = self.listPosition % len(self.pickerList['FileNameBuffer'])
         pickerCenterIdx = (self.interfaceLoader.GetPickerRowCount()//2 + idx) % len(self.pickerList['FileNameBuffer'])
