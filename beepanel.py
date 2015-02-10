@@ -259,7 +259,8 @@ class BeePanel():
             """
             Init Interfaces Screens
             """
-            self.beeCmd.home()
+            print("#TODO - HOME PRINTER IF READY")
+            #self.beeCmd.home()
             self.LoadCurrentScreen(self.currentScreenName)
         else:
             print("COULD NOT GET STATUS, Connection Wait happened???")

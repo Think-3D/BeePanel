@@ -226,6 +226,7 @@ class FileBrowserScreen():
         """handle all events."""
         for event in retVal:
             buttonEvent = False
+            eventName =  pygame.event.event_name(event.type)
             
             for btn in self.buttons:
                 if 'click' in btn.handleEvent(event):
@@ -267,14 +268,47 @@ class FileBrowserScreen():
                             self.CancelTransfer()
                         elif(self.interfaceState == 2):
                             self.CancelHeating()
+                        if(self.gcodeFile is not None):
+                            self.gcodeFile.close()
                         buttonEvent = True
                         break
                     
             if(event.type == pygame.MOUSEBUTTONUP and buttonEvent == False and self.interfaceState == 0):
                 self.HandlePickerClick(event)
-                
-
-
+            
+            """
+            KEY PRESS EVENTS
+            """
+            if(event.type == pygame.KEYDOWN):
+                key = event.key
+                if(key == 273):     #arrow Up
+                    self.listPosition = self.listPosition - 1
+                    self.verifyGCode = True
+                    break
+                elif(key == 274):     #arrow Down
+                    self.listPosition = self.listPosition + 1
+                    self.verifyGCode = True
+                    break
+                elif(key == 275):     #arrow Right
+                    #GET FILE LIST POSITION
+                    idx = self.listPosition % len(self.pickerList['FileNameBuffer'])
+                    pickerCenterIdx = (self.interfaceLoader.GetPickerRowCount()//2 + idx) % len(self.pickerList['FileNameBuffer'])
+                    self.selectedFolderName = self.pickerList['FileNameBuffer'][pickerCenterIdx]
+                    self.draw()
+                    self.verifyGCode = True
+                    break
+                elif(key == 13):     #Return Key
+                    if(self.isGCodeFile == True):
+                        self.StartPrint()
+                        break
+                elif(key == 27):    #Esc Key
+                    if(self.interfaceState == 1):
+                            self.CancelTransfer()
+                    elif(self.interfaceState == 2):
+                            self.CancelHeating()
+                    if(self.gcodeFile is not None):
+                            self.gcodeFile.close()
+                    break
         
         return
 
@@ -575,6 +609,12 @@ class FileBrowserScreen():
         
         #TRANSFERING FILE
         if(self.interfaceState == 1):
+            
+            """
+            TRANSFER WITHOUT LOOP
+            """
+            
+            """
             startPos = self.totalBytes
             blockTransfered = False
             while(blockTransfered == False):
@@ -583,7 +623,7 @@ class FileBrowserScreen():
                     print("Transfer aborted")
                     return False
 
-                self.totalBytes += self.beeCmd.MESSAGE_SIZE
+            self.totalBytes += self.beeCmd.MESSAGE_SIZE
             
             self.blocksTransfered += 1
             print("   :","Transfered ", str(self.blocksTransfered), "/", str(self.nBlocks), " blocks ", self.totalBytes, "/", self.fileSize, " bytes")
@@ -591,6 +631,44 @@ class FileBrowserScreen():
             if(self.blocksTransfered >= self.nBlocks):
                 #TRANSFERED ENDED
                 self.EndTransfer()
+            """
+            
+            """
+            TRANSFER WITH LOOP
+            """
+            self.beeCmd.transmisstionErrors = 0
+
+            while(self.blocksTransfered < self.nBlocks):
+                startPos = self.totalBytes
+                endPos = self.totalBytes + self.blockSize
+                
+                bytes2write = endPos - startPos
+                
+                if(self.blocksTransfered == self.nBlocks -1):
+                    endPos = self.fileSize
+                
+                blockTransfered = False
+                while(blockTransfered == False):
+                    blockTransfered = self.beeCmd.sendBlock(startPos,self.gcodeFile)
+                    if(blockTransfered is None):
+                        print("Transfer aborted")
+                        return False
+                    
+                self.totalBytes += bytes2write 
+                self.blocksTransfered += 1
+                print("   :","Transfered ", str(self.blocksTransfered), "/", str(self.nBlocks), " blocks ", self.totalBytes, "/", self.fileSize, " bytes")
+                
+                #clear whole screen
+                #self.screen.fill(pygame.Color(255,255,255))
+                retVal = pygame.event.get()
+                self.handle_events(retVal)
+                self.update()
+                self.draw()
+                # update screen
+                pygame.display.update()
+                
+            print("   :","Transfer completed",". Errors Resolved: ", self.beeCmd.transmisstionErrors)
+            self.EndTransfer()
             
         #HEATING
         elif(self.interfaceState == 2):
@@ -637,6 +715,7 @@ class FileBrowserScreen():
         
         
         #TODO SEND M31 WITH ESTIMATED TIME
+        self.beeCon.sendCmd("M31 A0 L0\n")
         
         fnSplit = self.selectedFileName.split(".")
         self.sdFileName = fnSplit[0]
@@ -644,6 +723,8 @@ class FileBrowserScreen():
         #CREATE SD FILE
         resp = self.beeCmd.CraeteFile(self.sdFileName)
         if(not resp):
+            self.interfaceState = 0
+            self.LoadInterfaceComponents()
             return
         
         #Start transfer
