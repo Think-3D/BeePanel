@@ -42,6 +42,8 @@ import math
 import FileFinder
 import pygame
 import platform
+import re
+import string
 
 class FileBrowserScreen():
     
@@ -702,6 +704,60 @@ class FileBrowserScreen():
             print("File does not exist")
             return
         
+        fnSplit = self.selectedFileName.split(".")
+        self.sdFileName = fnSplit[0]
+        
+        #REMOVE SPECIAL CHARS
+        self.sdFileName = re.sub('[\W_]+', '', self.sdFileName)
+        
+        #CHECK FILENAME
+        if(len(self.sdFileName) > 8):
+            self.sdFileName = self.sdFileName[:7]
+        
+        firstChar = self.sdFileName[0]
+        
+        if(firstChar.isdigit()):
+            nameChars = list(self.sdFileName)
+            nameChars[0] = 'a'
+            self.sdFileName = "".join(nameChars)
+        
+        #Add Header and footer
+        file = open(self.selectedFilePath,'r')
+        firstLine = file.readline()
+        newFile = None
+        newPath = None
+        if(';ready to print' not in firstLine.lower()):
+            newPath = ''
+            pathSplit = self.selectedFilePath.split('/')
+            for i in range(len(pathSplit) -1):
+                newPath += pathSplit[i] + '/'
+            newPath += self.sdFileName + '.gcode'
+            file.seek(0)
+            fileData = file.read()
+            file.close()
+            file = None
+            
+            newFile = open(newPath,'w')
+            newFile.write(';ready to print\nM300\nG28\nM109 S220\nM300\nM206 X500\nM107\nM104 S220\nG92 E\nM642 W1\nM130 T6 U1.3 V80\nG1 X-98.0 Y-20.0 Z5.0 F3000\nG1 Y-68.0 Z0.3\nG1 X-98.0 Y0.0 F500 E20\nG92 E\n')
+            newFile.write(fileData)
+            newFile.write('M300\nM104 S0\nG28 X\nG28 Z\nG1 Y65 G92 E')
+            newFile.close()
+        
+        if(newPath is not None):
+            self.selectedFilePath = newPath
+        if(file is not None):
+            file.close()
+            file = None
+        
+        if(not self.selectedFilePath.endswith(self.sdFileName + '.gcode')):
+            newPath = ''
+            pathSplit = self.selectedFilePath.split('/')
+            for i in range(len(pathSplit) -1):
+                newPath += pathSplit[i] + '/'
+            newPath += self.sdFileName + '.gcode'
+            os.renames(self.selectedFilePath, newPath)
+            self.selectedFilePath = newPath
+        
         #Load File
         print("   :","Loading File")
         self.fileSize = os.path.getsize(self.selectedFilePath)
@@ -716,9 +772,6 @@ class FileBrowserScreen():
         
         #TODO SEND M31 WITH ESTIMATED TIME
         self.beeCon.sendCmd("M31 A0 L0\n")
-        
-        fnSplit = self.selectedFileName.split(".")
-        self.sdFileName = fnSplit[0]
         
         #CREATE SD FILE
         resp = self.beeCmd.CraeteFile(self.sdFileName)
