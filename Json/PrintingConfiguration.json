@@ -4,7 +4,7 @@
             "PrintingTopLabel":[
                 {
                     "Text":"Printing in Progress",
-                    "X":"110",
+                    "X":"100",
                     "Y":"5",
                     "FontType":"Bold",
                     "FontSize":"12",
@@ -14,8 +14,8 @@
             "TimeLabel":
                 {
                     "Text":"Time Remaining: ",
-                    "X":"10",
-                    "Y":"100",
+                    "X":"20",
+                    "Y":"140",
                     "FontType":"Regular",
                     "FontSize":"12",
                     "FontColor":"0,0,0"
@@ -64,9 +64,9 @@
             
             "PrintingImage":[
                 {
-                    "ImgPath":"/Images/beeBWVectorSmall.png",
-                    "X":"170",
-                    "Y":"20"
+                    "ImgPath":"/Images/BestPnP_Icon.png",
+                    "X":"128",
+                    "Y":"30"
                 }
             ],
             "PausedTopLabel":[

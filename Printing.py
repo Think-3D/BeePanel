@@ -81,7 +81,7 @@ class PrintScreen():
     printPercent = 0
     
     nextPullTime = None
-    pullInterval = 1
+    pullInterval = 60
     
     """
     Progress Bar vars
@@ -91,8 +91,10 @@ class PrintScreen():
     pBarFill = 0
     pBarMax = 0
     
-    blocksTransfered = 0
-    totalBlocks = 0
+    estimatedTime = 1000
+    elapsedTime = 0
+    numberLines = 0
+    executedLines = 0
     
     targetTemperature = 220     
     nozzleTemperature = 0
@@ -142,7 +144,7 @@ class PrintScreen():
         
         self.UpdateVars()
         
-        self.nextPullTime = time() + self.pullInterval
+        self.nextPullTime = time()
         
         """
         Load Colors
@@ -226,6 +228,7 @@ class PrintScreen():
         if self.interfaceState == 0:
             lblStr = self.timeLblText + str(self.timeRemaining)
             self.timeLbl = self.timeLblFont.render(lblStr, 1, self.timeLblFontColor)
+            
         # Update Color Label
         elif self.interfaceState == 3:
             lblStr = self.colorLblText + self.colorNameList[self.selectedColoridx]
@@ -258,7 +261,7 @@ class PrintScreen():
             
             # Draw Progress Bar
             self.progressBar.DrawRect(self.screen)
-            self.screen.blit(self.progressBar.GetSurface(self.printPercent, 100),
+            self.screen.blit(self.progressBar.GetSurface(self.elapsedTime, self.estimatedTime),
                                 self.progressBar.GetPos())
         # Draw Time label
         elif self.interfaceState == 3:
@@ -299,19 +302,6 @@ class PrintScreen():
             
             
             self.pickColorRect = pygame.draw.rect(self.screen, pickerColor, (x, y, width, height), 3)
-        
-        elif(self.interfaceState == 5):
-            # Transfering
-            # Draw Progress Bar
-            self.progressBar.DrawRect(self.screen)
-            self.screen.blit(self.progressBar.GetSurface(self.blocksTransfered, self.totalBlocks),
-                                self.progressBar.GetPos())
-        elif(self.interfaceState == 6):
-            # Heating
-            # Draw Progress Bar
-            self.progressBar.DrawRect(self.screen)
-            self.screen.blit(self.progressBar.GetSurface(self.nozzleTemperature, self.targetTemperature),
-                                self.progressBar.GetPos())
                                 
         # Draw Image
         if (self.interfaceState != 3) and (self.interfaceState != 4):
@@ -403,31 +393,30 @@ class PrintScreen():
     *************************************************************************""" 
     def Pull(self, arg=None):
         
-        if(self.interfaceState == 5 and arg is not None):
-            self.blocksTransfered = int(arg[0])
-            self.totalBlocks = int(arg[1])
-        elif(self.interfaceState == 6):
-            self.nozzleTemperature = self.beeCmd.GetNozzleTemperature();
-            if(self.nozzleTemperature >= self.targetTemperature):
-                self.beeCmd.startSDPrint();
-                self.timeRemaining = 0
-                self.interfaceState = 0
-                self.printPercent = 0
-                self.printing = True
-            
-        
-        
         t = time()
         if t > self.nextPullTime:
             self.nextPullTime = time() + self.pullInterval
             
-            self.timeRemaining = "4:55:12"
-            
             if self.interfaceState == 0:
-                self.printPercent = float(self.printPercent + 0.05)
-                if self.printPercent > 1:
-                    self.printPercent = 1
-        
+                pStatus = self.beeCmd.getPrintStatus()
+                self.elapsedTime = pStatus['Elapsed Time']
+                self.estimatedTime = pStatus['Estimated Time']
+                self.numberLines = pStatus['Lines']
+                self.executedLines = pStatus['Executed Lines']
+                
+                self.timeRemaining = ""
+                minutesLeft = int(self.estimatedTime - self.elapsedTime) 
+                if(minutesLeft == 0):
+                    self.timeRemaining = 'Less Than a Minute'
+                elif(minutesLeft > 0):
+                    h = minutesLeft//60
+                    if(h > 0):
+                        self.timeRemaining += str(h) + 'h:'
+                    
+                    m = int(minutesLeft - (h*60))
+                    self.timeRemaining += str(m) + 'm'
+                else:
+                    self.timeRemaining = 'Unknown'
             
         return
     

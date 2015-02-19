@@ -34,7 +34,7 @@ cancleSDPrint()                Cancels SD print
 sendBlock()                    Sends a block of messages
 sendBlockMsg()                Sends a message from the block
 cleanBuffer()                Clears communication buffer 
-
+getPrintStatus()                Gets print status
 """
 
 __author__ = "BVC Electronic Systems"
@@ -932,3 +932,34 @@ class Cmd():
         print(resp)
         
         return tries
+    
+    """*************************************************************************
+                            getPrintStatus Method 
+
+    *************************************************************************"""
+    def getPrintStatus(self):
+        
+        printStatus = {}
+        
+        self.beeCon.write('M32\n')
+        
+        resp = ""
+        
+        while('ok' not in resp):
+            resp += self.beeCon.read()
+        
+        split = resp.split(' ')
+        
+        for s in split:
+            if('A' in s):
+                printStatus['Estimated Time'] = int(s[1:])
+            elif('B' in s):
+                printStatus['Elapsed Time'] = int(s[1:])/(60*1000)
+            elif('C' in s):
+                printStatus['Lines'] = int(s[1:])
+            elif('D' in s):
+                printStatus['Executed Lines'] = int(s[1:])
+        
+        return printStatus
+        
+        
