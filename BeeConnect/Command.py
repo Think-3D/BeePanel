@@ -1,4 +1,15 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
+"""
+* Copyright (c) 2015 BEEVC - Electronic Systems This file is part of BEESOFT
+* software: you can redistribute it and/or modify it under the terms of the GNU
+* General Public License as published by the Free Software Foundation, either
+* version 3 of the License, or (at your option) any later version. BEESOFT is
+* distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+* without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+* PARTICULAR PURPOSE. See the GNU General Public License for more details. You
+* should have received a copy of the GNU General Public License along with
+* BEESOFT. If not, see <http://www.gnu.org/licenses/>.
+"""
 
 r"""
 BeeCommand Class
@@ -961,5 +972,60 @@ class Cmd():
                 printStatus['Executed Lines'] = int(s[1:])
         
         return printStatus
+    
+    """*************************************************************************
+                                FlashFirmware Method 
+    
+    
+    *************************************************************************"""
+    def FlashFirmware(self, fileName):
         
+        if(os.path.isfile(fileName) == False):
+            print("   :","File does not exist")
+            return
+        
+        print("   :","Flashing new firmware File: ",fileName)
+        
+        cTime = time.time()
+        
+        message = "M650 A{0}\n".format(os.path.getsize(fileName))
+        self.beeCon.write(message)
+        
+        resp = ''
+        while('ok' not in resp):
+            resp += self.beeCon.read()
+        
+        resp = ''
+        with open(fileName, 'rb') as f:
+            while True:
+                buf = f.read(64)
+                
+                if not buf: break
+                
+                self.beeCon.write(buf)
+                ret = []
+                while (len(ret) != len(buf)):
+                    try:
+                        ret += self.beeCon.ep_in.read(len(buf), 1000)
+                    except usb.core.USBError as e:
+                        if ("timed out" in str(e.args)):
+                            pass
+            
+                bRet = bytes(ret)
+                if(bRet not in buf):
+                    print('TODO: MANAGE FIRMWARE FLASHING FAILURE')
+                    return
+
+                sys.stdout.write('.')
+                sys.stdout.flush()
+
+        eTime = time.time()
+        
+        avgSpeed = os.path.getsize(fileName)//(eTime - cTime)
+        
+        print ("\n   :","Flashing completed in", eTime-cTime, 's')
+        print("   :Average Transfer Speed",avgSpeed)
+        
+        
+        return
         

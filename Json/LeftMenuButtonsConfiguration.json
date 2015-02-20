@@ -1,12 +1,8 @@
 {
     "leftMenuButtons":[
         {
-            "ButtonName":"Printer Info",
-            "Title":"Printer Info"
-        },
-        {
-            "ButtonName":"Jog",
-            "Title":"Jog"
+            "ButtonName":"Browser",
+            "Title":"Browser"
         },
         {
             "ButtonName":"Calibration",
@@ -17,12 +13,16 @@
             "Title":"Filament"
         },
         {
+            "ButtonName":"Printer Info",
+            "Title":"Printer Info"
+        },
+        {
             "ButtonName":"Settings",
             "Title":"Settings"
         },
         {
-            "ButtonName":"Browser",
-            "Title":"Browser"
+            "ButtonName":"Jog",
+            "Title":"Jog"
         },
         {
             "ButtonName":"About",
