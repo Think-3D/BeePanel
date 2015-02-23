@@ -11,6 +11,8 @@
 * should have received a copy of the GNU General Public License along with
 * BEESOFT. If not, see <http://www.gnu.org/licenses/>.
 """
+from pip.utils.outdated import SELFCHECK_DATE_FMT
+from checkbox_support.contrib.xrandr import Status
 
 
 __author__ = "Marcos Gomes"
@@ -102,8 +104,38 @@ class WaitScreen():
                     resp = self.beeCmd.startPrinter()
                 
                     if('Firmware' in resp):
-                        self.connected = self.beeCon.connected
+                        
+                        status = self.beeCmd.getStatus()
+                        
+                        if('SD_Print' in status):
+                            self.connected = self.beeCon.connected
+                            break
+                        
+                        fw = self.beeCmd.GetFirmwareVersion()
+                        
+                        if('20.0.0' in fw):
+                            self.connected = self.beeCon.connected
+                        else:
+                            self.screen.fill(pygame.Color(255,255,255))
+                            lbl = lblFont[0].render('Please Restart Your BeeTheFirst',1,lblFontColor[0])
+                            self.screen.blit(lbl,(100,120))
+                            # update screen
+                            pygame.display.update()
+                            self.beeCon.close()
+                            time.sleep(1)
+                        
                     elif('Bootloader' in resp):
+                        
+                        print('Flashing BeePanel firmware')
+                        ff = FileFinder.FileFinder()
+                        firmPath = ff.GetAbsPath('/Firmware/BeePanel.bin')
+                        self.beeCmd.FlashFirmware(firmPath)
+                        
+                        print("Changing to firmware")
+                        self.beeCon.write("M630\n")
+                        self.beeCon.close()
+                        time.sleep(1)
+                        
                         self.beeCon = None
                     else:
                         cleaningTries = 5

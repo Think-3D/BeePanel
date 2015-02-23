@@ -163,8 +163,6 @@ class FileFinder():
                     #VERIFY IF DEVICE IS CONNECTED THROUGH USB
                     if os.path.realpath(path).find("/usb") > 0:
                         devName = "/dev/%s" % deviceName
-                        fileList['FolderList']['DevNames'].append(devName)
-                        fileList['FolderList']['FileNames'].append(devName)
                         #GET CORRESPONDING PATH
                         mountsFile = open("/proc/mounts")
                         linesMount = mountsFile.readlines()
@@ -172,6 +170,8 @@ class FileFinder():
                             wordsMounts = [y.strip() for y in l.split()]
                             if(devName in wordsMounts[0]):
                                 fileList['FolderList']['FilePaths'].append(wordsMounts[1])
+                                fileList['FolderList']['DevNames'].append(devName)
+                                fileList['FolderList']['FileNames'].append(devName)
         
         
         for i in range(len(fileList['FolderList']['FileNames'])):

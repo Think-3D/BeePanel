@@ -331,9 +331,9 @@
                     "HighlightedPath":"/Images/DownSmall.png"
                 }
             ],
-            "TransferTopLabel":[
+            "FinishTopLabel":[
                 {
-                    "Text":"Transfering... Please wait",
+                    "Text":"Print Finished",
                     "X":"20",
                     "Y":"5",
                     "FontType":"Bold",
@@ -341,54 +341,22 @@
                     "FontColor":"0,0,0"
                 }
             ],
-            "TransferButtons":[
+            "FinishButtons":[
                 {
-                    "ButtonName":"Cancel",
+                    "ButtonName":"Finsih",
                     "X":"14",
                     "Y":"200",
                     "Width":"88",
                     "Height":"25",
                     "ButtonType":"Text",
-                    "Title":"Cancel",
+                    "Title":"Finish",
                     "FontType":"Regular",
                     "FontSize":"12",
                     "FontColor":"0,0,0",
                     "bgColor":"255,255,255"
                 }
             ],
-            "TransferImage":[
-                {
-                    "ImgPath":"/Images/beeBWVectorSmall.png",
-                    "X":"110",
-                    "Y":"50"
-                }
-            ],
-            "HeatTopLabel":[
-                {
-                    "Text":"Heating... Please wait",
-                    "X":"20",
-                    "Y":"5",
-                    "FontType":"Bold",
-                    "FontSize":"12",
-                    "FontColor":"0,0,0"
-                }
-            ],
-            "HeatButtons":[
-                {
-                    "ButtonName":"Cancel",
-                    "X":"14",
-                    "Y":"200",
-                    "Width":"88",
-                    "Height":"25",
-                    "ButtonType":"Text",
-                    "Title":"Cancel",
-                    "FontType":"Regular",
-                    "FontSize":"12",
-                    "FontColor":"0,0,0",
-                    "bgColor":"255,255,255"
-                }
-            ],
-            "HeatImage":[
+            "FinishImage":[
                 {
                     "ImgPath":"/Images/beeBWVectorSmall.png",
                     "X":"110",

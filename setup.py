@@ -27,7 +27,7 @@ setup(
       author_email='mgomes@beeverycreative.com',
       license = '',
       url='https://github.com/beeverycreative/BeePanel',
-      packages=['BeeConnect', 'Loaders'],
+      packages=['BeeConnect', 'Loaders', 'estimator'],
       )
 
 """
@@ -50,6 +50,7 @@ installationBeeConnectDir = installationDir + "/BeeConnect"
 installatonFontsDir = installationDir + "/Fonts"
 installationImgDir = installationDir + "/Images"
 installationEstimatorDir = installationDir + "/estimator"
+installationFirmwareDir = installationDir + "/Firmware"
 dirMatch = False
 
 if(installationDir == sourceDir):
@@ -88,6 +89,10 @@ if(not dirMatch):
     if(not os.path.isdir(installationEstimatorDir)):
         print("Creating estimator directory")
         os.makedirs(installationEstimatorDir)
+        
+    if(not os.path.isdir(installationFirmwareDir)):
+        print("Creating Firmware directory")
+        os.makedirs(installationFirmwareDir)
                 
     """
     Get file list
@@ -99,6 +104,7 @@ if(not dirMatch):
     fontsList = [file for file in os.listdir(sourceDir + "/Fonts") if file.endswith('.ttf')]
     imgList = [file for file in os.listdir(sourceDir + "/Images")]
     estimatorList = [file for file in os.listdir(sourceDir + "/estimator")]
+    firmwareList = [file for file in os.listdir(sourceDir + "/Firmware")]
     
     
     """
@@ -126,3 +132,5 @@ if(not dirMatch):
         if(os.path.isfile(sourceDir + "/estimator/" + str(est))):
             shutil.copyfile(sourceDir + "/estimator/" + str(est), installationEstimatorDir + "/" + str(est))
     
+    for firm in firmwareList:
+        shutil.copyfile(sourceDir + "/Firmware/" + str(firm), installationFirmwareDir + "/" + str(firm))

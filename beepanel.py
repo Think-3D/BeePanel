@@ -36,6 +36,7 @@ import time
 
 import BeePanel_Button
 import WaitForConnection
+import FileFinder
 
 import About
 import Calibration
@@ -78,11 +79,11 @@ class BeePanel():
     """
     State vars
     """
-    restart = False
     exitApp = False
     done = False
     cancelTransfer = False
     BeeState = "Disconnected"
+    ff = None
     
     """
     BEEConnect vars
@@ -152,10 +153,11 @@ class BeePanel():
         State variables Initialization
         """
         self.done = False
-        self.restart = False
         self.exitApp = False
         self.cancelTransfer = False
         self.BeeState = "Disconnected"
+        
+        self.ff = FileFinder.FileFinder()
         
         """
         JSON Loading
@@ -269,8 +271,10 @@ class BeePanel():
             """
             Init Interfaces Screens
             """
-            print("#TODO - HOME PRINTER IF READY")
-            self.beeCmd.home()
+            self.beeCmd.SetNozzleTemperature(0)
+            self.ShowWaitScreen()
+            self.beeCmd.homeZ()
+            self.beeCmd.homeXY()
             self.LoadCurrentScreen(self.currentScreenName)
         else:
             print("COULD NOT GET STATUS, Connection Wait happened???")
@@ -285,8 +289,8 @@ class BeePanel():
         retVal = pygame.event.get()
         retVal = None
         
+        self.done = False
         self.exitApp = False
-        self.restart = False
         
         while not self.done:
             
@@ -309,7 +313,7 @@ class BeePanel():
             if(pullRes is not None):
                 print(pullRes)
                 if(pullRes == "Printing"):
-                    self.restart = True
+                    self.done = True
                     """
                     self.restart = True
                     self.currentScreen.KillAll()
@@ -326,7 +330,7 @@ class BeePanel():
             # Check for interface CallBack
             if((self.currentScreen.ExitCallBack() is not None)):
                 if(self.currentScreen.exitCallBackResp == "Restart"):
-                    self.restart = True
+                    self.done = True
                     self.currentScreenName = self.jsonLoader.GetDefaultScreen()
                 """
                 self.currentScreen.KillAll()
@@ -340,6 +344,7 @@ class BeePanel():
                 break
             
         #pygame.quit()
+            
         
         return
         
@@ -414,7 +419,13 @@ class BeePanel():
             
             if (not (setScreen is None)) and (not setScreen==self.currentScreen.GetCurrentScreenName()):
                 if(self.currentScreen.exitNeedsHoming):
-                    self.beeCmd.home()
+                    #If Filament Change Interface, Don't forget to cancel heating
+                    if(self.currentScreenName == "Filament"):
+                        self.beeCmd.SetNozzleTemperature(0)
+                        
+                    self.ShowWaitScreen()
+                    self.beeCmd.homeZ()
+                    self.beeCmd.homeXY()
                 self.LoadCurrentScreen(setScreen)
                 
         if(buttonEvent == True):
@@ -559,12 +570,29 @@ class BeePanel():
         return
     
     """*************************************************************************
-                                transferFile Method 
+                                ShowWaitScreen Method 
     
-    Transfers gcode file to R2C2
+    Shows Wait Screen 
     *************************************************************************"""  
-    def transferFile(self, fileName):
+    def ShowWaitScreen(self):
         
+        #Clear String
+        self.screen.fill(pygame.Color(255,255,255))
+        
+        if(self.ff is None):
+            self.ff = FileFinder.FileFinder()
+        
+        moovingImgPath = self.ff.GetAbsPath('/Images/mooving.png')
+        
+        moovingImg = pygame.image.load(moovingImgPath)
+
+        # Draw Image
+        self.screen.blit(moovingImg,(96,56))
+        
+        # update screen
+        pygame.display.update()
+        
+        pygame.event.get()
         
         return
 

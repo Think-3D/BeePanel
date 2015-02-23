@@ -34,27 +34,27 @@
             "Buttons":[
                 {
                     "ButtonName":"MenuUp",
-                    "X":"0",
+                    "X":"30",
                     "Y":"0",
                     "Width":"100",
                     "Height":"40",
                     "ButtonType":"Img",
                     "Title":"MenuUp",
-                    "NormalPath":"/Images/MenuUp.png",
-                    "DownPath":"/Images/InvertedMenuUp.png",
-                    "HighlightedPath":"/Images/MenuUp.png"
+                    "NormalPath":"/Images/b_simple_4.png",
+                    "DownPath":"/Images/b_pressed_4.png",
+                    "HighlightedPath":"/Images/b_simple_4.png"
                 },
                 {
                     "ButtonName":"MenuDown",
-                    "X":"0",
+                    "X":"30",
                     "Y":"200",
                     "Width":"100",
                     "Height":"40",
                     "ButtonType":"Img",
                     "Title":"MenuDown",
-                    "NormalPath":"/Images/MenuDown.png",
-                    "DownPath":"/Images/InvertedMenuDown.png",
-                    "HighlightedPath":"/Images/MenuDown.png"
+                    "NormalPath":"/Images/b_simple_4_down.png",
+                    "DownPath":"/Images/b_pressed_4_down.png",
+                    "HighlightedPath":"/Images/b_simple_4_down.png"
                 }
             ],
             "Configuration":{

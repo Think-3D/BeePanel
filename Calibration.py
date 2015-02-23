@@ -15,10 +15,11 @@
 
 import pygame
 from BeeConnect import *
-
+import FileFinder
 
 class CalibrationScreen():
     
+    ff = None
     calibrationState = 0
     
     interfaceLoader = None
@@ -74,8 +75,9 @@ class CalibrationScreen():
         self.leftBoltImgY = self.interfaceLoader.GetLeftImgY()
         
         
+        self.ShowWaitScreen()
         self.beeCmd.GoToFirstCalibrationPoint()
-        
+        pygame.event.get()
         
         return
 
@@ -105,11 +107,11 @@ class CalibrationScreen():
                             self.lblFontColor = self.interfaceLoader.GetlblFontColor(self.calibrationState)
                             self.buttons = self.interfaceLoader.GetButtonsList(self.calibrationState)
                             if self.calibrationState == 1:
+                                self.ShowWaitScreen()
                                 self.beeCmd.GoToSecondCalibrationPoint()
                             elif self.calibrationState == 2:
+                                self.ShowWaitScreen()
                                 self.beeCmd.GoToThirdCalibrationPoint()
-                            
-                            
                     
                     elif btnName == "+0.5mm":
                         print("Move +0.5mm")
@@ -123,6 +125,8 @@ class CalibrationScreen():
                     elif btnName == "-0.5mm":
                         print("Move -0.5mm")
                         self.beeCmd.move(None,None,float(-0.5),None)
+                
+                pygame.event.get()
                     
         return
 
@@ -208,5 +212,32 @@ class CalibrationScreen():
     Pull variables
     *************************************************************************""" 
     def Pull(self):
+        
+        return
+    
+    """*************************************************************************
+                                ShowWaitScreen Method 
+    
+    Shows Wait Screen 
+    *************************************************************************"""  
+    def ShowWaitScreen(self):
+        
+        #Clear String
+        self.screen.fill(pygame.Color(255,255,255))
+        
+        if(self.ff is None):
+            self.ff = FileFinder.FileFinder()
+        
+        moovingImgPath = self.ff.GetAbsPath('/Images/mooving.png')
+        
+        moovingImg = pygame.image.load(moovingImgPath)
+
+        # Draw Image
+        self.screen.blit(moovingImg,(96,56))
+        
+        # update screen
+        pygame.display.update()
+        
+        pygame.event.get()
         
         return

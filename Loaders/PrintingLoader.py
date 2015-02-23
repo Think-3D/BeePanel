@@ -106,24 +106,20 @@ class PrintingLoader():
         self.lblIndexes.append(len(self.lblsJson[3]))
         self.lblsJson.append(json.loads(json.dumps(self.interfaceJson['PickerTopLabel'])))
         self.lblIndexes.append(len(self.lblsJson[4]))
-        self.lblsJson.append(json.loads(json.dumps(self.interfaceJson['TransferTopLabel'])))
+        self.lblsJson.append(json.loads(json.dumps(self.interfaceJson['FinishTopLabel'])))
         self.lblIndexes.append(len(self.lblsJson[5]))
-        self.lblsJson.append(json.loads(json.dumps(self.interfaceJson['HeatTopLabel'])))
-        self.lblIndexes.append(len(self.lblsJson[6]))
         
         self.buttonsJson.append(json.loads(json.dumps(self.interfaceJson['PrintingButtons'])))
         self.buttonsJson.append(json.loads(json.dumps(self.interfaceJson['PausedButtons'])))
         self.buttonsJson.append(json.loads(json.dumps(self.interfaceJson['ShutdownButtons'])))
         self.buttonsJson.append(json.loads(json.dumps(self.interfaceJson['FilamentButtons'])))
         self.buttonsJson.append(json.loads(json.dumps(self.interfaceJson['PickerButtons'])))
-        self.buttonsJson.append(json.loads(json.dumps(self.interfaceJson['TransferButtons'])))
-        self.buttonsJson.append(json.loads(json.dumps(self.interfaceJson['HeatButtons'])))
+        self.buttonsJson.append(json.loads(json.dumps(self.interfaceJson['FinishButtons'])))
         
         self.imagesJson.append(json.loads(json.dumps(self.interfaceJson['PrintingImage'])))
         self.imagesJson.append(json.loads(json.dumps(self.interfaceJson['PausedImage'])))
         self.imagesJson.append(json.loads(json.dumps(self.interfaceJson['ShutdownImage'])))
-        self.imagesJson.append(json.loads(json.dumps(self.interfaceJson['TransferImage'])))
-        self.imagesJson.append(json.loads(json.dumps(self.interfaceJson['HeatImage'])))
+        self.imagesJson.append(json.loads(json.dumps(self.interfaceJson['FinishImage'])))
         
         """
         Time Label Configuration

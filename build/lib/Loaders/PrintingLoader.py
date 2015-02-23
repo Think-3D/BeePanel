@@ -1,35 +1,15 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 """
-BEETFT v0.1
-
-BEETFT creates a simple interface to control basic function of the BEETHEFIRST 3D printer.
-BEETFT requires Pygame to be installed. Pygame can be downloaded from http://pygame.org
-BEETFT is developed by Marcos Gomes
-https://github.com/marcosfg/BEETFT
-
-
-The MIT License (MIT)
-
-Copyright (c) 2014 Marcos Gomes
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,p
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
+* Copyright (c) 2015 BEEVC - Electronic Systems This file is part of BEESOFT
+* software: you can redistribute it and/or modify it under the terms of the GNU
+* General Public License as published by the Free Software Foundation, either
+* version 3 of the License, or (at your option) any later version. BEESOFT is
+* distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+* without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+* PARTICULAR PURPOSE. See the GNU General Public License for more details. You
+* should have received a copy of the GNU General Public License along with
+* BEESOFT. If not, see <http://www.gnu.org/licenses/>.
 """
 
 __author__ = "Marcos Gomes"
@@ -126,24 +106,20 @@ class PrintingLoader():
         self.lblIndexes.append(len(self.lblsJson[3]))
         self.lblsJson.append(json.loads(json.dumps(self.interfaceJson['PickerTopLabel'])))
         self.lblIndexes.append(len(self.lblsJson[4]))
-        self.lblsJson.append(json.loads(json.dumps(self.interfaceJson['TransferTopLabel'])))
+        self.lblsJson.append(json.loads(json.dumps(self.interfaceJson['FinishTopLabel'])))
         self.lblIndexes.append(len(self.lblsJson[5]))
-        self.lblsJson.append(json.loads(json.dumps(self.interfaceJson['HeatTopLabel'])))
-        self.lblIndexes.append(len(self.lblsJson[6]))
         
         self.buttonsJson.append(json.loads(json.dumps(self.interfaceJson['PrintingButtons'])))
         self.buttonsJson.append(json.loads(json.dumps(self.interfaceJson['PausedButtons'])))
         self.buttonsJson.append(json.loads(json.dumps(self.interfaceJson['ShutdownButtons'])))
         self.buttonsJson.append(json.loads(json.dumps(self.interfaceJson['FilamentButtons'])))
         self.buttonsJson.append(json.loads(json.dumps(self.interfaceJson['PickerButtons'])))
-        self.buttonsJson.append(json.loads(json.dumps(self.interfaceJson['TransferButtons'])))
-        self.buttonsJson.append(json.loads(json.dumps(self.interfaceJson['HeatButtons'])))
+        self.buttonsJson.append(json.loads(json.dumps(self.interfaceJson['FinishButtons'])))
         
         self.imagesJson.append(json.loads(json.dumps(self.interfaceJson['PrintingImage'])))
         self.imagesJson.append(json.loads(json.dumps(self.interfaceJson['PausedImage'])))
         self.imagesJson.append(json.loads(json.dumps(self.interfaceJson['ShutdownImage'])))
-        self.imagesJson.append(json.loads(json.dumps(self.interfaceJson['TransferImage'])))
-        self.imagesJson.append(json.loads(json.dumps(self.interfaceJson['HeatImage'])))
+        self.imagesJson.append(json.loads(json.dumps(self.interfaceJson['FinishImage'])))
         
         """
         Time Label Configuration

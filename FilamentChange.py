@@ -29,7 +29,7 @@ class FilamentChangeScreen():
     """
     beeCmd = None
     
-    
+    ff = None
     exit = False
     interfaceState = 0
     
@@ -120,10 +120,12 @@ class FilamentChangeScreen():
         self.beeCmd.SetNozzleTemperature(self.targetTemperature)
         
         #Go to Heat Position
-        self.beeCmd.home()
+        self.ShowWaitScreen()
+        self.beeCmd.homeZ()
+        self.beeCmd.homeXY()
         self.beeCmd.GoToHeatPos()
         
-        #Get current colot code
+        #Get current color code
         self.selectedColorCode = self.beeCmd.GetBeeCode()
         print("Current Color Code: ", self.selectedColorCode)
         self.selectedColorName = self.colorCodes.GetColorName(self.selectedColorCode)
@@ -153,6 +155,7 @@ class FilamentChangeScreen():
                     if btnName == "Next":
                         if self.interfaceState == 0:
                             self.interfaceState = 1
+                            self.ShowWaitScreen()
                             self.beeCmd.GoToRestPos()
                         elif self.interfaceState == 2:
                             self.interfaceState = 1
@@ -171,9 +174,11 @@ class FilamentChangeScreen():
                         self.interfaceState = self.interfaceState + 1
                     elif btnName == "Load":
                         print("Load Filament")
+                        self.ShowLoadScreen()
                         self.beeCmd.Load()
                     elif btnName == "Unload":
                         print("Unload Filament")
+                        self.ShowUnloadScreen()
                         self.beeCmd.Unload()
                     elif btnName == "Up":
                         self.listPosition = self.listPosition - 1
@@ -190,7 +195,9 @@ class FilamentChangeScreen():
                     self.lblTopFontColor = self.interfaceLoader.GetlblFontColor(self.interfaceState)
                     self.buttons = self.interfaceLoader.GetButtonsList(self.interfaceState)
                     self.lblTopText = self.interfaceLoader.GetlblText(self.interfaceState)
-                    
+            
+            pygame.event.get()
+            
         return
     
 
@@ -394,5 +401,86 @@ class FilamentChangeScreen():
                 relY = posY - pickerYMin
                 idxChange = -2 + int(relY/height)
                 self.listPosition = self.listPosition + idxChange
+        
+        return
+    
+    """*************************************************************************
+                                ShowWaitScreen Method 
+    
+    Shows Wait Screen 
+    *************************************************************************"""  
+    def ShowWaitScreen(self):
+        
+        #Clear String
+        self.screen.fill(pygame.Color(255,255,255))
+        
+        if(self.ff is None):
+            self.ff = FileFinder.FileFinder()
+        
+        moovingImgPath = self.ff.GetAbsPath('/Images/mooving.png')
+        
+        moovingImg = pygame.image.load(moovingImgPath)
+
+        # Draw Image
+        self.screen.blit(moovingImg,(96,56))
+        
+        # update screen
+        pygame.display.update()
+        
+        pygame.event.get()
+        
+        return
+    
+    """*************************************************************************
+                                ShowLoadScreen Method 
+    
+    Shows Load Screen 
+    *************************************************************************"""  
+    def ShowLoadScreen(self):
+        
+        #Clear String
+        self.screen.fill(pygame.Color(255,255,255))
+        
+        if(self.ff is None):
+            self.ff = FileFinder.FileFinder()
+        
+        moovingImgPath = self.ff.GetAbsPath('/Images/Load.png')
+        
+        moovingImg = pygame.image.load(moovingImgPath)
+
+        # Draw Image
+        self.screen.blit(moovingImg,(10,32))
+        
+        # update screen
+        pygame.display.update()
+        
+        pygame.event.get()
+        
+        return
+    
+    """*************************************************************************
+                                ShowUnloadScreen Method 
+    
+    Shows Unload Screen 
+    *************************************************************************"""  
+    def ShowUnloadScreen(self):
+        
+        #Clear String
+        self.screen.fill(pygame.Color(255,255,255))
+        
+        if(self.ff is None):
+            self.ff = FileFinder.FileFinder()
+        
+        moovingImgPath = self.ff.GetAbsPath('/Images/Unload.png')
+        
+        moovingImg = pygame.image.load(moovingImgPath)
+
+        # Draw Image
+        self.screen.blit(moovingImg,(10,30))
+        
+        # update screen
+        pygame.display.update()
+        
+        pygame.event.get()
         
         return 

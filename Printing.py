@@ -61,7 +61,7 @@ class PrintScreen():
     printPercent = 0
     
     nextPullTime = None
-    pullInterval = 60
+    pullInterval = 10
     
     """
     Progress Bar vars
@@ -214,6 +214,9 @@ class PrintScreen():
             lblStr = self.colorLblText + self.colorNameList[self.selectedColoridx]
             self.colorLbl = self.colorLblFont.render(lblStr, 1, self.colorLblFontColor)
         
+        elif self.interfaceState == 5:
+            lblStr = self.timeRemaining
+            self.timeLbl = self.timeLblFont.render(lblStr, 1, self.timeLblFontColor)
         
         for btn in self.buttons:
             if btn._propGetName() == "Update":
@@ -241,7 +244,7 @@ class PrintScreen():
             
             # Draw Progress Bar
             self.progressBar.DrawRect(self.screen)
-            self.screen.blit(self.progressBar.GetSurface(self.elapsedTime, self.estimatedTime),
+            self.screen.blit(self.progressBar.GetSurface(self.executedLines, self.numberLines),
                                 self.progressBar.GetPos())
         # Draw Time label
         elif self.interfaceState == 3:
@@ -396,8 +399,15 @@ class PrintScreen():
                     m = int(minutesLeft - (h*60))
                     self.timeRemaining += str(m) + 'm'
                 else:
-                    self.timeRemaining = 'Unknown'
-            
+                    self.timeRemaining = 'Taking longer than expected'
+                    
+                if(self.executedLines >= self.numberLines):
+                    h = self.elapsedTime//60
+                    m = self.elapsedTime - (h * 60)
+                    self.timeRemaining = 'Print Finished. Total time ' + str(h) + ':' + str(m)
+                    print(self.timeRemaining)
+                    self.interfaceState = 5
+     
         return
     
     """*************************************************************************
@@ -466,4 +476,30 @@ class PrintScreen():
         
         return
     
+    """*************************************************************************
+                                ShowWaitScreen Method 
+    
+    Shows Wait Screen 
+    *************************************************************************"""  
+    def ShowWaitScreen(self):
+        
+        #Clear String
+        self.screen.fill(pygame.Color(255,255,255))
+        
+        if(self.ff is None):
+            self.ff = FileFinder.FileFinder()
+        
+        moovingImgPath = self.ff.GetAbsPath('/Images/mooving.png')
+        
+        moovingImg = pygame.image.load(moovingImgPath)
+
+        # Draw Image
+        self.screen.blit(moovingImg,(96,56))
+        
+        # update screen
+        pygame.display.update()
+        
+        pygame.event.get()
+        
+        return
     

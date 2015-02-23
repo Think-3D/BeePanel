@@ -56,7 +56,6 @@ import usb.util
 import sys
 import os
 import time
-import time
 import math
 
 import BeeConnect.Connection
@@ -70,7 +69,10 @@ class Cmd():
     BLOCK_SIZE = 64
     
     transmisstionErrors = 0
-
+    
+    oldFw = ''
+    newFw = ''
+    
     """*************************************************************************
                                 Init Method 
     
@@ -120,10 +122,10 @@ class Cmd():
         
         if('Bad M-code 625' in resp):   #printer in bootloader mode
             print("Printer running in Bootloader Mode")
-            print("Changing to firmware")
-            self.beeCon.write("M630\n")
-            self.beeCon.close()
-            time.sleep(1)
+            #print("Changing to firmware")
+            #self.beeCon.write("M630\n")
+            #self.beeCon.close()
+            #time.sleep(1)
             
             return "Bootloader"
         elif('ok Q' in resp):
@@ -145,30 +147,37 @@ class Cmd():
         returns the current status of the printer
         """
         
-        resp = self.beeCon.sendCmd("M625\n")
-        #print(resp)
+        resp = ''
+        status = ''
+        done = False
         
-        sPos = resp.find('S:')
+        while(not done):
+            
+            while('s:' not in resp.lower()):
+                resp += self.beeCon.sendCmd("M625\n")
+                time.sleep(1)
+            
+            if('s:3' in resp.lower()):
+                status = 'Ready'
+                done = True
+            elif('s:4' in resp.lower()):
+                status = 'Moving'
+                done = True
+            elif('s:5' in resp.lower()):
+                status = 'SD_Print'
+                done = True
+            elif('s:6' in resp.lower()):
+                status = 'Transfer'
+                done = True
+            elif('s:7' in resp.lower()):
+                status = 'Pause'
+                done = True
+            elif('s:9' in resp.lower()):
+                status = 'SDown_Wait'
+                done = True
+            
         
-        try:
-            status = int(resp[sPos+2])
-        except:
-            return "Unknown"
-        
-        if(status == 3):
-            return "Ready"
-        elif(status == 4):
-            return "Moving"
-        elif(status == 5):
-            return "SD_Print"
-        elif(status == 6):
-            return "Transfer"
-        elif(status == 7):
-            return "Pause"
-        elif(status == 9):
-            return "SDown_Wait"
-        
-        return "Unknown"
+        return status
 
     """*************************************************************************
                                 beep Method 
@@ -234,7 +243,7 @@ class Cmd():
                                 move Method 
     
     *************************************************************************"""
-    def move(self,x=None,y=None,z=None,e=None,f=None):
+    def move(self,x=None,y=None,z=None,e=None,f=None, wait = None):
         r"""
         move method
         
@@ -287,8 +296,10 @@ class Cmd():
             commandStr = "G1 X" + str(newX) + " Y" + str(newY) + " Z" + str(newZ) + " E" + str(newE) + "\n"
         
         
-        
-        self.beeCon.sendCmd(commandStr,"3")
+        if(wait is not None):
+            self.beeCon.sendCmd(commandStr)
+        else:
+            self.beeCon.sendCmd(commandStr,"3")
         
         return
     
@@ -307,19 +318,16 @@ class Cmd():
         self.beeCon.sendCmd("G28\n","3")
         
         #set feedrate
-        resp = self.beeCon.sendCmd("G1 F15000\n")
-        #print(resp)
+        self.beeCon.sendCmd("G1 F15000\n")
         
         #set acceleration
-        resp = self.beeCon.sendCmd("M206 X400\n")
-        #print(resp)
+        self.beeCon.sendCmd("M206 X400\n")
         
         #go to first point
         self.beeCon.sendCmd("G1 X0 Y67 Z2\n")
         
         #set acceleration
-        resp = self.beeCon.sendCmd("M206 X1000\n","3")
-        #print(resp)
+        self.beeCon.sendCmd("M206 X1000\n")
         
         return
     
@@ -346,7 +354,8 @@ class Cmd():
         
         #go to SECOND point
         self.move(0,0,10,0)
-        resp = self.beeCon.sendCmd("G1 X-31 Y-65\n","3")
+        #self.beeCon.sendCmd("G1 X-31 Y-65\n","3")
+        self.beeCon.sendCmd("G1 X-31 Y-65\n")
         self.move(0,0,-10,0)
         
         return
@@ -369,7 +378,8 @@ class Cmd():
         
         self.move(0,0,10,0)
         #go to SECOND point
-        self.beeCon.sendCmd("G1 X35 Y-65\n","3")
+        #self.beeCon.sendCmd("G1 X35 Y-65\n","3")
+        self.beeCon.sendCmd("G1 X35 Y-65\n")
         
         self.move(0,0,-10,0)
         
@@ -443,7 +453,7 @@ class Cmd():
         self.beeCon.sendCmd("M300 S0 P500\n")
         self.beeCon.sendCmd("M300 P500\n")
         self.beeCon.sendCmd("M300 S0 P500\n")
-        self.beeCon.sendCmd("G1 F300 E100\n")
+        self.beeCon.sendCmd("G1 F300 E100\n","3")
         self.beeCon.sendCmd("G92 E\n")
         return
 
@@ -467,9 +477,9 @@ class Cmd():
         self.beeCon.sendCmd("M300 S0 P500\n")
         self.beeCon.sendCmd("G1 F300 E50\n")
         self.beeCon.sendCmd("G92 E\n")
-        self.beeCon.sendCmd("G1 F1000 E-23\n","3")
-        self.beeCon.sendCmd("G1 F800 E2\n","3")
-        self.beeCon.sendCmd("G1 F2000 E-23\n","3")
+        self.beeCon.sendCmd("G1 F1000 E-23\n")
+        self.beeCon.sendCmd("G1 F800 E2\n")
+        self.beeCon.sendCmd("G1 F2000 E-23\n")
         self.beeCon.sendCmd("G1 F200 E-50\n","3")
         self.beeCon.sendCmd("G92 E\n")
         
@@ -757,14 +767,20 @@ class Cmd():
                                 startSDPrint Method 
     
     *************************************************************************"""
-    def startSDPrint(self):
+    def startSDPrint(self, header=False, temp=None):
         r"""
         startSDPrint method
         
         starts printing selected file
         """
+        cmd = 'M33'
+        if(header):
+            cmd += ' S1'
+            if(temp is not None):
+                cmd += ' T' + str(temp)
         
-        self.beeCon.sendCmd("M33\n")
+        cmd += '\n'
+        self.beeCon.sendCmd(cmd)
         
         return True
 
@@ -986,6 +1002,10 @@ class Cmd():
         
         print("   :","Flashing new firmware File: ",fileName)
         
+        self.oldFw = self.GetFirmwareVersion()
+        
+        self.beeCon.sendCmd('M114 A0.0.0\n', 'ok')
+        
         cTime = time.time()
         
         message = "M650 A{0}\n".format(os.path.getsize(fileName))
@@ -1026,6 +1046,25 @@ class Cmd():
         print ("\n   :","Flashing completed in", eTime-cTime, 's')
         print("   :Average Transfer Speed",avgSpeed)
         
+        self.beeCon.sendCmd('M114 A20.0.0\n', 'ok')
+        
+        self.newFw=self.GetFirmwareVersion()
         
         return
+    
+    """*************************************************************************
+                                GetFirmwareVersion Method 
+    
+    *************************************************************************"""
+    def GetFirmwareVersion(self):
         
+        resp = self.beeCon.sendCmd('M115\n','ok')
+        resp = resp.replace(' ', '')
+        
+        split = resp.split('ok') 
+        fw = split[0]
+        
+        return fw
+    
+        
+        return

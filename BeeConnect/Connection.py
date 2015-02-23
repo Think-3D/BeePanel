@@ -264,7 +264,7 @@ class Con():
         if wait is None:
             resp = self.dispatch(cmd)
         else:
-            if(wait.isdigit):
+            if(wait.isdigit()):
                 resp = self.waitForStatus(cmd,wait,timeout)
             else:
                 resp = self.waitFor(cmd,wait,timeout)

@@ -17,13 +17,15 @@ __license__ = "MIT"
 
 import os
 import subprocess
-from time import time
+import time
 import math
 import FileFinder
 import pygame
 import platform
 import re
 import string
+
+import estimator.gcoder
 
 class FileBrowserScreen():
     
@@ -34,6 +36,7 @@ class FileBrowserScreen():
     interfaceState = 0
     exitCallBackResp = None
     exitNeedsHoming = False
+    ff = None
     
     """
     BEEConnect vars
@@ -143,6 +146,8 @@ class FileBrowserScreen():
         self.interfaceLoader = interfaceLoader
         
         self.interfaceState = 0         #reset interface state
+        
+        self.ShowLoadingScreen()
         
         """
         Load lists and settings from interfaceLoader
@@ -654,7 +659,7 @@ class FileBrowserScreen():
             
         #HEATING
         elif(self.interfaceState == 2):
-            currentTime = time()
+            currentTime = time.time()
             if(currentTime > self.nextPullTime):
                 self.nozzleTemperature = self.beeCmd.GetNozzleTemperature()
                 print('Nozzle Temperature: ', self.nozzleTemperature)
@@ -662,12 +667,17 @@ class FileBrowserScreen():
                 if(self.nozzleTemperature >= self.targetTemperature):
                     self.nozzleTemperature = self.targetTemperature
                     
-                    self.beeCmd.home()
+                    #self.beeCmd.home()
                     self.beeCmd.SetNozzleTemperature(self.targetTemperature)
-                    self.beeCmd.startSDPrint();
+                    self.ShowWaitScreen()
+                    self.beeCmd.startSDPrint(True,220);
+                    st = ''
+                    while('SD_Print' not in st):
+                        st = self.beeCmd.getStatus()
+                        time.sleep(1)
                     return "Printing"
             
-                self.nextPullTime = time() + self.pullInterval
+                self.nextPullTime = time.time() + self.pullInterval
         
             
         return 
@@ -683,6 +693,9 @@ class FileBrowserScreen():
         if(os.path.isfile(self.selectedFilePath) == False):
             print("File does not exist")
             return
+        
+        #Show Loading Screen
+        self.ShowLoadingScreen()
         
         fnSplit = self.selectedFileName.split(".")
         self.sdFileName = fnSplit[0]
@@ -701,42 +714,19 @@ class FileBrowserScreen():
             nameChars[0] = 'a'
             self.sdFileName = "".join(nameChars)
         
-        #Add Header and footer
-        file = open(self.selectedFilePath,'r')
-        firstLine = file.readline()
-        newFile = None
-        newPath = None
-        if(';ready to print' not in firstLine.lower()):
-            newPath = ''
-            pathSplit = self.selectedFilePath.split('/')
-            for i in range(len(pathSplit) -1):
-                newPath += pathSplit[i] + '/'
-            newPath += self.sdFileName + '.gcode'
-            file.seek(0)
-            fileData = file.read()
-            file.close()
-            file = None
-            
-            newFile = open(newPath,'w')
-            newFile.write(';ready to print\nM300\nG28\nM109 S220\nM300\nM206 X500\nM107\nM104 S220\nG92 E\nM642 W1\nM130 T6 U1.3 V80\nG1 X-98.0 Y-20.0 Z5.0 F3000\nG1 Y-68.0 Z0.3\nG1 X-98.0 Y0.0 F500 E20\nG92 E\n')
-            newFile.write(fileData)
-            newFile.write('M300\nM104 S0\nG28 X\nG28 Z\nG1 Y65 G92 E')
-            newFile.close()
+        #ADD ESTIMATOR HEADER
+        gc = estimator.gcoder.GCode(open(self.selectedFilePath,'rU'))
         
-        if(newPath is not None):
-            self.selectedFilePath = newPath
-        if(file is not None):
-            file.close()
-            file = None
+        est = gc.estimate_duration()
+        eCmd = 'M31 A' + str(est['seconds']//60) + ' L' + str(est['lines']) + '\n'
+        header = open('gFile.gcode','w')
+        header.write(eCmd)
+        header.close()
+
+        #subprocess.call(['cat','header.txt', self.selectedFilePath,'>>','gFile.gcode'])
+        os.system("cat '" + self.selectedFilePath + "' >> " + "gFile.gcode")
         
-        if(not self.selectedFilePath.endswith(self.sdFileName + '.gcode')):
-            newPath = ''
-            pathSplit = self.selectedFilePath.split('/')
-            for i in range(len(pathSplit) -1):
-                newPath += pathSplit[i] + '/'
-            newPath += self.sdFileName + '.gcode'
-            os.renames(self.selectedFilePath, newPath)
-            self.selectedFilePath = newPath
+        self.selectedFilePath = 'gFile.gcode'
         
         #Load File
         print("   :","Loading File")
@@ -746,12 +736,6 @@ class FileBrowserScreen():
         self.blockSize = self.beeCmd.MESSAGE_SIZE * self.beeCmd.BLOCK_SIZE
         self.nBlocks = math.ceil(self.fileSize/self.blockSize)
         print("   :","Number of Blocks: ", self.nBlocks)
-        
-        #RUN ESTIMATOR
-        
-        
-        #TODO SEND M31 WITH ESTIMATED TIME
-        self.beeCon.sendCmd("M31 A0 L0\n")
         
         #CREATE SD FILE
         resp = self.beeCmd.CraeteFile(self.sdFileName)
@@ -764,7 +748,7 @@ class FileBrowserScreen():
         self.blocksTransfered = 0
         self.totalBytes = 0
         
-        self.startTime = time()
+        self.startTime = time.time()
         
         self.gcodeFile = open(self.selectedFilePath, 'rb')
         
@@ -800,7 +784,7 @@ class FileBrowserScreen():
     *************************************************************************"""
     def EndTransfer(self):
         
-        elapsedTime = time()- self.startTime
+        elapsedTime = time.time()- self.startTime
         avgSpeed = self.fileSize//elapsedTime
         print("Elapsed time: ",elapsedTime)
         print("Average Transfer Speed: ", avgSpeed)
@@ -893,4 +877,57 @@ class FileBrowserScreen():
         self.buttons = self.interfaceLoader.GetButtonsList(self.interfaceState)
         
         return
-       
+    
+    """*************************************************************************
+                                ShowWaitScreen Method 
+    
+    Shows Wait Screen 
+    *************************************************************************"""  
+    def ShowWaitScreen(self):
+        
+        #Clear String
+        self.screen.fill(pygame.Color(255,255,255))
+        
+        if(self.ff is None):
+            self.ff = FileFinder.FileFinder()
+        
+        moovingImgPath = self.ff.GetAbsPath('/Images/mooving.png')
+        
+        moovingImg = pygame.image.load(moovingImgPath)
+
+        # Draw Image
+        self.screen.blit(moovingImg,(96,56))
+        
+        # update screen
+        pygame.display.update()
+        
+        pygame.event.get()
+        
+        return
+    
+    """*************************************************************************
+                                ShowLoadingScreen Method 
+    
+    Shows Loading Screen 
+    *************************************************************************"""  
+    def ShowLoadingScreen(self):
+        
+        #Clear String
+        self.screen.fill(pygame.Color(255,255,255))
+        
+        if(self.ff is None):
+            self.ff = FileFinder.FileFinder()
+        
+        moovingImgPath = self.ff.GetAbsPath('/Images/loading.png')
+        
+        moovingImg = pygame.image.load(moovingImgPath)
+
+        # Draw Image
+        self.screen.blit(moovingImg,(72,32))
+        
+        # update screen
+        pygame.display.update()
+        
+        pygame.event.get()
+        
+        return

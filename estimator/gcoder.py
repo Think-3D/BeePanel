@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+
 # This file is copied from GCoder.
 #
 # GCoder is free software: you can redistribute it and/or modify
@@ -14,6 +15,12 @@
 # You should have received a copy of the GNU General Public License
 # along with Printrun.  If not, see <http://www.gnu.org/licenses/>.
 
+#Change Notes:
+#20 Feb 2015 Marcos Gomes 
+
+#Added Python3 compatibility
+#method estimate_duration() from GCoder class returns a dict with number of lines and duration in seconds
+
 import sys
 import re
 import math
@@ -21,7 +28,7 @@ import datetime
 import logging
 from array import array
 
-from printrun_utils import install_locale
+from estimator.printrun_utils import install_locale
 install_locale('pronterface')
 
 gcode_parsed_args = ["x", "y", "e", "f", "z", "i", "j"]
@@ -413,8 +420,8 @@ class GCode(object):
             old_lines = layers.get(prev_z, [])
             old_lines += cur_lines
             layers[prev_z] = old_lines
-
-        for zindex in layers.keys():
+            
+        for zindex in list(layers):
             cur_lines = layers[zindex]
             has_movement = False
             for l in layers[zindex]:
@@ -566,7 +573,13 @@ class GCode(object):
 
         totaltime = datetime.timedelta(seconds = int(totalduration))
         self.duration = totaltime
-        return "%d layers, %s" % (len(self.layers), str(totaltime))
+        
+        estimator = {}
+        estimator['lines'] = len(self.lines)
+        estimator['seconds'] = self.duration.seconds
+        
+        #return "%d layers, %s" % (len(self.layers), str(totaltime))
+        return estimator
 
 def main():
     if len(sys.argv) < 2:
