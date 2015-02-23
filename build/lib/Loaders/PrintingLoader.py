@@ -119,6 +119,8 @@ class PrintingLoader():
         self.imagesJson.append(json.loads(json.dumps(self.interfaceJson['PrintingImage'])))
         self.imagesJson.append(json.loads(json.dumps(self.interfaceJson['PausedImage'])))
         self.imagesJson.append(json.loads(json.dumps(self.interfaceJson['ShutdownImage'])))
+        self.imagesJson.append('')                                                              #Filament Change IMG
+        self.imagesJson.append('')                                                              #Picker IMG
         self.imagesJson.append(json.loads(json.dumps(self.interfaceJson['FinishImage'])))
         
         """
@@ -220,12 +222,17 @@ class PrintingLoader():
         Load Image Configuration
         """
         for img in self.imagesJson:
-            imgJson = json.loads(json.dumps(img))
-            for img in imgJson:
-                self.imagePath.append(ff.GetAbsPath(img['ImgPath']))
-                self.imageX.append(int(img['X']))
-                self.imageY.append(int(img['Y']))
-                
+            if(img != ''):
+                imgJson = json.loads(json.dumps(img))
+                for img in imgJson:
+                    self.imagePath.append(ff.GetAbsPath(img['ImgPath']))
+                    self.imageX.append(int(img['X']))
+                    self.imageY.append(int(img['Y']))
+            else:
+                self.imagePath.append('')
+                self.imageX.append('')
+                self.imageY.append('')
+                    
         
         """
         Load Progress Bar Configuration
@@ -350,8 +357,10 @@ class PrintingLoader():
     GetTimeLblText
     """
     def GetTimeLblText(self,interfaceState):
-        if interfaceState == 0 or interfaceState == 5:
+        if interfaceState == 0:
             return self.timeLblText
+        if interfaceState == 5:
+            return ''
     
     """
     GetTimeLblFont
@@ -424,27 +433,18 @@ class PrintingLoader():
     GetImagePath
     """
     def GetImagePath(self,interfaceState):
-        if(interfaceState > 2):
-            return self.imagePath[interfaceState- 2]
-        else:
             return self.imagePath[interfaceState]
     
     """
     GetImageX
     """
     def GetImageX(self,interfaceState):
-        if(interfaceState > 2):
-            return self.imageX[interfaceState- 2]
-        else:
             return self.imageX[interfaceState]
     
     """
     GetImageY
     """
     def GetImageY(self,interfaceState):
-        if(interfaceState > 2):
-            return self.imageY[interfaceState- 2]
-        else:
             return self.imageY[interfaceState]
     
     """*************************************************************************

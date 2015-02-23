@@ -718,7 +718,7 @@ class FileBrowserScreen():
         gc = estimator.gcoder.GCode(open(self.selectedFilePath,'rU'))
         
         est = gc.estimate_duration()
-        eCmd = 'M31 A' + str(est['seconds']//60) + ' L' + str(est['lines']) + '\n'
+        eCmd = 'M31 A' + str(est['seconds']//60) + ' L' + str(est['lines']) + '\nM32 A0\n'
         header = open('gFile.gcode','w')
         header.write(eCmd)
         header.close()

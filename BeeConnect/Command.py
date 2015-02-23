@@ -981,13 +981,24 @@ class Cmd():
             if('A' in s):
                 printStatus['Estimated Time'] = int(s[1:])
             elif('B' in s):
-                printStatus['Elapsed Time'] = int(s[1:])/(60*1000)
+                printStatus['Elapsed Time'] = int(s[1:])//(60*1000)
             elif('C' in s):
                 printStatus['Lines'] = int(s[1:])
             elif('D' in s):
                 printStatus['Executed Lines'] = int(s[1:])
         
         return printStatus
+    
+    """*************************************************************************
+                            SetBlowerSpeed Method 
+
+    *************************************************************************"""
+    def SetBlowerSpeed(self, speed):
+        
+        cmd = 'M106 S' + str(speed) + '\n'
+        self.beeCon.sendCmd(cmd)
+        
+        return
     
     """*************************************************************************
                                 FlashFirmware Method 

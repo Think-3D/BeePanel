@@ -1,6 +1,10 @@
 {
     "leftMenuButtons":[
         {
+            "ButtonName":"Printer Info",
+            "Title":"Printer Info"
+        },
+        {
             "ButtonName":"Browser",
             "Title":"Browser"
         },
@@ -11,10 +15,6 @@
         {
             "ButtonName":"Filament",
             "Title":"Filament"
-        },
-        {
-            "ButtonName":"Printer Info",
-            "Title":"Printer Info"
         },
         {
             "ButtonName":"Settings",

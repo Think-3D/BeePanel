@@ -981,7 +981,7 @@ class Cmd():
             if('A' in s):
                 printStatus['Estimated Time'] = int(s[1:])
             elif('B' in s):
-                printStatus['Elapsed Time'] = int(s[1:])/(60*1000)
+                printStatus['Elapsed Time'] = int(s[1:])//(60*1000)
             elif('C' in s):
                 printStatus['Lines'] = int(s[1:])
             elif('D' in s):

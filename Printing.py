@@ -157,6 +157,9 @@ class PrintScreen():
                         buttonEvent = True
                         self.exitCallBackResp = "Restart"
                         break
+                    elif btnName == "Finish":
+                        self.exitCallBackResp = "Restart"
+                        buttonEvent = True
                     elif btnName == "Resume":
                         self.interfaceState = 0
                         print("\n//TODO: SEND RESUME PRINT\n")
@@ -285,7 +288,10 @@ class PrintScreen():
             
             
             self.pickColorRect = pygame.draw.rect(self.screen, pickerColor, (x, y, width, height), 3)
-                                
+        
+        elif(self.interfaceState == 5):
+            self.screen.blit(self.timeLbl, (self.timeLblXPos, self.timeLblYPos))
+                                   
         # Draw Image
         if (self.interfaceState != 3) and (self.interfaceState != 4):
             self.screen.blit(self.image, (self.imageX, self.imageY))
@@ -404,9 +410,10 @@ class PrintScreen():
                 if(self.executedLines >= self.numberLines):
                     h = self.elapsedTime//60
                     m = self.elapsedTime - (h * 60)
-                    self.timeRemaining = 'Print Finished. Total time ' + str(h) + ':' + str(m)
+                    self.timeRemaining = 'Print Finished. Total time: ' + str(int(h)) + 'h' + str(int(m))
                     print(self.timeRemaining)
                     self.interfaceState = 5
+                    self.UpdateVars()
      
         return
     

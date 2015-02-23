@@ -343,7 +343,7 @@
             ],
             "FinishButtons":[
                 {
-                    "ButtonName":"Finsih",
+                    "ButtonName":"Finish",
                     "X":"14",
                     "Y":"200",
                     "Width":"88",
@@ -358,9 +358,9 @@
             ],
             "FinishImage":[
                 {
-                    "ImgPath":"/Images/beeBWVectorSmall.png",
-                    "X":"110",
-                    "Y":"50"
+                    "ImgPath":"/Images/BestPnP_Icon.png",
+                    "X":"128",
+                    "Y":"30"
                 }
             ]
         }
