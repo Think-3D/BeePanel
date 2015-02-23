@@ -350,35 +350,35 @@ class PrintingLoader():
     GetTimeLblText
     """
     def GetTimeLblText(self,interfaceState):
-        if interfaceState == 0:
+        if interfaceState == 0 or interfaceState == 5:
             return self.timeLblText
     
     """
     GetTimeLblFont
     """
     def GetTimeLblFont(self,interfaceState):
-        if interfaceState == 0:
+        if interfaceState == 0 or interfaceState == 5:
             return self.timeLblFont
     
     """
     GetTimeLblFontColor
     """
     def GetTimeLblFontColor(self,interfaceState):
-        if interfaceState == 0:
+        if interfaceState == 0 or interfaceState == 5:
             return self.timeLblFontColor
     
     """
     GetTimeLblXPos
     """
     def GetTimeLblXPos(self,interfaceState):
-        if interfaceState == 0:
+        if interfaceState == 0 or interfaceState == 5:
             return self.timeLblXPos
     
     """
     GetTimeLblYPos
     """
     def GetTimeLblYPos(self,interfaceState):
-        if interfaceState == 0:
+        if interfaceState == 0 or interfaceState == 5:
             return self.timeLblYPos
     
     """
@@ -455,7 +455,7 @@ class PrintingLoader():
     GetProgessBar
     """
     def GetProgessBar(self,interfaceState):
-        if(interfaceState == 0 or interfaceState == 5 or interfaceState == 6):
+        if(interfaceState == 0):
             return self.progressBar 
         else:
             return
