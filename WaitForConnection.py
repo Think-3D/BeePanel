@@ -11,9 +11,6 @@
 * should have received a copy of the GNU General Public License along with
 * BEESOFT. If not, see <http://www.gnu.org/licenses/>.
 """
-from pip.utils.outdated import SELFCHECK_DATE_FMT
-from checkbox_support.contrib.xrandr import Status
-
 
 __author__ = "Marcos Gomes"
 __license__ = "MIT"
