@@ -670,7 +670,7 @@ class FileBrowserScreen():
                     #self.beeCmd.home()
                     self.beeCmd.SetNozzleTemperature(self.targetTemperature)
                     self.ShowWaitScreen()
-                    self.beeCmd.startSDPrint(True,220);
+                    self.beeCmd.startSDPrint();
                     st = ''
                     while('SD_Print' not in st):
                         st = self.beeCmd.getStatus()
@@ -718,13 +718,39 @@ class FileBrowserScreen():
         gc = estimator.gcoder.GCode(open(self.selectedFilePath,'rU'))
         
         est = gc.estimate_duration()
-        eCmd = 'M31 A' + str(est['seconds']//60) + ' L' + str(est['lines']) + '\nM32 A0\n'
-        header = open('gFile.gcode','w')
-        header.write(eCmd)
-        header.close()
-
+        eCmd = 'M300\n'                 #Beep
+        eCmd += 'M206 X500\n'           #Set Acceleration
+        eCmd += 'M107\n'              #Turn blower off
+        eCmd += 'M109 S220\n'           #Set Temperature and wait
+        eCmd += 'G92 E\n'               #Zero Extruder
+        print('#TODO - Handle Filament Coef')       
+        eCmd += 'M642 W1\n'               #Set filament coeff
+        eCmd += 'M130 T6 U1.3 V80\n'          #Set PID Settings
+        eCmd += 'G1 X-98.0 Y-20.0 Z5.0 F3000\n'   #Nozzle Cleaning
+        eCmd += 'G1 Y-68.0 Z0.3\n'
+        eCmd += 'G1 X-98.0 Y0.0 F500 E20\n'
+        eCmd += 'G92 E\n'               #Zero Extruder
+        eCmd += 'M31 A' + str(est['seconds']//60) + ' L' + str(est['lines']) + '\n' #Estimator command
+        eCmd += 'M32 A0\n'      #Clear time counter
+        eCmd += 'M104 S220\n'       #Define Temperature
+        
+        newFile = open('gFile.gcode','w')
+        newFile.write(eCmd)
+        newFile.close()
+        
+        eCmd = 'M300\n'
+        eCmd += 'M104 S0\n'
+        eCmd += 'G28 Z\n'
+        eCmd += 'G28 X\n'
+        eCmd += 'G1 Y65\n'
+        eCmd += 'G92 E\n'
+        
+        footer = open('footer.gcode', 'w')
+        footer.write(eCmd)
+        footer.close()
+        
         #subprocess.call(['cat','header.txt', self.selectedFilePath,'>>','gFile.gcode'])
-        os.system("cat '" + self.selectedFilePath + "' >> " + "gFile.gcode")
+        os.system("cat '" + self.selectedFilePath + "' footer.gcode >> " + "gFile.gcode")
         
         self.selectedFilePath = 'gFile.gcode'
         

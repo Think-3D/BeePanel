@@ -107,7 +107,11 @@ class WaitScreen():
                         if('SD_Print' in status):
                             self.connected = self.beeCon.connected
                             break
+                        else:
+                            self.connected = self.beeCon.connected
+                            break
                         
+                        """
                         fw = self.beeCmd.GetFirmwareVersion()
                         
                         if('20.0.0' in fw):
@@ -120,13 +124,14 @@ class WaitScreen():
                             pygame.display.update()
                             self.beeCon.close()
                             time.sleep(1)
-                        
+                        """
                     elif('Bootloader' in resp):
-                        
+                        """
                         print('Flashing BeePanel firmware')
                         ff = FileFinder.FileFinder()
                         firmPath = ff.GetAbsPath('/Firmware/BeePanel.bin')
                         self.beeCmd.FlashFirmware(firmPath)
+                        """
                         
                         print("Changing to firmware")
                         self.beeCon.write("M630\n")

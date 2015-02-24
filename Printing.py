@@ -387,11 +387,15 @@ class PrintScreen():
             self.nextPullTime = time() + self.pullInterval
             
             if self.interfaceState == 0:
-                pStatus = self.beeCmd.getPrintStatus()
-                self.elapsedTime = pStatus['Elapsed Time']
-                self.estimatedTime = pStatus['Estimated Time']
-                self.numberLines = pStatus['Lines']
-                self.executedLines = pStatus['Executed Lines']
+                
+                try:
+                    pStatus = self.beeCmd.getPrintStatus()
+                    self.elapsedTime = pStatus['Elapsed Time']
+                    self.estimatedTime = pStatus['Estimated Time']
+                    self.numberLines = pStatus['Lines']
+                    self.executedLines = pStatus['Executed Lines']
+                except:
+                    pass
                 
                 self.timeRemaining = ""
                 minutesLeft = int(self.estimatedTime - self.elapsedTime) 
