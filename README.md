@@ -34,7 +34,7 @@ To burn the image follow these steps: <br/>
 
 *   Download the .img file. <br/>
 *   Insert a 4GB+ SD card in your SD card reader. <br/>
-*   Follow isntructions on how to burn the .img. (http://www.raspberrypi.org/documentation/installation/installing-images/) <br/>
+*   Follow instructions on how to burn the .img. (http://www.raspberrypi.org/documentation/installation/installing-images/) <br/>
 
 However if you wish to install it on an existing raspbian image read section "Installing BeePanel in an existing Raspbian Image" and follow the instructions. <br/>
 
@@ -50,7 +50,7 @@ In the ssh session console type:
         cd
         cd BeePanel
         sudo git pull
-        sudo python3 setyp.py install
+        sudo python3 setup.py install
         
         
 ## Installing BeePanel in an existing Raspbian Image ##
