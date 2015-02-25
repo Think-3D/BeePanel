@@ -27,8 +27,6 @@ https://github.com/beeverycreative/BeePanel
 * PyGame
 
 
-### Adafruit PiTFT Setup ###
-
 
 ### Reccommended Install ###
 We recommend you to install BeePanel by burning the Available Image into a SD card. <br/>
@@ -40,11 +38,69 @@ To burn the image follow these steps: <br/>
 
 However if you wish to install it on an existing raspbian image read section "Installing BeePanel in an existing Raspbian Image" and follow the instructions. <br/>
 
+## Update ##
 
+To update, open a ssh session with using the username "pi" and the default password "1234":
 
-### Installing BeePanel in an existing Raspbian Image ###
+    * In Windows use putty (or similar)
+    * In Osx or Linux, open terminal and type "ssh pi@IP_ADDRESS", or "ssh pi@HOSTNAME.local"
 
-cd ~
-git clone https://github.com/beeverycreative/BeePanel.git
-cd BeePanel
-sudo python3 setup.py install
+In the ssh session console type:
+
+        cd
+        cd BeePanel
+        sudo git pull
+        sudo python3 setyp.py install
+        
+        
+## Installing BeePanel in an existing Raspbian Image ##
+
+### Install Bonjour/Zeroconf ###
+
+        cd
+        sudo apt-get update
+        sudo apt-get install libnss-mdns
+
+### Install Adafruit PiTFT ###
+
+        cd
+        wget http://adafru.it/pitftsh
+        mv pitftsh pitft.sh
+        chmod +x pitft.sh
+        sudo ./pitft.sh -t 28c -r 
+
+When asked if you want show console on the screen type "n" and press enter. Same thing fot the shuthdown option on button 23.
+
+### Instal USB automount ### 
+
+        sudo apt-get install usbmount
+        
+### Install PyGame ###
+
+        cd
+        sudo apt-get install mercurial
+        hg clone https://bitbucket.org/pygame/pygame
+        cd pygame
+
+        sudo apt-get install libsdl-dev libsdl-image1.2-dev libsdl-mixer1.2-dev libsdl-ttf2.0-dev 
+        sudo apt-get install libsmpeg-dev libportmidi-dev libavformat-dev libswscale-dev
+
+        python3 setup.py build
+        sudo python3 setup.py install
+        
+### Install PyUSB ###
+
+        cd
+        git clone https://github.com/walac/pyusb.git git/pyusb
+        cd git/pyusb
+        sudo python3 setup.py install
+        
+### BeePanel ###
+
+        cd
+        git clone https://github.com/beeverycreative/BeePanel.git git/BeePanel
+        cd /home/pi/git/BeePanel
+        sudo python3 setup.py install
+        
+        
+        sudo reboot
