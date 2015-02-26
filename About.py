@@ -238,6 +238,7 @@ class AboutScreen():
     *************************************************************************""" 
     def Check4Updates(self):
         
+        self.ShowLoadingScreen()
         os.system('git remote update')
         
         r = os.popen('git status -uno').read()
