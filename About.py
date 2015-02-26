@@ -22,15 +22,33 @@ class AboutScreen():
     screen = None
     interfaceLoader = None
     
+    """
+    Labels
+    """
     lblFontColor = None
     lblXPos = None
     lblYPos = None
     lblText = None
     lblFont = None
-    
+    lbls = None
     lbl = None
     
+    """
+    Buttons
+    """
     buttons = None
+    
+    """
+    Text Fields
+    """
+    txtFieldFontColor = None
+    txtFieldXPos = None
+    txtFieldYPos = None
+    txtFieldFont = None
+    
+    updateTxtFieldText = ''
+    txtFields = None
+    
     
     updateReady = None
     
@@ -68,6 +86,11 @@ class AboutScreen():
         
         self.buttons = self.interfaceLoader.GetButtonsList()
         
+        self.txtFieldFontColor = self.interfaceLoader.GetTxtFieldsFontColor()
+        self.txtFieldXPos = self.interfaceLoader.GetTxtFieldsXPos()
+        self.txtFieldYPos = self.interfaceLoader.GetTxtFieldsYPos()
+        self.txtFieldFont = self.interfaceLoader.GetTxtFieldsFont()
+        
         return
         
 
@@ -85,7 +108,7 @@ class AboutScreen():
                     btnName = btn._propGetName()
                     
                     if btnName == "Check For Updates":
-                        self.updateReady = True
+                        self.Check4Updates()
                     elif btnName == "Update":
                         print("Updating...")
         
@@ -98,10 +121,22 @@ class AboutScreen():
     *************************************************************************"""
     def update(self):
         
+        """
+        Update labels
+        """
         self.lbls = []
-        for i in range(0,len(self.lblText)):
+        for i in range(len(self.lblText)):
             self.lbls.append(self.lblFont[i].render(self.lblText[i], 1, self.lblFontColor[i]))
         
+        """
+        Update Text Fields
+        """
+        self.txtFields = []
+        self.txtFields.append(self.txtFieldFont[0].render(self.updateTxtFieldText,1,self.txtFieldFontColor[0]))
+        
+        """
+        Update Buttons
+        """
         for btn in self.buttons:
             if btn._propGetName() == "Update":
                 btn.visible = self.updateReady
@@ -117,9 +152,20 @@ class AboutScreen():
     *************************************************************************""" 
     def draw(self):
             
+        """
+        Draw Labels
+        """
         for i in range(0,len(self.lblText)):
             self.screen.blit(self.lbls[i], (self.lblXPos[i],self.lblYPos[i]))
         
+        """
+        Draw text Fields
+        """
+        self.screen.blit(self.txtFields[0],(self.txtFieldXPos[0],self.txtFieldYPos[0]))
+        
+        """
+        Draw Buttons
+        """
         for btn in self.buttons:
             btn.draw(self.screen)
             
@@ -176,3 +222,17 @@ class AboutScreen():
         
             
         return
+    
+    """*************************************************************************
+                                Check4Updates Method 
+    
+    Pull variables
+    *************************************************************************""" 
+    def Check4Updates(self):
+        
+        
+        self.updateReady = True
+        
+        self.updateTxtFieldText = 'New Update Available'
+        
+        return False
