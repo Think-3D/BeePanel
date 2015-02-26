@@ -250,5 +250,6 @@ class AboutScreen():
     def Update(self):
         
         os.system('git pull')
+        os.system('python3 setup.py install')
             
         return
