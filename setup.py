@@ -51,13 +51,14 @@ installatonFontsDir = installationDir + "/Fonts"
 installationImgDir = installationDir + "/Images"
 installationEstimatorDir = installationDir + "/estimator"
 installationFirmwareDir = installationDir + "/Firmware"
+installationFTPDir = installationDir + "/FTP"
 dirMatch = False
 
 if(installationDir == sourceDir):
     print('Source and Installation Dir Match')
     dirMatch = True
 
-#IF INSTALLATION DIR DIFFERENT FROM WORKING DIR, COPY FILES    
+#IF INSTALLATION DIR DIFFERENT FROM WORKING DIR, COPY FILES
 if(not dirMatch):
     """
     Check/create dirs
@@ -93,6 +94,10 @@ if(not dirMatch):
     if(not os.path.isdir(installationFirmwareDir)):
         print("Creating Firmware directory")
         os.makedirs(installationFirmwareDir)
+        
+    if(not os.path.isdir(installationFTPDir)):
+        print("Creating FTP directory")
+        os.makedirs(installationFTPDir)
                 
     """
     Get file list
@@ -105,7 +110,7 @@ if(not dirMatch):
     imgList = [file for file in os.listdir(sourceDir + "/Images")]
     estimatorList = [file for file in os.listdir(sourceDir + "/estimator")]
     firmwareList = [file for file in os.listdir(sourceDir + "/Firmware")]
-    
+    ftpList = [file for file in os.listdir(sourceDir + "/FTP")]
     
     """
     Copy files to BeePanel dir
@@ -134,3 +139,7 @@ if(not dirMatch):
     
     for firm in firmwareList:
         shutil.copyfile(sourceDir + "/Firmware/" + str(firm), installationFirmwareDir + "/" + str(firm))
+        
+    for ftp in ftpList:
+        shutil.copyfile(sourceDir + "/FTP/" + str(ftp), installationFTPDir + "/" + str(ftp))
+        

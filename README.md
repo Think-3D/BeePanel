@@ -16,6 +16,25 @@ BeePanel allows you to run custom gcodes on your BTF Printer, using USB Mass sto
 
 https://github.com/beeverycreative/BeePanel
 
+## v0.2 Changelog ##
+
+Printer Info screen is now updated with:
+    * Printer satus
+    * Printer firmware version
+    * BeeConnect Version
+    * Ethernet address
+    * Wireless SSID
+    * Wireless IP
+
+
+## Working on ##
+
+* Prniting menu bug when touch image
+* Pause
+* Shutdown
+* Wifi Configuration
+* Wireless File transfer
+
 
 ## Setup ##
 
@@ -98,9 +117,13 @@ When asked if you want show console on the screen type "n" and press enter. Same
 ### BeePanel ###
 
         cd
-        git clone https://github.com/beeverycreative/BeePanel.git git/BeePanel
-        cd /home/pi/git/BeePanel
+        git clone https://github.com/beeverycreative/BeePanel.git
+        cd BeePanel/
         sudo python3 setup.py install
         
+### Python Modules ###
+
+        sudo apt-get install python3-pip
+        sudo pip-3.2 install netifaces
         
         sudo reboot

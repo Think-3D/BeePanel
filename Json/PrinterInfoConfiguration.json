@@ -26,7 +26,7 @@
                     "FontColor":"0,0,0"
                 },
                 {
-                    "Text":"BEEConnect:",
+                    "Text":"BeeConnect:",
                     "X":"110",
                     "Y":"80",
                     "FontType":"Bold",
@@ -34,7 +34,7 @@
                     "FontColor":"0,0,0"
                 },
                 {
-                    "Text":"SN:",
+                    "Text":"Local IP:",
                     "X":"110",
                     "Y":"110",
                     "FontType":"Bold",
@@ -42,7 +42,7 @@
                     "FontColor":"0,0,0"
                 },
                 {
-                    "Text":"Network:",
+                    "Text":"Wireless SSID:",
                     "X":"110",
                     "Y":"140",
                     "FontType":"Bold",
@@ -50,7 +50,7 @@
                     "FontColor":"0,0,0"
                 },
                 {
-                    "Text":"IP:",
+                    "Text":"Wireless IP:",
                     "X":"110",
                     "Y":"170",
                     "FontType":"Bold",

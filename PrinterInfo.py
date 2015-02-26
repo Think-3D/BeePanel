@@ -15,7 +15,10 @@
 __author__ = "Marcos Gomes"
 __license__ = "MIT"
 
-from time import time
+import time
+import socket
+import netifaces
+import os
 
 class PrinterInfoScreen():
     
@@ -32,18 +35,22 @@ class PrinterInfoScreen():
     
     status = None
     fw = None
-    BEEConnect = None
-    sn = None
-    network = None
-    ip = None
+    localIp = '0.0.0.0'
+    wirelessIP = None
+    wirelessSSID = 'Disconnected'
     
     interfaceLoader = None
     
     nextPullTime = None
-    pullInterval = 1
+    pullInterval = 20
     
     exitNeedsHoming = False
     exitCallBackResp = None
+    
+    """
+    BEEConnect vars
+    """
+    beeCmd = None
     
     """*************************************************************************
                                 Init Method 
@@ -55,8 +62,10 @@ class PrinterInfoScreen():
         self.screen = screen
         self.interfaceLoader = interfaceLoader
         
-        self.nextPullTime = time()
+        self.nextPullTime = time.time()
         self.Pull()
+        
+        self.beeCmd = comm
         
         print("Loading Printer Info Screen Components")
         
@@ -72,6 +81,8 @@ class PrinterInfoScreen():
         self.lblValFont = self.interfaceLoader.GetlblValFont()
         self.lblValFontColor = self.interfaceLoader.GetlblValFontColor()
         self.lblValXPos = self.interfaceLoader.GetlblValXPos()
+        
+        self.getIP()
         
         return
 
@@ -103,22 +114,16 @@ class PrinterInfoScreen():
             valText = ""
             if fieldText == "Printer Status:":
                 valText = self.status
-                print("\nTODO: GET STATUS\n")
             elif fieldText == "Firmware:":
                 valText = self.fw
-                print("\nTODO: GET FW\n")
-            elif fieldText == "BEEConnect:":
-                valText = self.BEEConnect
-                print("\nTODO: GET BEEConnect\n")
-            elif fieldText == "SN:":
-                valText = self.sn
-                print("\nTODO: GET SN\n")
-            elif fieldText == "Network:":
-                valText = self.network
-                print("\nTODO: GET Network\n")
-            elif fieldText == "IP:":
-                valText = self.ip
-                print("\nTODO: GET IP\n")
+            elif fieldText == "BeeConnect:":
+                valText = "v0.1"
+            elif fieldText == "Local IP:":
+                valText = self.localIp
+            elif fieldText == "Wireless SSID:":
+                valText = self.wirelessSSID
+            elif fieldText == "Wireless IP:":
+                valText = self.wirelessIP
             
             self.lblVal.append(self.lblValFont.render(valText, 1, self.lblValFontColor))
             
@@ -163,10 +168,8 @@ class PrinterInfoScreen():
         self.lblValFontColor = None
         self.status = None
         self.fw = None
-        self.BEEConnect = None
-        self.sn = None
-        self.network = None
-        self.ip = None
+        self.wirelessIP = None
+        self.wirelessSSID = None
         self.interfaceLoader = None
         self.nextPullTime = None
         self.pullInterval = None
@@ -189,15 +192,41 @@ class PrinterInfoScreen():
     *************************************************************************""" 
     def Pull(self):
         
-        t = time()
+        t = time.time()
         if t > self.nextPullTime:
-            self.nextPullTime = time() + self.pullInterval
             
-            self.status = "StandBy"
-            self.fw = "V00000"
-            self.BEEConnect = "V11111"
-            self.sn = "55555"
-            self.network = "Lan?"
-            self.ip = "0.0.0.0.0"
+            if(self.beeCmd is None):
+                return
+            
+            self.nextPullTime = time.time() + self.pullInterval
+            
+            self.status = self.beeCmd.getStatus()
+            self.fw = self.beeCmd.GetFirmwareVersion()
+            self.getIP()
+        
+        return
+    
+    """*************************************************************************
+                                getIP Method 
+    
+    
+    *************************************************************************""" 
+    def getIP(self):
+        
+        #GET ETHERNET ADDRESS
+        try:
+            self.localIp = netifaces.ifaddresses('eth0')[2][0]['addr']
+        except:
+            self.localIp = 'Disconnected'
+        
+        #GET WLAN ADDRESS
+        try:
+            self.wirelessIP = netifaces.ifaddresses('wlan0')[2][0]['addr']
+        except:
+            self.wirelessIP = 'Disconnected'
+        
+        #GET WIRELESS SSID
+        #iwconfig wlan0 | grep 'ESSID:' | awk '{print $4}' | sed 's/ESSID://g' | sed 's/"//g'
+        self.wirelessSSID = os.popen('iwconfig wlan0 | grep '+ "'ESSID:' | awk '{print $4}' | sed 's/ESSID://g' | sed 's/"+ '"//g' + "'").read()[:-1]
         
         return

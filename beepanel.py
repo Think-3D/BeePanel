@@ -222,7 +222,7 @@ class BeePanel():
         """
         print("Drawing Interfaces")
         pygame.init()
-        #pygame.mouse.set_visible(False)
+        pygame.mouse.set_visible(False)
         
         self.screen = self.BEEDisplay.GetBEEScreen()
         self.screen.fill(self.BEEDisplay.GetbgColor())
@@ -332,15 +332,9 @@ class BeePanel():
                 if(self.currentScreen.exitCallBackResp == "Restart"):
                     self.done = True
                     self.currentScreenName = self.jsonLoader.GetDefaultScreen()
-                """
-                self.currentScreen.KillAll()
-                self.currentScreen = None
-                self.beeCmd.homeZ()
-                self.beeCmd = None
-                self.beeCon.close()
-                self.beeCon = None
-                self.done = True
-                """
+                elif(self.currentScreen.exitCallBackResp == "Exit"):
+                    self.exitApp = True
+                    self.done = True
                 break
             
         #pygame.quit()
@@ -616,13 +610,11 @@ if __name__ == '__main__':
     while(app.exitApp == False):
         try:
             app.start()
+            if(app.exitApp == True):
+                break
         except ValueError:
             app = BeePanel()
             print('Application error occurred')
     
     pygame.quit()
-    """
-    if(app.restart == True):
-        app = None
-        restart_app()
-    """
+    
