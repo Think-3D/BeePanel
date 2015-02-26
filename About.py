@@ -238,13 +238,19 @@ class AboutScreen():
     *************************************************************************""" 
     def Check4Updates(self):
         
+        os.system('git remote update')
         
-        self.updateReady = True
+        r = os.popen('git status -uno').read()
+        
+        if('Your branch is behind' in r):
+            self.updateReady = True
+        else:
+            self.updateReady = False
         
         if(self.updateReady):
             self.updateTxtFieldText = 'New Update Available'
         else:
-            self.updateTxtFieldText = ''
+            self.updateTxtFieldText = 'Already Up-to-date'
         
         return
     
