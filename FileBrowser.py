@@ -801,10 +801,10 @@ class FileBrowserScreen():
         self.LoadInterfaceComponents()
         print('Transfer Canceled')
         
+        self.ShowLoadingScreen()
         #CANCEL HEATING
         self.beeCmd.SetNozzleTemperature(0)
         
-        self.exitCallBackResp = "Restart"
         
         return
     """*************************************************************************
