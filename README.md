@@ -32,7 +32,7 @@ Printer Info screen is now updated with:
 
 ## Working on ##
 
-* Prniting menu bug when touch image
+* Printing menu bug when touch image
 * Pause
 * Shutdown
 * Wifi Configuration
