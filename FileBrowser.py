@@ -146,6 +146,8 @@ class FileBrowserScreen():
         self.interfaceLoader = interfaceLoader
         
         self.interfaceState = 0         #reset interface state
+        self.cancelTransfer = False
+        self.exitCallBackResp = None
         
         self.ShowLoadingScreen()
         
@@ -791,7 +793,7 @@ class FileBrowserScreen():
     *************************************************************************"""
     def CancelTransfer(self):
         
-        self.cancelTransfer = False
+        self.cancelTransfer = True
         self.blocksTransfered = 0
         self.nBlocks = 0
         
@@ -801,6 +803,8 @@ class FileBrowserScreen():
         
         #CANCEL HEATING
         self.beeCmd.SetNozzleTemperature(0)
+        
+        self.exitCallBackResp = "Restart"
         
         return
     """*************************************************************************
