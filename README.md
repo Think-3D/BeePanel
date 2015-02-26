@@ -5,6 +5,16 @@ See the GNU General Public License for more details. You should have received a 
 
 ## Changelog ##
 
+## v0.2  ##
+
+Printer Info screen is now updated with:
+    * Printer satus
+    * Printer firmware version
+    * BeeConnect Version
+    * Ethernet address
+    * Wireless SSID
+    * Wireless IP
+
 ### v0.1 ###
 
 * Printer status update
@@ -18,16 +28,6 @@ BeePanel grants you access to mantainance operations directly on the touch scree
 BeePanel allows you to run custom gcodes on your BTF Printer, using USB Mass storage devices to transfer the code directly to the pritner. <br/>
 
 https://github.com/beeverycreative/BeePanel
-
-## v0.2 Changelog ##
-
-Printer Info screen is now updated with:
-    * Printer satus
-    * Printer firmware version
-    * BeeConnect Version
-    * Ethernet address
-    * Wireless SSID
-    * Wireless IP
 
 
 ## Working on ##
