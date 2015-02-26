@@ -258,7 +258,8 @@ class AboutScreen():
         self.ShowLoadingScreen()
         os.system('git pull')
         os.system('python3 setup.py install')
-        os.system('sudo reboot')
+        
+        self.exitCallBackResp = "Exit"
             
         return
     
