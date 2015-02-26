@@ -17,6 +17,8 @@ __license__ = "MIT"
 
 from BeeConnect import *
 import os
+import pygame
+import FileFinder
 
 class AboutScreen():
     
@@ -50,6 +52,10 @@ class AboutScreen():
     updateTxtFieldText = ''
     txtFields = None
     
+    """
+    File Finder
+    """
+    ff = None
     
     updateReady = None
     
@@ -249,7 +255,38 @@ class AboutScreen():
     *************************************************************************""" 
     def Update(self):
         
+        self.ShowLoadingScreen()
         os.system('git pull')
         os.system('python3 setup.py install')
+        os.system('sudo reboot')
             
         return
+    
+    """*************************************************************************
+                                ShowLoadingScreen Method 
+    
+    Shows Loading Screen 
+    *************************************************************************"""  
+    def ShowLoadingScreen(self):
+        
+        #Clear String
+        self.screen.fill(pygame.Color(255,255,255))
+        
+        if(self.ff is None):
+            self.ff = FileFinder.FileFinder()
+        
+        moovingImgPath = self.ff.GetAbsPath('/Images/loading.png')
+        
+        moovingImg = pygame.image.load(moovingImgPath)
+
+        # Draw Image
+        self.screen.blit(moovingImg,(72,32))
+        
+        # update screen
+        pygame.display.update()
+        
+        pygame.event.get()
+        
+        return
+    
+    
