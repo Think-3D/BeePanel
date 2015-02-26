@@ -33,32 +33,6 @@
                     "FontSize":"12",
                     "FontColor":"0,0,0",
                     "bgColor":"255,255,255"
-                },
-                {
-                    "ButtonName":"Pause",
-                    "X":"116",
-                    "Y":"200",
-                    "Width":"88",
-                    "Height":"25",
-                    "ButtonType":"Text",
-                    "Title":"Pause",
-                    "FontType":"Regular",
-                    "FontSize":"12",
-                    "FontColor":"0,0,0",
-                    "bgColor":"255,255,255"
-                },
-                {
-                    "ButtonName":"ShutDown",
-                    "X":"218",
-                    "Y":"200",
-                    "Width":"88",
-                    "Height":"25",
-                    "ButtonType":"Text",
-                    "Title":"ShutDown",
-                    "FontType":"Regular",
-                    "FontSize":"12",
-                    "FontColor":"0,0,0",
-                    "bgColor":"255,255,255"
                 }
             ],
             

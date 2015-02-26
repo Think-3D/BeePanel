@@ -146,6 +146,8 @@ class FileBrowserScreen():
         self.interfaceLoader = interfaceLoader
         
         self.interfaceState = 0         #reset interface state
+        self.cancelTransfer = False
+        self.exitCallBackResp = None
         
         self.ShowLoadingScreen()
         
@@ -465,7 +467,7 @@ class FileBrowserScreen():
                 HEATING INTERFACE
 
             """
-        elif self.interfaceState == 2:
+        elif(self.interfaceState == 2 and self.cancelTransfer == False):
             # Draw Image
             self.screen.blit(self.heatImg,(self.heatImgX,self.heatImgY))
             # Draw Progress Bar
@@ -658,7 +660,7 @@ class FileBrowserScreen():
             self.EndTransfer()
             
         #HEATING
-        elif(self.interfaceState == 2):
+        elif(self.interfaceState == 2 and self.cancelTransfer == False):
             currentTime = time.time()
             if(currentTime > self.nextPullTime):
                 self.nozzleTemperature = self.beeCmd.GetNozzleTemperature()
@@ -688,6 +690,8 @@ class FileBrowserScreen():
     Initializes File Transfer
     *************************************************************************"""
     def StartTransfer(self):
+        
+        self.cancelTransfer = False
         
         #check if file exists
         if(os.path.isfile(self.selectedFilePath) == False):
@@ -791,7 +795,7 @@ class FileBrowserScreen():
     *************************************************************************"""
     def CancelTransfer(self):
         
-        self.cancelTransfer = False
+        self.cancelTransfer = True
         self.blocksTransfered = 0
         self.nBlocks = 0
         
@@ -799,8 +803,10 @@ class FileBrowserScreen():
         self.LoadInterfaceComponents()
         print('Transfer Canceled')
         
+        self.ShowLoadingScreen()
         #CANCEL HEATING
         self.beeCmd.SetNozzleTemperature(0)
+        
         
         return
     """*************************************************************************
@@ -820,11 +826,12 @@ class FileBrowserScreen():
         if(not resp):
             return
         
-        print("Heating")
-        #Heat Nozzle
-        self.beeCmd.SetNozzleTemperature(self.targetTemperature)
-        
-        self.interfaceState = 2
+        if(self.cancelTransfer == False):
+            print("Heating")
+            #Heat Nozzle
+            self.beeCmd.SetNozzleTemperature(self.targetTemperature)
+            self.interfaceState = 2
+            
         self.LoadInterfaceComponents()
         
         

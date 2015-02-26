@@ -54,7 +54,12 @@ class AboutLoader():
     
     interfaceButtons = None
     
-    bee = None
+    txtFields = None
+    txtFieldsJson = None
+    txtFieldXPos = None
+    txtFieldYPos = None
+    txtFieldFont = None
+    txtFieldFontColor = None
     
     """*************************************************************************
                                 Init Method 
@@ -68,20 +73,17 @@ class AboutLoader():
         """
         self.interfaceJson = interfaceJson
         
+        """
+        Load Labels Configuration
+        """
         self.lblsJson = []
-        self.buttonsJson = []
+        self.lblsJson.append(json.loads(json.dumps(self.interfaceJson['Labels'])))
+        
         self.lblFontColor = []
         self.lblXPos = []
         self.lblYPos = []
         self.lblText = []
         self.lblFont = []
-        
-        self.lblsJson.append(json.loads(json.dumps(self.interfaceJson['Labels'])))
-        self.buttonsJson.append(json.loads(json.dumps(self.interfaceJson['Buttons'])))
-        
-        """
-        Load Labels Configuration
-        """
         for lbls in self.lblsJson:
             lblJson = json.loads(json.dumps(lbls))
             for lbl in lblJson:
@@ -100,6 +102,9 @@ class AboutLoader():
         """
         Load Buttons Configuration
         """
+        self.buttonsJson = []
+        self.buttonsJson.append(json.loads(json.dumps(self.interfaceJson['Buttons'])))
+        
         self.interfaceButtons = []
         for btns in self.buttonsJson:
             filButtons = []
@@ -145,6 +150,31 @@ class AboutLoader():
         
             self.interfaceButtons.append(filButtons)
             
+        """
+        Load Text Fields Configuration
+        """
+        self.txtFieldsJson = []
+        self.txtFieldsJson.append(json.loads(json.dumps(self.interfaceJson['TextFields'])))
+        
+        self.txtFields = []
+        self.txtFieldXPos = []
+        self.txtFieldYPos = []
+        self.txtFieldFont = []
+        self.txtFieldFontColor = []
+        for tFields in self.txtFieldsJson:
+            tFieldsJson = json.loads(json.dumps(tFields))
+            for tField in tFieldsJson:
+                tFieldFontType = tField['FontType']
+                tFieldFontSize = int(tField['FontSize'])
+                tFieldFColor = tField['FontColor']
+                self.txtFieldXPos.append(int(tField['X']))
+                self.txtFieldYPos.append(int(tField['Y']))
+                self.txtFieldFont.append(self.GetFont(tFieldFontType, tFieldFontSize))
+                
+                splitColor = tFieldFColor.split(",")
+                fontColor = pygame.Color(int(splitColor[0]),int(splitColor[1]),int(splitColor[2]))
+                self.txtFieldFontColor.append(fontColor)
+                    
         return
     
     """*************************************************************************
@@ -250,3 +280,51 @@ class AboutLoader():
         returns list with interface labels Y coordinates
         """
         return self.lblYPos
+    
+    """*************************************************************************
+                                GetTxtFieldsFont Method 
+    
+    *************************************************************************"""
+    def GetTxtFieldsFont(self):
+        r"""
+        GetTxtFieldsFont method
+        
+        returns list with interface Text Fields Font
+        """
+        return self.txtFieldFont
+    
+    """*************************************************************************
+                                GetTxtFieldsFontColor Method 
+    
+    *************************************************************************"""
+    def GetTxtFieldsFontColor(self):
+        r"""
+        GetTxtFieldsFontColor method
+        
+        returns list with interface Text Fields Font Color
+        """
+        return self.txtFieldFontColor
+    
+    """*************************************************************************
+                                GetTxtFieldsXPos Method 
+    
+    *************************************************************************"""
+    def GetTxtFieldsXPos(self):
+        r"""
+        GetTxtFieldsXPos method
+        
+        returns list with interface Text Fields X coordinates
+        """
+        return self.txtFieldXPos
+    
+    """*************************************************************************
+                                GetTxtFieldsYPos Method 
+    
+    *************************************************************************"""
+    def GetTxtFieldsYPos(self):
+        r"""
+        GetTxtFieldsYPos method
+        
+        returns list with interface Text Fields Y coordinates
+        """
+        return self.txtFieldYPos
