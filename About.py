@@ -16,6 +16,7 @@ __author__ = "Marcos Gomes"
 __license__ = "MIT"
 
 from BeeConnect import *
+import os
 
 class AboutScreen():
     
@@ -111,6 +112,7 @@ class AboutScreen():
                         self.Check4Updates()
                     elif btnName == "Update":
                         print("Updating...")
+                        self.Update()
         
         return
 
@@ -226,13 +228,27 @@ class AboutScreen():
     """*************************************************************************
                                 Check4Updates Method 
     
-    Pull variables
+    Check For github updates
     *************************************************************************""" 
     def Check4Updates(self):
         
         
         self.updateReady = True
         
-        self.updateTxtFieldText = 'New Update Available'
+        if(self.updateReady):
+            self.updateTxtFieldText = 'New Update Available'
+        else:
+            self.updateTxtFieldText = ''
         
-        return False
+        return
+    
+    """*************************************************************************
+                                Update Method 
+    
+    Update variables
+    *************************************************************************""" 
+    def Update(self):
+        
+        os.system('git pull')
+            
+        return
