@@ -4,32 +4,32 @@
             "Labels":[
                 {
                     "Text":"Settings",
-                    "X":"110",
-                    "Y":"5",
+                    "X":"0.34375",
+                    "Y":"0.02",
                     "FontType":"Bold",
-                    "FontSize":"12",
+                    "FontSize":"0.05",
                     "FontColor":"0,0,0"
                 },
                 {
                     "Text":"Insert wifi.json in the flash drive",
-                    "X":"110",
-                    "Y":"35",
+                    "X":"0.34375",
+                    "Y":"0.15",
                     "FontType":"Bold",
-                    "FontSize":"9",
+                    "FontSize":"0.0375",
                     "FontColor":"0,0,0"
                 }
             ],
             "Buttons":[
                 {
                     "ButtonName":"Update WiFi",
-                    "X":"110",
-                    "Y":"55",
-                    "Width":"150",
-                    "Height":"35",
+                    "X":"0.34375",
+                    "Y":"0.23",
+                    "Width":"0.46875",
+                    "Height":"0.15",
                     "ButtonType":"Text",
                     "Title":"Update WiFi",
                     "FontType":"Regular",
-                    "FontSize":"12",
+                    "FontSize":"0.05",
                     "FontColor":"0,0,0",
                     "bgColor":"255,255,255"
                 }

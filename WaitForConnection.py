@@ -45,15 +45,23 @@ class WaitScreen():
     beeCon = None
     beeCmd = None
     
+    
+    displayWidth = 480
+    displayHeight = 320
+    
     """*************************************************************************
                                 Init Method 
     
     intis all compoments
     *************************************************************************"""
-    def __init__(self, screen):
+    def __init__(self, screen, dispWidth = 480, dispHeight = 320):
         """
         .
         """
+        
+        self.displayWidth = dispWidth
+        self.displayHeight = dispHeight
+        
         self.connected = False
         
         print("Printer Connection: ",self.connected)
@@ -63,7 +71,7 @@ class WaitScreen():
         self.screen = screen
         self.currentScreen = 'WaitConnection'
         
-        self.loader = Loaders.WaitForConnectionLoader.WaitForConnectionLoader()
+        self.loader = Loaders.WaitForConnectionLoader.WaitForConnectionLoader(self.displayWidth, self.displayHeight)
         
         lblText = self.loader.GetLblsText()
         lblX = self.loader.GetLblsXPos()

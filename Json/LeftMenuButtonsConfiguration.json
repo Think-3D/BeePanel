@@ -34,10 +34,10 @@
             "Buttons":[
                 {
                     "ButtonName":"MenuUp",
-                    "X":"30",
+                    "X":"0.09375",
                     "Y":"0",
-                    "Width":"100",
-                    "Height":"40",
+                    "Width":"0.3125",
+                    "Height":"0.16",
                     "ButtonType":"Img",
                     "Title":"MenuUp",
                     "NormalPath":"/Images/b_simple_4.png",
@@ -46,10 +46,10 @@
                 },
                 {
                     "ButtonName":"MenuDown",
-                    "X":"30",
-                    "Y":"200",
-                    "Width":"100",
-                    "Height":"40",
+                    "X":"0.09375",
+                    "Y":"0.83",
+                    "Width":"0.3125",
+                    "Height":"0.16",
                     "ButtonType":"Img",
                     "Title":"MenuDown",
                     "NormalPath":"/Images/b_simple_4_down.png",
@@ -58,15 +58,15 @@
                 }
             ],
             "Configuration":{
-                "X":"10",
-                "Y":"44",
-                "Width":"80",
-                "Height":"39",
+                "X":"0.023",
+                "Y":"0.183",
+                "Width":"0.25",
+                "Height":"0.1625",
                 "CarouselItems":"4",
-                "ButtonHeight":"35",
+                "ButtonHeight":"0.15",
                 "bgColor":"255,255,255",
                 "FontColor":"0,0,0",
-                "FontSize":"10",
+                "FontSize":"0.04",
                 "FontType":"Regular"
             }
         }

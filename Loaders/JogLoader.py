@@ -34,22 +34,28 @@ class JogLoader():
     
     interfaceButtons = []
     
+    displayWidth = 480
+    displayHeight = 320
+    
     """*************************************************************************
                                 Init Method 
     
     Inits current screen components
     *************************************************************************"""
-    def __init__(self, interfaceJson):
+    def __init__(self, interfaceJson, dispWidth, dispHeight):
+        
+        self.displayWidth = dispWidth
+        self.displayHeight = dispHeight
         
         self.interfaceJson = interfaceJson
         self.lblJson = json.loads(json.dumps(self.interfaceJson['TopLabel']))
         self.ButtonsJson = json.loads(json.dumps(self.interfaceJson['Buttons']))
         
         lblFontType = self.lblJson['FontType']
-        lblFontSize = int(self.lblJson['FontSize'])
+        lblFontSize = int(float(self.lblJson['FontSize'])*self.displayHeight)
         lblFColor = self.lblJson['lblFontColor']
-        self.lblXPos = int(self.lblJson['X'])
-        self.lblYPos = int(self.lblJson['Y'])
+        self.lblXPos = int(float(self.lblJson['X'])*self.displayWidth)
+        self.lblYPos = int(float(self.lblJson['Y'])*self.displayHeight)
         
         self.lblFont = self.GetFont(lblFontType,lblFontSize)
         
@@ -58,10 +64,10 @@ class JogLoader():
         
         
         for btn in self.ButtonsJson:
-            btnX = int(btn['X'])
-            btnY = int(btn['Y'])
-            btnWidth = int(btn['Width'])
-            btnHeight = int(btn['Height'])
+            btnX = int(float(btn['X'])*self.displayWidth)
+            btnY = int(float(btn['Y'])*self.displayHeight)
+            btnWidth = int(float(btn['Width'])*self.displayWidth)
+            btnHeight = int(float(btn['Height'])*self.displayHeight)
             btnType = btn['ButtonType']
             
             if btnType == "Text":
@@ -69,7 +75,7 @@ class JogLoader():
                 bgColor = btn['bgColor'].split(",")
                 fColor = btn['FontColor'].split(",")
                 fType = btn['FontType']
-                fSize = int(btn['FontSize'])
+                fSize = int(float(btn['FontSize'])*self.displayHeight)
                 btnName = btn['ButtonName']
                 
                 jogBtn = BeePanel_Button.Button(btnX,btnY,btnWidth,btnHeight,btnTitle,

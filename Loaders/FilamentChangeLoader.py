@@ -90,17 +90,23 @@ class FilamentChangeLoader():
     pickerFontColor = None
     pickerFont = None
     
+    displayWidth = 480
+    displayHeight = 320
+    
     """*************************************************************************
                                 Init Method 
     
-    
+    Inits current screen components
     *************************************************************************"""
-    def __init__(self, interfaceJson):
+    def __init__(self, interfaceJson, dispWidth, dispHeight):
         r"""
         __init__ method
         
         Initialization method. Loads configurations from the json file
         """
+        
+        self.displayWidth = dispWidth
+        self.displayHeight = dispHeight
         
         ff = FileFinder.FileFinder()
         
@@ -119,10 +125,10 @@ class FilamentChangeLoader():
         """
         for lbl in self.topLblJson:
             lblFontType = lbl['FontType']
-            lblFontSize = int(lbl['FontSize'])
+            lblFontSize = int(float(lbl['FontSize'])*self.displayHeight)
             lblFColor = lbl['lblFontColor']
-            self.lblTopXPos.append(int(lbl['X']))
-            self.lblTopYPos.append(int(lbl['Y']))
+            self.lblTopXPos.append(int(float(lbl['X'])*self.displayWidth))
+            self.lblTopYPos.append(int(float(lbl['Y'])*self.displayHeight))
             self.lbltext.append(lbl['Text'])
             
             font = self.GetFont(lblFontType,lblFontSize)
@@ -139,10 +145,10 @@ class FilamentChangeLoader():
         for btns in self.buttonsJson:
             filButtons = []
             for btn in btns:
-                btnX = int(btn['X'])
-                btnY = int(btn['Y'])
-                btnWidth = int(btn['Width'])
-                btnHeight = int(btn['Height'])
+                btnX = int(float(btn['X'])*self.displayWidth)
+                btnY = int(float(btn['Y'])*self.displayHeight)
+                btnWidth = int(float(btn['Width'])*self.displayWidth)
+                btnHeight = int(float(btn['Height'])*self.displayHeight)
                 btnType = btn['ButtonType']
             
                 if btnType == "Text":
@@ -150,7 +156,7 @@ class FilamentChangeLoader():
                     bgColor = btn['bgColor'].split(",")
                     fColor = btn['FontColor'].split(",")
                     fType = btn['FontType']
-                    fSize = int(btn['FontSize'])
+                    fSize = int(float(btn['FontSize'])*self.displayHeight)
                     btnName = btn['ButtonName']
                 
                     jogBtn = BeePanel_Button.Button(btnX,btnY,btnWidth,btnHeight,btnTitle,
@@ -183,17 +189,17 @@ class FilamentChangeLoader():
         """
         imageJson = json.loads(json.dumps(self.interfaceJson['FirstImage']))
         self.imagePath = ff.GetAbsPath(imageJson['ImgPath'])
-        self.imageX = int(imageJson['X'])
-        self.imageY = int(imageJson['Y'])
+        self.imageX = int(float(imageJson['X'])*self.displayWidth)
+        self.imageY = int(float(imageJson['Y'])*self.displayHeight)
         
         """
         Load Progress Bar Configuration
         """
         pBarJson = json.loads(json.dumps(self.interfaceJson['ProgressBar']))
-        pBarX = int(pBarJson['X'])
-        pBarY = int(pBarJson['Y'])
-        pBarWidth = int(pBarJson['Width'])
-        pBarHeight = int(pBarJson['Height'])
+        pBarX = int(float(pBarJson['X'])*self.displayWidth)
+        pBarY = int(float(pBarJson['Y'])*self.displayHeight)
+        pBarWidth = int(float(pBarJson['Width'])*self.displayWidth)
+        pBarHeight = int(float(pBarJson['Height'])*self.displayHeight)
         pBarThickness = int(pBarJson['Thickness'])
         pBarLineColorRGB = pBarJson['LineColor']
         pBarFillColorRGB = pBarJson['bgColor']
@@ -210,11 +216,11 @@ class FilamentChangeLoader():
         Color Picker Configuration
         """
         colorPickerJson = json.loads(json.dumps(self.interfaceJson['ColorPicker']))
-        self.pickerX = int(colorPickerJson['X'])
-        self.pickerY = int(colorPickerJson['Y'])
-        self.pickerWidth = int(colorPickerJson['Width'])
-        self.pickerHeight = int(colorPickerJson['Height'])
-        self.pickerFontSize = int(colorPickerJson['FontSize'])
+        self.pickerX = int(float(colorPickerJson['X'])*self.displayWidth)
+        self.pickerY = int(float(colorPickerJson['Y'])*self.displayHeight)
+        self.pickerWidth = int(float(colorPickerJson['Width'])*self.displayWidth)
+        self.pickerHeight = int(float(colorPickerJson['Height'])*self.displayHeight)
+        self.pickerFontSize = int(float(colorPickerJson['FontSize'])*self.displayHeight)
         pickerFontColorRGB = colorPickerJson['FontColor']
         fontType = colorPickerJson['FontType']
             
@@ -232,10 +238,10 @@ class FilamentChangeLoader():
         """
         colorLblJson = json.loads(json.dumps(self.interfaceJson['SelectedColorLbl']))
         lblFontType = colorLblJson['FontType']
-        lblFontSize = int(colorLblJson['FontSize'])
+        lblFontSize = int(float(colorLblJson['FontSize'])*self.displayHeight)
         lblFColor = colorLblJson['FontColor']
-        self.selectedLblX = int(colorLblJson['X'])
-        self.selectedLblY = int(colorLblJson['Y'])
+        self.selectedLblX = int(float(colorLblJson['X'])*self.displayWidth)
+        self.selectedLblY = int(float(colorLblJson['Y'])*self.displayHeight)
             
         splitColor = lblFColor.split(",")
         self.selectedLblFontColor = pygame.Color(int(splitColor[0]),int(splitColor[1]),int(splitColor[2]))

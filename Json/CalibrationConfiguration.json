@@ -3,87 +3,87 @@
         {
             "FirstLabel":
                     {
-                        "X":"110",
-                        "Y":"5",
+                        "X":"0.34375",
+                        "Y":"0.02",
                         "FontType":"Bold",
-                        "FontSize":"12",
+                        "FontSize":"0.05",
                         "lblFontColor":"0,0,0"
                     },
             "SecondLabel":
                     {
-                        "X":"110",
-                        "Y":"5",
+                        "X":"0.34375",
+                        "Y":"0.02",
                         "FontType":"Bold",
-                        "FontSize":"12",
+                        "FontSize":"0.05",
                         "lblFontColor":"0,0,0"
                     },
             "ThirdLabel":
                     {
-                        "X":"110",
-                        "Y":"5",
+                        "X":"0.34375",
+                        "Y":"0.02",
                         "FontType":"Bold",
-                        "FontSize":"12",
+                        "FontSize":"0.05",
                         "lblFontColor":"0,0,0"
                     },
             "FirstButtons":[
                 {
                     "ButtonName":"-0.5mm",
-                    "X":"118",
-                    "Y":"32",
-                    "Width":"136",
-                    "Height":"40",
+                    "X":"0.36875",
+                    "Y":"0.13",
+                    "Width":"0.425",
+                    "Height":"0.17",
                     "ButtonType":"Text",
                     "Title":"-0.5mm",
                     "FontType":"Bold",
-                    "FontSize":"12",
+                    "FontSize":"0.05",
                     "FontColor":"0,0,0",
                     "bgColor":"255,255,255"
                 },
                 {
                     "ButtonName":"-0.05mm",
-                    "X":"118",
-                    "Y":"84",
-                    "Width":"136",
-                    "Height":"40",
+                    "X":"0.36875",
+                    "Y":"0.35",
+                    "Width":"0.425",
+                    "Height":"0.17",
                     "ButtonType":"Text",
                     "Title":"-0.05mm",
                     "FontType":"Bold",
-                    "FontSize":"12",
+                    "FontSize":"0.05",
                     "FontColor":"0,0,0",
                     "bgColor":"255,255,255"
                 },
                 {
                     "ButtonName":"+0.05mm",
-                    "X":"118",
-                    "Y":"136",
-                    "Width":"136",
-                    "Height":"40",
+                    "X":"0.36875",
+                    "Y":"0.55",
+                    "Width":"0.425",
+                    "Height":"0.17",
                     "ButtonType":"Text",
                     "Title":"+0.05mm",
                     "FontType":"Bold",
-                    "FontSize":"12",
+                    "FontSize":"0.05",
                     "FontColor":"0,0,0",
                     "bgColor":"255,255,255"
                 },
                 {
                     "ButtonName":"+0.5mm",
-                    "X":"118",
-                    "Y":"188",
-                    "Width":"136",
-                    "Height":"40",
+                    "X":"0.36875",
+                    "Y":"0.78",
+                    "Width":"0.425",
+                    "Height":"0.17",
                     "ButtonType":"Text",
                     "Title":"+0.5mm",
                     "FontType":"Bold",
-                    "FontSize":"12",
+                    "FontSize":"0.05",
                     "FontColor":"0,0,0",
                     "bgColor":"255,255,255"
                 },
                 {
                     "ButtonName":"Next",
-                    "X":"272",
-                    "Y":"65",
-                    "Width":"30",
-                    "Height":"152",
+                    "X":"0.85",
+                    "Y":"0.27",
+                    "Width":"0.09",
+                    "Height":"0.63",
                     "ButtonType":"Img",
                     "Title":"Next",
                     "NormalPath":"/Images/Next.png",
@@ -94,10 +94,10 @@
             "SecondButtons":[
                 {
                     "ButtonName":"Next",
-                    "X":"272",
-                    "Y":"65",
-                    "Width":"30",
-                    "Height":"152",
+                    "X":"0.85",
+                    "Y":"0.27",
+                    "Width":"0.09",
+                    "Height":"0.63",
                     "ButtonType":"Img",
                     "Title":"Next",
                     "NormalPath":"/Images/Next.png",
@@ -108,10 +108,10 @@
             "ThirdButtons":[
                 {
                     "ButtonName":"Next",
-                    "X":"272",
-                    "Y":"65",
-                    "Width":"30",
-                    "Height":"152",
+                    "X":"0.85",
+                    "Y":"0.27",
+                    "Width":"0.09",
+                    "Height":"0.63",
                     "ButtonType":"Img",
                     "Title":"Next",
                     "NormalPath":"/Images/Next.png",
@@ -122,15 +122,15 @@
             "RightBoltImg":[
                 {
                     "ImgPath":"/Images/rightBolt.png",
-                    "X":"110",
-                    "Y":"50"
+                    "X":"0.34375",
+                    "Y":"0.2"
                 }
             ],
             "LeftBoltImg":[
                 {
                     "ImgPath":"/Images/leftBolt.png",
-                    "X":"110",
-                    "Y":"50"
+                    "X":"0.34375",
+                    "Y":"0.2"
                 }
             ]
         }

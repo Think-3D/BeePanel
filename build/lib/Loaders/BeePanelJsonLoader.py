@@ -120,14 +120,17 @@ class jsonLoader():
         self.display = displayData.get('display')               #get the display list from json file
         displayJson = json.loads(json.dumps(self.display[0]))
         self.defaultScreen = displayJson['DefaultScreen']
-        self.displayObject = BeePanelDisplay.Display(
-                displayJson['Name'],
-                int(displayJson['Width']),
-                int(displayJson['Height']),
-                displayJson['bgColor'],
-                int(displayJson['SplitLinePos']),
-                displayJson['SplitLineColor'],
-                int(displayJson['SplitLineThickness']))
+        
+        displayWidth = int(displayJson['Width'])
+        displayHeight = int(displayJson['Height'])
+        bgColor = displayJson['bgColor']
+        relLinePos = float(displayJson['SplitLinePos'])
+        splitLinePos = int(relLinePos*displayWidth)
+        lineColor = displayJson['SplitLineColor']
+        lThickness = int(displayJson['SplitLineThickness'])
+        
+        #self.displayObject = BeePanelDisplay.Display(displayJson['Name'],displayWidth,displayHeight,bgColor,splitLinePos,lineColor,lThickness))
+        self.displayObject = BeePanelDisplay.Display(displayJson['Name'],displayWidth,displayHeight,bgColor,splitLinePos,lineColor,lThickness)
         
         f.close()                                                   #close the file
         
@@ -136,7 +139,7 @@ class jsonLoader():
         """
         f = open(ff.GetAbsPath(self.leftMenuJsonPath),'r')                          #load json as text file
         menuData = json.load(f)                                     #parse the json file
-        self.leftMenuLoader = LeftMenuLoader.LeftMenuLoader(menuData)
+        self.leftMenuLoader = LeftMenuLoader.LeftMenuLoader(menuData, displayWidth, displayHeight)
         f.close()                                                   #close the file
             
         """
@@ -146,7 +149,7 @@ class jsonLoader():
         printerInfoData = json.load(f)                              #parse the json file
         printerInfo = printerInfoData['PrinterInfo']                #Get Printer Info
         printerInfoJson = json.loads(json.dumps(printerInfo[0]))    #Convert text to json
-        self.printerInfoInterface = PrinterInfoLoader.PrinterInfoLoader(printerInfoJson)    #create interface
+        self.printerInfoInterface = PrinterInfoLoader.PrinterInfoLoader(printerInfoJson, displayWidth, displayHeight)    #create interface
         f.close()                                                   #close the file
         
         """
@@ -156,7 +159,7 @@ class jsonLoader():
         jogData = json.load(f)                                     #parse the json file
         jog = jogData['Jog']                #Get Jog configuration text
         jogJson = json.loads(json.dumps(jog[0]))    #Convert text to json
-        self.jogInterface = JogLoader.JogLoader(jogJson)    #create interface
+        self.jogInterface = JogLoader.JogLoader(jogJson, displayWidth, displayHeight)    #create interface
         f.close()                                            #close the file
         
         """
@@ -166,7 +169,7 @@ class jsonLoader():
         calibrationData = json.load(f)                                     #parse the json file
         calibration = calibrationData['Calibration']                #Get Calibration configuration text
         calibrationJson = json.loads(json.dumps(calibration[0]))    #Convert text to json
-        self.calibrationInterface = CalibrationLoader.CalibrationLoader(calibrationJson)    #create interface
+        self.calibrationInterface = CalibrationLoader.CalibrationLoader(calibrationJson, displayWidth, displayHeight)    #create interface
         f.close()                                            #close the file
         
         """

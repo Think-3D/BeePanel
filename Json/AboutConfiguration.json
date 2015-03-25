@@ -4,54 +4,54 @@
             "Labels":[
                 {
                     "Text":"About",
-                    "X":"110",
-                    "Y":"5",
+                    "X":"0.34375",
+                    "Y":"0.02",
                     "FontType":"Bold",
-                    "FontSize":"12",
+                    "FontSize":"0.05",
                     "FontColor":"0,0,0"
                 },
                 {
                     "Text":"https://github.com/beeverycreative/BeePanel/",
-                    "X":"105",
-                    "Y":"210",
+                    "X":"0.328125",
+                    "Y":"0.875",
                     "FontType":"Bold",
-                    "FontSize":"8",
+                    "FontSize":"0.04",
                     "FontColor":"0,0,0"
                 }
             ],
             "TextFields":[
                 {
-                    "X":"110",
-                    "Y":"170",
+                    "X":"0.34375",
+                    "Y":"0.7",
                     "FontType":"Bold",
-                    "FontSize":"15",
+                    "FontSize":"0.0625",
                     "FontColor":"0,0,0"
                 }
             ],
             "Buttons":[
                 {
                     "ButtonName":"Check For Updates",
-                    "X":"110",
-                    "Y":"50",
-                    "Width":"200",
-                    "Height":"40",
+                    "X":"0.34375",
+                    "Y":"0.2",
+                    "Width":"0.625",
+                    "Height":"0.17",
                     "ButtonType":"Text",
                     "Title":"Check For Updates",
                     "FontType":"Regular",
-                    "FontSize":"12",
+                    "FontSize":"0.05",
                     "FontColor":"0,0,0",
                     "bgColor":"255,255,255"
                 },
                 {
                     "ButtonName":"Update",
-                    "X":"110",
-                    "Y":"120",
-                    "Width":"200",
-                    "Height":"40",
+                    "X":"0.34375",
+                    "Y":"0.5",
+                    "Width":"0.625",
+                    "Height":"0.17",
                     "ButtonType":"Text",
                     "Title":"Update",
                     "FontType":"Regular",
-                    "FontSize":"12",
+                    "FontSize":"0.05",
                     "FontColor":"0,0,0",
                     "bgColor":"255,255,255"
                 }

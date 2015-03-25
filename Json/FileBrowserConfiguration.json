@@ -5,68 +5,68 @@
                     {
                         "_comment":"Top lable for the file picker interface",
                         "Text":"Browse File",
-                        "X":"110",
-                        "Y":"45",
+                        "X":"0.34375",
+                        "Y":"0.1875",
                         "FontType":"Bold",
-                        "FontSize":"12",
+                        "FontSize":"0.05",
                         "FontColor":"0,0,0"
                     },
             "SecondTopLabel":
                     {
                         "_comment":"Top label for the Transfering interface",
                         "Text":"Transfering... Please Wait",
-                        "X":"110",
-                        "Y":"5",
+                        "X":"0.34375",
+                        "Y":"0.02",
                         "FontType":"Bold",
-                        "FontSize":"12",
+                        "FontSize":"0.05",
                         "FontColor":"0,0,0"
                     },
             "ThirdTopLabel":
                     {
                         "_commment":"Top label for the Heating interface",
                         "Text":"Heating... Please Wait",
-                        "X":"110",
-                        "Y":"5",
+                        "X":"0.34375",
+                        "Y":"0.02",
                         "FontType":"Bold",
-                        "FontSize":"12",
+                        "FontSize":"0.05",
                         "FontColor":"0,0,0"
                     },
             "FirstButtons":[
                 {
                     "_comment":"Button used to change search path to USB devices",
                     "ButtonName":"USB",
-                    "X":"110",
-                    "Y":"5",
-                    "Width":"95",
-                    "Height":"35",
+                    "X":"0.34375",
+                    "Y":"0.02",
+                    "Width":"0.296875",
+                    "Height":"0.15",
                     "ButtonType":"Text",
                     "Title":"USB",
                     "FontType":"Regular",
-                    "FontSize":"12",
+                    "FontSize":"0.05",
                     "FontColor":"0,0,0",
                     "bgColor":"255,255,255"
                 },
                 {
                     "_comment":"Button used to change the search path to BTF memmory",
                     "ButtonName":"BTF",
-                    "X":"215",
-                    "Y":"5",
-                    "Width":"95",
-                    "Height":"35",
+                    "X":"0.671875",
+                    "Y":"0.02",
+                    "Width":"0.296875",
+                    "Height":"0.15",
                     "ButtonType":"Text",
                     "Title":"BTF",
                     "FontType":"Regular",
-                    "FontSize":"12",
+                    "FontSize":"0.05",
                     "FontColor":"0,0,0",
                     "bgColor":"255,255,255"
                 },
                 {
                     "_comment":"Button used to navigate the file picker up",
                     "ButtonName":"Up",
-                    "X":"270",
-                    "Y":"75",
-                    "Width":"30",
-                    "Height":"30",
+                    "X":"0.84375",
+                    "Y":"0.3125",
+                    "Width":"0.09375",
+                    "Height":"0.125",
                     "ButtonType":"Img",
                     "Title":"Up",
                     "NormalPath":"/Images/UpSmall.png",
@@ -76,10 +76,10 @@
                 {
                     "_comment":"Button used to navigate the file picker down",
                     "ButtonName":"Down",
-                    "X":"270",
-                    "Y":"150",
-                    "Width":"30",
-                    "Height":"30",
+                    "X":"0.84375",
+                    "Y":"0.625",
+                    "Width":"0.09375",
+                    "Height":"0.125",
                     "ButtonType":"Img",
                     "Title":"Down",
                     "NormalPath":"/Images/DownSmall.png",
@@ -89,14 +89,14 @@
                 {
                     "_comment":"Button used to strat a transfer/Heating/print",
                     "ButtonName":"Print",
-                    "X":"250",
-                    "Y":"200",
-                    "Width":"55",
-                    "Height":"30",
+                    "X":"0.78125",
+                    "Y":"0.85",
+                    "Width":"0.171875",
+                    "Height":"0.125",
                     "ButtonType":"Text",
                     "Title":"Print",
                     "FontType":"Regular",
-                    "FontSize":"12",
+                    "FontSize":"0.05",
                     "FontColor":"0,0,0",
                     "bgColor":"255,255,255"
                 }
@@ -104,12 +104,12 @@
         "FilePicker":
                 {
                     "_comment":"File picker configuration",
-                    "X":"110",
-                    "Y":"130",
-                    "Width":"150",
-                    "Height":"55",
+                    "X":"0.34375",
+                    "Y":"0.55",
+                    "Width":"0.46875",
+                    "Height":"0.23",
                     "FontColor":"0,0,0",
-                    "FontSize":"12",
+                    "FontSize":"0.05",
                     "FontType":"Bold",
                     "StringLen":"22",
                     "RowCount":"3"
@@ -118,14 +118,14 @@
                 {
                     "_comment":"Button cancel transfer",
                     "ButtonName":"Cancel",
-                    "X":"250",
-                    "Y":"200",
-                    "Width":"55",
-                    "Height":"25",
+                    "X":"0.78125",
+                    "Y":"0.85",
+                    "Width":"0.171875",
+                    "Height":"0.1",
                     "ButtonType":"Text",
                     "Title":"Cancel",
                     "FontType":"Regular",
-                    "FontSize":"12",
+                    "FontSize":"0.05",
                     "FontColor":"0,0,0",
                     "bgColor":"255,255,255"
                 }
@@ -134,21 +134,21 @@
                 {
                     "_comment":"Image for the Tranfering interface",
                     "ImgPath":"/Images/beeBWVectorSmall.png",
-                    "X":"150",
-                    "Y":"50"
+                    "X":"0.46875",
+                    "Y":"0.2"
                 },
         "ThirdButtons":[
                 {
                     "_comment":"Button cancel heating",
                     "ButtonName":"Cancel",
-                    "X":"250",
-                    "Y":"200",
-                    "Width":"55",
-                    "Height":"25",
+                    "X":"0.78125",
+                    "Y":"0.85",
+                    "Width":"0.171875",
+                    "Height":"0.1",
                     "ButtonType":"Text",
                     "Title":"Cancel",
                     "FontType":"Regular",
-                    "FontSize":"12",
+                    "FontSize":"0.05",
                     "FontColor":"0,0,0",
                     "bgColor":"255,255,255"
                 }
@@ -157,16 +157,16 @@
                 {
                     "_comment":"Image for the heating interface",
                     "ImgPath":"/Images/beeBWVectorSmall.png",
-                    "X":"150",
-                    "Y":"50"
+                    "X":"0.46875",
+                    "Y":"0.2"
                 },
         "ProgressBar":
                 {
                     "_comment":"Progress bar configuration",
-                    "X":"110",
-                    "Y":"160",
-                    "Width":"200",
-                    "Height":"25",
+                    "X":"0.34375",
+                    "Y":"0.65",
+                    "Width":"0.625",
+                    "Height":"0.1",
                     "Thickness":"3",
                     "bgColor":"0,0,0",
                     "LineColor":"0,0,0"

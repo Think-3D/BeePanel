@@ -46,14 +46,18 @@ class LeftMenuLoader():
     fG = None
     Fb = None
     
+    displayWidth = 480
+    displayHeight = 320
     
     """*************************************************************************
                                 Init Method 
     
     Inits current screen components
     *************************************************************************"""
-    def __init__(self, jsonData):
+    def __init__(self, jsonData, dispWidth, dispHeight):
         
+        self.displayWidth = dispWidth
+        self.displayHeight = dispHeight
         
         carouselJson = json.loads(json.dumps(jsonData['Carousel']))[0]
         carouselButtonsJson = carouselJson['Buttons']
@@ -63,11 +67,11 @@ class LeftMenuLoader():
         Carousel Config
         """
         self.carouselItems = int(carouselConfigJson['CarouselItems'])
-        self.carouselX = int(carouselConfigJson['X'])
-        self.carouselY = int(carouselConfigJson['Y'])
-        self.carouselWidth = int(carouselConfigJson['Width'])
-        self.carouselHeight = int(carouselConfigJson['Height'])
-        self.carouselButtonHeight = int(carouselConfigJson['ButtonHeight'])
+        self.carouselX = int(float(carouselConfigJson['X'])*self.displayWidth)
+        self.carouselY = int(float(carouselConfigJson['Y'])*self.displayHeight)
+        self.carouselWidth = int(float(carouselConfigJson['Width'])*self.displayWidth)
+        self.carouselHeight = int(float(carouselConfigJson['Height'])*self.displayWidth)
+        self.carouselButtonHeight = int(float(carouselConfigJson['ButtonHeight'])*self.displayHeight)
         
         bgColor = carouselConfigJson['bgColor']
         splitColor = bgColor.split(",")
@@ -77,7 +81,7 @@ class LeftMenuLoader():
         self.bgColor = pygame.Color(self.bgR,self.bgG,self.bgB)
         
         self.fontType = carouselConfigJson['FontType']
-        self.fontSize = int(carouselConfigJson['FontSize'])
+        self.fontSize = int(float(carouselConfigJson['FontSize'])*self.displayHeight)
         self.font = self.GetFont(self.fontType,self.fontSize)
         
         fColor = carouselConfigJson['FontColor']
@@ -89,10 +93,10 @@ class LeftMenuLoader():
         
         self.carouselButtons = []
         for btn in carouselButtonsJson:
-            btnX = int(btn['X'])
-            btnY = int(btn['Y'])
-            btnWidth = int(btn['Width'])
-            btnHeight = int(btn['Height'])
+            btnX = int(float(btn['X'])*self.displayWidth)
+            btnY = int(float(btn['Y'])*self.displayHeight)
+            btnWidth = int(float(btn['Width'])*self.displayWidth)
+            btnHeight = int(float(btn['Height'])*self.displayHeight)
             btnType = btn['ButtonType']
 
             if btnType == "Text":
@@ -100,7 +104,7 @@ class LeftMenuLoader():
                 bgColor = btn['bgColor'].split(",")
                 fColor = btn['FontColor'].split(",")
                 fType = btn['FontType']
-                fSize = int(btn['FontSize'])
+                fSize = int(float(btn['FontSize'])*self.displayHeight)
                 btnName = btn['ButtonName']
 
                 jogBtn = BeePanel_Button.Button(btnX,btnY,btnWidth,btnHeight,btnTitle,

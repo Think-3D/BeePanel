@@ -4,33 +4,33 @@
             "PrintingTopLabel":[
                 {
                     "Text":"Printing in Progress",
-                    "X":"100",
-                    "Y":"5",
+                    "X":"0.3125",
+                    "Y":"0.02",
                     "FontType":"Bold",
-                    "FontSize":"12",
+                    "FontSize":"0.05",
                     "FontColor":"0,0,0"
                 }
             ],
             "TimeLabel":
                 {
                     "Text":"Time Remaining: ",
-                    "X":"20",
-                    "Y":"140",
+                    "X":"0.0625",
+                    "Y":"0.583",
                     "FontType":"Regular",
-                    "FontSize":"12",
+                    "FontSize":"0.05",
                     "FontColor":"0,0,0"
                 },
             "PrintingButtons":[
                 {
                     "ButtonName":"Cancel",
-                    "X":"14",
-                    "Y":"200",
-                    "Width":"88",
-                    "Height":"25",
+                    "X":"0.0583",
+                    "Y":"0.83",
+                    "Width":"0.275",
+                    "Height":"0.1",
                     "ButtonType":"Text",
                     "Title":"Cancel",
                     "FontType":"Regular",
-                    "FontSize":"12",
+                    "FontSize":"0.05",
                     "FontColor":"0,0,0",
                     "bgColor":"255,255,255"
                 }
@@ -39,57 +39,57 @@
             "PrintingImage":[
                 {
                     "ImgPath":"/Images/BestPnP_Icon.png",
-                    "X":"128",
-                    "Y":"30"
+                    "X":"0.4",
+                    "Y":"0.125"
                 }
             ],
             "PausedTopLabel":[
                 {
                     "Text":"Paused... Waiting for resume",
-                    "X":"20",
-                    "Y":"5",
+                    "X":"0.0625",
+                    "Y":"0.02",
                     "FontType":"Bold",
-                    "FontSize":"12",
+                    "FontSize":"0.05",
                     "FontColor":"0,0,0"
                 }
             ],
             "PausedButtons":[
                 {
                     "ButtonName":"Cancel",
-                    "X":"14",
-                    "Y":"200",
-                    "Width":"88",
-                    "Height":"25",
+                    "X":"0.0583",
+                    "Y":"0.83",
+                    "Width":"0.275",
+                    "Height":"0.1",
                     "ButtonType":"Text",
                     "Title":"Cancel",
                     "FontType":"Regular",
-                    "FontSize":"12",
+                    "FontSize":"0.05",
                     "FontColor":"0,0,0",
                     "bgColor":"255,255,255"
                 },
                 {
                     "ButtonName":"Change Filament",
-                    "X":"116",
-                    "Y":"200",
-                    "Width":"88",
-                    "Height":"25",
+                    "X":"0.3625",
+                    "Y":"0.83",
+                    "Width":"0.275",
+                    "Height":"0.1",
                     "ButtonType":"Text",
                     "Title":"Change Filament",
                     "FontType":"Regular",
-                    "FontSize":"9",
+                    "FontSize":"0.0375",
                     "FontColor":"0,0,0",
                     "bgColor":"255,255,255"
                 },
                 {
                     "ButtonName":"Resume",
-                    "X":"218",
-                    "Y":"200",
-                    "Width":"88",
-                    "Height":"25",
+                    "X":"0.68125",
+                    "Y":"0.83",
+                    "Width":"0.275",
+                    "Height":"0.1",
                     "ButtonType":"Text",
                     "Title":"Resume",
                     "FontType":"Regular",
-                    "FontSize":"12",
+                    "FontSize":"0.05",
                     "FontColor":"0,0,0",
                     "bgColor":"255,255,255"
                 }
@@ -97,44 +97,44 @@
             "PausedImage":[
                 {
                     "ImgPath":"/Images/beeBWVectorSmall.png",
-                    "X":"110",
-                    "Y":"50"
+                    "X":"0.34375",
+                    "Y":"0.2"
                 }
             ],
             "ShutdownTopLabel":[
                 {
                     "Text":"Paused... Waiting for resume or shutdown",
-                    "X":"10",
-                    "Y":"5",
+                    "X":"0.03125",
+                    "Y":"0.02",
                     "FontType":"Bold",
-                    "FontSize":"12",
+                    "FontSize":"0.05",
                     "FontColor":"0,0,0"
                 }
             ],
             "ShutdownButtons":[
                 {
                     "ButtonName":"Close",
-                    "X":"218",
-                    "Y":"200",
-                    "Width":"88",
-                    "Height":"25",
+                    "X":"0.68125",
+                    "Y":"0.83",
+                    "Width":"0.275",
+                    "Height":"0.1",
                     "ButtonType":"Text",
                     "Title":"Close",
                     "FontType":"Regular",
-                    "FontSize":"12",
+                    "FontSize":"0.05",
                     "FontColor":"0,0,0",
                     "bgColor":"255,255,255"
                 },
                 {
                     "ButtonName":"Resume",
-                    "X":"116",
-                    "Y":"200",
-                    "Width":"88",
-                    "Height":"25",
+                    "X":"0.3625",
+                    "Y":"0.83",
+                    "Width":"0.275",
+                    "Height":"0.1",
                     "ButtonType":"Text",
                     "Title":"Resume",
                     "FontType":"Regular",
-                    "FontSize":"12",
+                    "FontSize":"0.05",
                     "FontColor":"0,0,0",
                     "bgColor":"255,255,255"
                 }
@@ -142,83 +142,83 @@
             "ShutdownImage":[
                 {
                     "ImgPath":"/Images/beeBWVectorSmall.png",
-                    "X":"110",
-                    "Y":"50"
+                    "X":"0.34375",
+                    "Y":"0.2"
                 }
             ],
             "FilamentTopLabel":[
                 {
                     "Text":"Filament Operations",
-                    "X":"10",
-                    "Y":"5",
+                    "X":"0.03125",
+                    "Y":"0.02",
                     "FontType":"Bold",
-                    "FontSize":"12",
+                    "FontSize":"0.05",
                     "FontColor":"0,0,0"
                 }
             ],
             "FilamentButtons":[
                 {
                     "ButtonName":"Load",
-                    "X":"14",
-                    "Y":"50",
-                    "Width":"88",
-                    "Height":"80",
+                    "X":"0.0583",
+                    "Y":"0.2",
+                    "Width":"0.275",
+                    "Height":"0.33",
                     "ButtonType":"Text",
                     "Title":"Load",
                     "FontType":"Regular",
-                    "FontSize":"12",
+                    "FontSize":"0.05",
                     "FontColor":"0,0,0",
                     "bgColor":"255,255,255"
                 },
                 {
                     "ButtonName":"Unload",
-                    "X":"116",
-                    "Y":"50",
-                    "Width":"88",
-                    "Height":"80",
+                    "X":"0.3625",
+                    "Y":"0.2",
+                    "Width":"0.275",
+                    "Height":"0.33",
                     "ButtonType":"Text",
                     "Title":"Unload",
                     "FontType":"Regular",
-                    "FontSize":"12",
+                    "FontSize":"0.05",
                     "FontColor":"0,0,0",
                     "bgColor":"255,255,255"
                 },
                 {
                     "ButtonName":"Color",
-                    "X":"218",
-                    "Y":"50",
-                    "Width":"88",
-                    "Height":"80",
+                    "X":"0.68125",
+                    "Y":"0.2",
+                    "Width":"0.275",
+                    "Height":"0.33",
                     "ButtonType":"Text",
                     "Title":"Color",
                     "FontType":"Regular",
-                    "FontSize":"12",
+                    "FontSize":"0.05",
                     "FontColor":"0,0,0",
                     "bgColor":"255,255,255"
                 },
                 {
                     "ButtonName":"Resume",
-                    "X":"218",
-                    "Y":"200",
-                    "Width":"88",
-                    "Height":"25",
+                    "X":"0.68125",
+                    "Y":"0.83",
+                    "Width":"0.275",
+                    "Height":"0.1",
                     "ButtonType":"Text",
                     "Title":"Resume",
                     "FontType":"Regular",
-                    "FontSize":"12",
+                    "FontSize":"0.05",
                     "FontColor":"0,0,0",
                     "bgColor":"255,255,255"
                 },
                 {
                     "ButtonName":"Cancel",
-                    "X":"116",
-                    "Y":"200",
-                    "Width":"88",
-                    "Height":"25",
+                    "X":"0.3625",
+                    "Y":"0.83",
+                    "Width":"0.275",
+                    "Height":"0.1",
                     "ButtonType":"Text",
                     "Title":"Cancel",
                     "FontType":"Regular",
-                    "FontSize":"12",
+                    "FontSize":"0.05",
                     "FontColor":"0,0,0",
                     "bgColor":"255,255,255"
                 }
@@ -230,50 +230,50 @@
             ],
             "ProgressBar":
                 {
-                    "X":"20",
-                    "Y":"160",
-                    "Width":"280",
-                    "Height":"25",
+                    "X":"0.0625",
+                    "Y":"0.67",
+                    "Width":"0.875",
+                    "Height":"0.1",
                     "Thickness":"3",
                     "bgColor":"0,0,0",
                     "LineColor":"0,0,0"
                 },
             "ColorPicker":
                 {
-                    "X":"20",
-                    "Y":"105",
-                    "Width":"200",
-                    "Height":"30",
+                    "X":"0.0625",
+                    "Y":"0.4375",
+                    "Width":"0.625",
+                    "Height":"0.125",
                     "FontColor":"0,0,0",
-                    "FontSize":"12",
+                    "FontSize":"0.05",
                     "FontType":"Bold"
                 },
             "ColorLabel":
                 {
                     "Text":"Selected Color: ",
                     "X":"40",
-                    "Y":"160",
+                    "Y":"0.67",
                     "FontType":"Regular",
-                    "FontSize":"12",
+                    "FontSize":"0.05",
                     "FontColor":"0,0,0"
                 },
             "PickerTopLabel":[
                 {
                     "Text":"PickColor",
-                    "X":"10",
-                    "Y":"5",
+                    "X":"0.03125",
+                    "Y":"0.02",
                     "FontType":"Bold",
-                    "FontSize":"12",
+                    "FontSize":"0.05",
                     "FontColor":"0,0,0"
                 }
             ],
             "PickerButtons":[
                 {
                     "ButtonName":"Next",
-                    "X":"270",
-                    "Y":"200",
+                    "X":"0.84375",
+                    "Y":"0.83",
                     "Width":"30",
-                    "Height":"30",
+                    "Height":"0.125",
                     "ButtonType":"Img",
                     "Title":"Next",
                     "NormalPath":"/Images/NextSmall.png",
@@ -282,10 +282,10 @@
                 },
                 {
                     "ButtonName":"Up",
-                    "X":"270",
-                    "Y":"50",
+                    "X":"0.84375",
+                    "Y":"0.2",
                     "Width":"30",
-                    "Height":"30",
+                    "Height":"0.125",
                     "ButtonType":"Img",
                     "Title":"Up",
                     "NormalPath":"/Images/UpSmall.png",
@@ -294,10 +294,10 @@
                 },
                 {
                     "ButtonName":"Down",
-                    "X":"270",
-                    "Y":"150",
+                    "X":"0.84375",
+                    "Y":"0.625",
                     "Width":"30",
-                    "Height":"30",
+                    "Height":"0.125",
                     "ButtonType":"Img",
                     "Title":"Down",
                     "NormalPath":"/Images/DownSmall.png",
@@ -308,24 +308,24 @@
             "FinishTopLabel":[
                 {
                     "Text":"Print Finished",
-                    "X":"20",
-                    "Y":"5",
+                    "X":"0.0625",
+                    "Y":"0.02",
                     "FontType":"Bold",
-                    "FontSize":"12",
+                    "FontSize":"0.05",
                     "FontColor":"0,0,0"
                 }
             ],
             "FinishButtons":[
                 {
                     "ButtonName":"Finish",
-                    "X":"14",
-                    "Y":"200",
-                    "Width":"88",
-                    "Height":"25",
+                    "X":"0.0583",
+                    "Y":"0.83",
+                    "Width":"0.275",
+                    "Height":"0.1",
                     "ButtonType":"Text",
                     "Title":"Finish",
                     "FontType":"Regular",
-                    "FontSize":"12",
+                    "FontSize":"0.05",
                     "FontColor":"0,0,0",
                     "bgColor":"255,255,255"
                 }
@@ -333,8 +333,8 @@
             "FinishImage":[
                 {
                     "ImgPath":"/Images/BestPnP_Icon.png",
-                    "X":"128",
-                    "Y":"30"
+                    "X":"0.4",
+                    "Y":"0.125"
                 }
             ]
         }

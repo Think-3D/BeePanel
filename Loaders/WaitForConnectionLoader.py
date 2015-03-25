@@ -37,12 +37,18 @@ class WaitForConnectionLoader():
     imageX = None
     imageY = None
     
+    displayWidth = 480
+    displayHeight = 320
+    
     """*************************************************************************
                                 Init Method 
     
     Inits current screen components
     *************************************************************************"""
-    def __init__(self):
+    def __init__(self, dispWidth, dispHeight):
+        
+        self.displayWidth = dispWidth
+        self.displayHeight = dispHeight
         
         ff = FileFinder.FileFinder()
         
@@ -71,10 +77,10 @@ class WaitForConnectionLoader():
             lblJson = json.loads(json.dumps(lbls))
             for lbl in lblJson:
                 lblFontType = lbl['FontType']
-                lblFontSize = int(lbl['FontSize'])
+                lblFontSize = int(float(lbl['FontSize'])*self.displayHeight)
                 lblFColor = lbl['FontColor']
-                self.lblXPos.append(int(lbl['X']))
-                self.lblYPos.append(int(lbl['Y']))
+                self.lblXPos.append(int(float(lbl['X'])*self.displayWidth))
+                self.lblYPos.append(int(float(lbl['Y'])*self.displayHeight))
                 self.lblText.append(lbl['Text'])
                 self.lblFont.append(self.GetFont(lblFontType,lblFontSize))
                 
@@ -86,8 +92,8 @@ class WaitForConnectionLoader():
         Loade Image Configurtation
         """
         self.imagePath = ff.GetAbsPath(self.imgJson['ImgPath'])
-        self.imageX = int(self.imgJson['X'])
-        self.imageY = int(self.imgJson['Y'])
+        self.imageX = int(self.imgJson['X']*self.displayWidth)
+        self.imageY = int(self.imgJson['Y']*self.displayHeight)
         
         f.close()
         

@@ -68,12 +68,15 @@ class CalibrationLoader():
     sliceImgY = 0
     rightImgY = 0
     
+    displayWidth = 480
+    displayHeight = 320
+    
     """*************************************************************************
                                 Init Method 
     
-    
+    Inits current screen components
     *************************************************************************"""
-    def __init__(self, interfaceJson):
+    def __init__(self, interfaceJson, dispWidth, dispHeight):
         r"""
         __init__ method
         
@@ -98,10 +101,10 @@ class CalibrationLoader():
         
         for lbl in self.lblJson:
             lblFontType = lbl['FontType']
-            lblFontSize = int(lbl['FontSize'])
+            lblFontSize = int(float(lbl['FontSize'])*self.displayHeight)
             lblFColor = lbl['lblFontColor']
-            self.lblXPos.append(int(lbl['X']))
-            self.lblYPos.append(int(lbl['Y']))
+            self.lblXPos.append(int(float(lbl['X'])*self.displayWidth))
+            self.lblYPos.append(int(float(lbl['Y'])*self.displayHeight))
             
             self.lblFont.append(self.GetFont(lblFontType,lblFontSize))
             
@@ -112,10 +115,10 @@ class CalibrationLoader():
         for btns in self.buttonsJson:
             calButtons = []
             for btn in btns:
-                btnX = int(btn['X'])
-                btnY = int(btn['Y'])
-                btnWidth = int(btn['Width'])
-                btnHeight = int(btn['Height'])
+                btnX = int(float(btn['X'])*self.displayWidth)
+                btnY = int(float(btn['Y'])*self.displayHeight)
+                btnWidth = int(float(btn['Width'])*self.displayWidth)
+                btnHeight = int(float(btn['Height'])*self.displayHeight)
                 btnType = btn['ButtonType']
             
                 if btnType == "Text":
@@ -123,7 +126,7 @@ class CalibrationLoader():
                     bgColor = btn['bgColor'].split(",")
                     fColor = btn['FontColor'].split(",")
                     fType = btn['FontType']
-                    fSize = int(btn['FontSize'])
+                    fSize = int(float(btn['FontSize'])*self.displayHeight)
                     btnName = btn['ButtonName']
                 
                     jogBtn = BeePanel_Button.Button(btnX,btnY,btnWidth,btnHeight,btnTitle,
@@ -158,10 +161,10 @@ class CalibrationLoader():
         """
         self.leftImgPath = ff.GetAbsPath(self.leftImgJson['ImgPath'])
         self.rightImgPath = ff.GetAbsPath(self.rightImgJson['ImgPath'])
-        self.leftImgX = int(self.leftImgJson['X'])
-        self.leftImgY = int(self.leftImgJson['Y'])
-        self.rightImgX = int(self.rightImgJson['X'])
-        self.rightImgY = int(self.rightImgJson['Y'])
+        self.leftImgX = int(float(self.leftImgJson['X'])*self.displayWidth)
+        self.leftImgY = int(float(self.leftImgJson['Y'])*self.displayHeight)
+        self.rightImgX = int(float(self.rightImgJson['X'])*self.displayWidth)
+        self.rightImgY = int(float(self.rightImgJson['Y'])*self.displayHeight)
             
         return
     

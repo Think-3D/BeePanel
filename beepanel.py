@@ -83,6 +83,8 @@ class BeePanel():
     done = False
     cancelTransfer = False
     BeeState = "Disconnected"
+    displayWidth = 480
+    displayHeight = 320
     ff = None
     
     """
@@ -226,6 +228,8 @@ class BeePanel():
         
         self.screen = self.BEEDisplay.GetBEEScreen()
         self.screen.fill(self.BEEDisplay.GetbgColor())
+        self.displayWidth = self.BEEDisplay.displayWidth
+        self.displayHeight = self.BEEDisplay.displayHeight
         
         """
         Wait For Connection

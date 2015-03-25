@@ -40,12 +40,18 @@ class PrinterInfoLoader():
     lblValFont = None
     lblValFontColor = None
     
+    displayWidth = 480
+    displayHeight = 320
+    
     """*************************************************************************
                                 Init Method 
     
     Inits current screen components
     *************************************************************************"""
-    def __init__(self, interfaceJson):
+    def __init__(self, interfaceJson, dispWidth, dispHeight):
+        
+        self.displayWidth = dispWidth
+        self.displayHeight = dispHeight
         
         self.interfaceJson = interfaceJson
         
@@ -61,9 +67,9 @@ class PrinterInfoLoader():
                     "FontSize":"12",
                     "FontColor":"0,0,0"
         """
-        self.lblValXPos = int(self.lblValJson['X'])
+        self.lblValXPos = int(float(self.lblValJson['X'])*self.displayWidth)
         lblValFontType = self.lblValJson['FontType']
-        lblValFontSize = int(self.lblValJson['FontSize'])
+        lblValFontSize = int(float(self.lblValJson['FontSize'])*self.displayHeight)
         self.lblValFont = self.GetFont(lblValFontType,lblValFontSize)
         lblValFColor = self.lblValJson['FontColor']
         splitColor = lblValFColor.split(",")
@@ -80,11 +86,11 @@ class PrinterInfoLoader():
         
         for lbl in self.lblJson:
             lblFontType = lbl['FontType']
-            lblFontSize = int(lbl['FontSize'])
+            lblFontSize = int(float(lbl['FontSize'])*self.displayHeight)
             lblFColor = lbl['FontColor']
             
-            self.lblXPos.append(int(lbl['X']))
-            self.lblYPos.append(int(lbl['Y']))
+            self.lblXPos.append(int(float(lbl['X']))*self.displayWidth)
+            self.lblYPos.append(int(float(lbl['Y']))*self.displayHeight)
             self.lblText.append(lbl['Text'])
             
             font = self.GetFont(lblFontType,lblFontSize)

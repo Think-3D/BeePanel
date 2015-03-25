@@ -4,18 +4,18 @@
             "Labels":[
                 {
                     "Text":"Ups... where's the BEE?",
-                    "X":"10",
-                    "Y":"10",
+                    "X":"0.03125",
+                    "Y":"0.04",
                     "FontType":"Regular",
-                    "FontSize":"12",
+                    "FontSize":"0.05",
                     "FontColor":"0,0,0"
                 },
                 {
                     "Text":"...please connect your BTF pritner",
-                    "X":"120",
-                    "Y":"220",
+                    "X":"0.375",
+                    "Y":"0.92",
                     "FontType":"Regular",
-                    "FontSize":"11",
+                    "FontSize":"0.045",
                     "FontColor":"0,0,0"
                 }
             ],
