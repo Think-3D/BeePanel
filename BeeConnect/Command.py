@@ -487,6 +487,7 @@ class Cmd():
         self.beeCon.sendCmd("G1 F2000 E-23\n")
         self.beeCon.sendCmd("G1 F200 E-50\n","3")
         self.beeCon.sendCmd("G92 E\n")
+        self.beeCon.sendCmd("M400 A\n")
         
         return
 
