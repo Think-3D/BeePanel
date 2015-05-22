@@ -11,7 +11,7 @@
                     "FontColor":"0,0,0"
                 },
                 {
-                    "Text":"Insert wifi.json in the flash drive",
+                    "Text":"Insert wifi.conf in the flash drive",
                     "X":"0.34375",
                     "Y":"0.15",
                     "FontType":"Bold",
