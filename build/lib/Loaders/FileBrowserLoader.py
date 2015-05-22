@@ -72,12 +72,23 @@ class FileBrowserLoader():
     #Progress Bar
     progressBar = None
     
+    displayWidth = 480
+    displayHeight = 320
+    
     """*************************************************************************
                                 Init Method 
     
     Inits current screen components
     *************************************************************************"""
-    def __init__(self, interfaceJson):
+    def __init__(self, interfaceJson, dispWidth, dispHeight):
+        r"""
+        __init__ method
+        
+        Initialization method. Loads configurations from the json file
+        """
+        
+        self.displayWidth = dispWidth
+        self.displayHeight = dispHeight
         
         ff = FileFinder.FileFinder()
         
@@ -107,10 +118,10 @@ class FileBrowserLoader():
         """
         for topLbl in self.topLblJson:
             topLblFontType = topLbl['FontType']
-            topLblFontSize = int(topLbl['FontSize'])
+            topLblFontSize = int(float(topLbl['FontSize'])*self.displayHeight)
             topLblFColor = topLbl['FontColor']
-            self.lblTopXPos.append(int(topLbl['X']))
-            self.lblTopYPos.append(int(topLbl['Y']))
+            self.lblTopXPos.append(int(float(topLbl['X'])*self.displayWidth))
+            self.lblTopYPos.append(int(float(topLbl['Y'])*self.displayHeight))
             self.topLbltext.append(topLbl['Text'])
             self.lblTopFont.append(self.GetFont(topLblFontType,topLblFontSize))
             
@@ -144,10 +155,10 @@ class FileBrowserLoader():
         for btns in self.buttonsJson:
             filButtons = []
             for btn in btns:
-                btnX = int(btn['X'])
-                btnY = int(btn['Y'])
-                btnWidth = int(btn['Width'])
-                btnHeight = int(btn['Height'])
+                btnX = int(float(btn['X'])*self.displayWidth)
+                btnY = int(float(btn['Y'])*self.displayHeight)
+                btnWidth = int(float(btn['Width'])*self.displayWidth)
+                btnHeight = int(float(btn['Height'])*self.displayHeight)
                 btnType = btn['ButtonType']
                 
             
@@ -156,7 +167,7 @@ class FileBrowserLoader():
                     bgColor = btn['bgColor'].split(",")
                     fColor = btn['FontColor'].split(",")
                     fType = btn['FontType']
-                    fSize = int(btn['FontSize'])
+                    fSize = int(float(btn['FontSize'])*self.displayHeight)
                     btnName = btn['ButtonName']
                 
                     jogBtn = BeePanel_Button.Button(btnX,btnY,btnWidth,btnHeight,btnTitle,
@@ -189,11 +200,11 @@ class FileBrowserLoader():
         File Picker Configuration
         """
         filePickerJson = json.loads(json.dumps(self.interfaceJson['FilePicker']))
-        self.pickerX = int(filePickerJson['X'])
-        self.pickerY = int(filePickerJson['Y'])
-        self.pickerWidth = int(filePickerJson['Width'])
-        self.pickerHeight = int(filePickerJson['Height'])
-        self.pickerFontSize = int(filePickerJson['FontSize'])
+        self.pickerX = int(float(filePickerJson['X'])*self.displayWidth)
+        self.pickerY = int(float(filePickerJson['Y'])*self.displayHeight)
+        self.pickerWidth = int(float(filePickerJson['Width'])*self.displayHeight)
+        self.pickerHeight = int(float(filePickerJson['Height'])*self.displayHeight)
+        self.pickerFontSize = int(float(filePickerJson['FontSize'])*self.displayHeight)
         self.pickerStrlen = int(filePickerJson['StringLen'])
         self.pickerRowCount = int(filePickerJson['RowCount'])
         pickerFontColorRGB = filePickerJson['FontColor']
@@ -219,20 +230,20 @@ class FileBrowserLoader():
         self.transfImgPath = ff.GetAbsPath(self.transfImgJson['ImgPath'])
         self.heatImgPath = ff.GetAbsPath(self.heatImgJson['ImgPath'])
         
-        self.transfImgX = int(self.transfImgJson['X'])
-        self.transfImgY = int(self.transfImgJson['Y'])
+        self.transfImgX = int(float(self.transfImgJson['X'])*self.displayWidth)
+        self.transfImgY = int(float(self.transfImgJson['Y'])*self.displayHeight)
         
-        self.heatImgX = int(self.heatImgJson['X'])
-        self.heatImgY = int(self.heatImgJson['Y'])
+        self.heatImgX = int(float(self.heatImgJson['X'])*self.displayWidth)
+        self.heatImgY = int(float(self.heatImgJson['Y'])*self.displayHeight)
         
         """
         Load Progress Bar Configuration
         """
         pBarJson = json.loads(json.dumps(self.interfaceJson['ProgressBar']))
-        pBarX = int(pBarJson['X'])
-        pBarY = int(pBarJson['Y'])
-        pBarWidth = int(pBarJson['Width'])
-        pBarHeight = int(pBarJson['Height'])
+        pBarX = int(float(pBarJson['X'])*self.displayHeight)
+        pBarY = int(float(pBarJson['Y'])*self.displayHeight)
+        pBarWidth = int(float(pBarJson['Width'])*self.displayHeight)
+        pBarHeight = int(float(pBarJson['Height'])*self.displayHeight)
         pBarThickness = int(pBarJson['Thickness'])
         pBarLineColorRGB = pBarJson['LineColor']
         pBarFillColorRGB = pBarJson['bgColor']

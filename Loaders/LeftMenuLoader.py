@@ -70,7 +70,7 @@ class LeftMenuLoader():
         self.carouselX = int(float(carouselConfigJson['X'])*self.displayWidth)
         self.carouselY = int(float(carouselConfigJson['Y'])*self.displayHeight)
         self.carouselWidth = int(float(carouselConfigJson['Width'])*self.displayWidth)
-        self.carouselHeight = int(float(carouselConfigJson['Height'])*self.displayWidth)
+        self.carouselHeight = int(float(carouselConfigJson['Height'])*self.displayHeight)
         self.carouselButtonHeight = int(float(carouselConfigJson['ButtonHeight'])*self.displayHeight)
         
         bgColor = carouselConfigJson['bgColor']

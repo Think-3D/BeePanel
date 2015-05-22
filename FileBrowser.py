@@ -728,7 +728,7 @@ class FileBrowserScreen():
         eCmd += 'M109 S220\n'           #Set Temperature and wait
         eCmd += 'G92 E\n'               #Zero Extruder
         print('#TODO - Handle Filament Coef')       
-        eCmd += 'M642 W1\n'               #Set filament coeff
+        #eCmd += 'M642 W1\n'               #Set filament coeff
         eCmd += 'M130 T6 U1.3 V80\n'          #Set PID Settings
         eCmd += 'G1 X-98.0 Y-20.0 Z5.0 F3000\n'   #Nozzle Cleaning
         eCmd += 'G1 Y-68.0 Z0.3\n'
@@ -924,12 +924,12 @@ class FileBrowserScreen():
         if(self.ff is None):
             self.ff = FileFinder.FileFinder()
         
-        moovingImgPath = self.ff.GetAbsPath('/Images/mooving.png')
+        moovingImgPath = self.ff.GetAbsPath('/Images/moving.png')
         
         moovingImg = pygame.image.load(moovingImgPath)
 
         # Draw Image
-        self.screen.blit(moovingImg,(96,56))
+        self.screen.blit(moovingImg,(0,0))
         
         # update screen
         pygame.display.update()
@@ -951,12 +951,12 @@ class FileBrowserScreen():
         if(self.ff is None):
             self.ff = FileFinder.FileFinder()
         
-        moovingImgPath = self.ff.GetAbsPath('/Images/loading.png')
+        moovingImgPath = self.ff.GetAbsPath('/Images/updating.png')
         
         moovingImg = pygame.image.load(moovingImgPath)
 
         # Draw Image
-        self.screen.blit(moovingImg,(72,32))
+        self.screen.blit(moovingImg,(0,0))
         
         # update screen
         pygame.display.update()

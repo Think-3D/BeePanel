@@ -1,54 +1,229 @@
 {
     "ColorCodes":[
         {
-            "ColorName":"Black",
-            "ColorCode":"A1",
+            "ColorName":"A001 Transparent",
+            "ColorCode":"A001",
+            "RGBColor":"255,255,255"
+        },
+        {
+            "ColorName":"A002 White",
+            "ColorCode":"A002",
+            "RGBColor":"255,255,255"
+        },
+        {
+            "ColorName":"A003 Black",
+            "ColorCode":"A003",
             "RGBColor":"0,0,0"
         },
         {
-            "ColorName":"BlackA302",
-            "ColorCode":"A302",
-            "RGBColor":"255,255,255"
-        },
-        {
-            "ColorName":"White",
-            "ColorCode":"A2",
-            "RGBColor":"255,255,255"
-        },
-        {
-            "ColorName":"Blue",
-            "ColorCode":"A3",
-            "RGBColor":"0,0,255"
-        },
-        {
-            "ColorName":"Green",
-            "ColorCode":"A4",
-            "RGBColor":"0,255,0"
-        },
-        {
-            "ColorName":"Red",
-            "ColorCode":"A5",
+            "ColorName":"A004 Red",
+            "ColorCode":"A004",
             "RGBColor":"255,0,0"
         },
         {
-            "ColorName":"Yellow",
-            "ColorCode":"A6",
+            "ColorName":"A005 Yellow",
+            "ColorCode":"A005",
             "RGBColor":"255,255,0"
         },
         {
-            "ColorName":"Turquoise",
-            "ColorCode":"A7",
-            "RGBColor":"64,224,208"
+            "ColorName":"A006 Blue",
+            "ColorCode":"A006",
+            "RGBColor":"0,0,255"
         },
         {
-            "ColorName":"Orange",
-            "ColorCode":"A8",
+            "ColorName":"A007 Olive Green",
+            "ColorCode":"A007",
+            "RGBColor":"85,107,47"
+        },
+        {
+            "ColorName":"A008 Pink",
+            "ColorCode":"A008",
+            "RGBColor":"255,182,193"
+        },
+        {
+            "ColorName":"A009 Silver",
+            "ColorCode":"A009",
+            "RGBColor":"192,192,192"
+        },
+        {
+            "ColorName":"A010 Turquoise",
+            "ColorCode":"A010",
+            "RGBColor":"0,206,209"
+        },
+        {
+            "ColorName":"A011 Green",
+            "ColorCode":"A011",
+            "RGBColor":"0,255,0"
+        },
+        {
+            "ColorName":"A012 Orange",
+            "ColorCode":"A012",
             "RGBColor":"255,165,0"
         },
         {
-            "ColorName":"Transparent",
-            "ColorCode":"A9",
-            "RGBColor":"220,220,220"
+            "ColorName":"A021 Transparent",
+            "ColorCode":"A021",
+            "RGBColor":"255,255,255"
+        },
+        {
+            "ColorName":"A022 White",
+            "ColorCode":"A022",
+            "RGBColor":"255,255,255"
+        },
+        {
+            "ColorName":"A023 Black",
+            "ColorCode":"A023",
+            "RGBColor":"0,0,0"
+        },
+        {
+            "ColorName":"A024 Red",
+            "ColorCode":"A024",
+            "RGBColor":"255,0,0"
+        },
+        {
+            "ColorName":"A025 Yellow",
+            "ColorCode":"A025",
+            "RGBColor":"255,255,0"
+        },
+        {
+            "ColorName":"A026 Blue",
+            "ColorCode":"A026",
+            "RGBColor":"0,0,255"
+        },
+        {
+            "ColorName":"A027 Olive Green",
+            "ColorCode":"A027",
+            "RGBColor":"85,107,47"
+        },
+        {
+            "ColorName":"A028 Fuchsia",
+            "ColorCode":"A028",
+            "RGBColor":"255,0,255"
+        },
+        {
+            "ColorName":"A029 Silver",
+            "ColorCode":"A029",
+            "RGBColor":"192,192,192"
+        },
+        {
+            "ColorName":"A030 Turquoise",
+            "ColorCode":"A030",
+            "RGBColor":"0,206,209"
+        },
+        {
+            "ColorName":"A031 Neon Green",
+            "ColorCode":"A031",
+            "RGBColor":"0,255,127"
+        },
+        {
+            "ColorName":"A032 Orange",
+            "ColorCode":"A032",
+            "RGBColor":"255,165,0"
+        },
+        {
+            "ColorName":"A101 Transparent",
+            "ColorCode":"A101",
+            "RGBColor":"255,255,255"
+        },
+        {
+            "ColorName":"A102 Blanc Gris",
+            "ColorCode":"A102",
+            "RGBColor":"255,255,255"
+        },
+        {
+            "ColorName":"A103 Zinc Yellow",
+            "ColorCode":"A103",
+            "RGBColor":"238,238,0"
+        },
+        {
+            "ColorName":"A104 Signal Yellow",
+            "ColorCode":"A104",
+            "RGBColor":"255,255,0"
+        },
+        {
+            "ColorName":"A105 Bright Red Orange",
+            "ColorCode":"A105",
+            "RGBColor":"255,165,0"
+        },
+        {
+            "ColorName":"A106 Traffic Red",
+            "ColorCode":"A106",
+            "RGBColor":"255,0,0"
+        },
+        {
+            "ColorName":"A107 Tomato Red",
+            "ColorCode":"A107",
+            "RGBColor":"139,37,0"
+        },
+        {
+            "ColorName":"A108 Light Pink",
+            "ColorCode":"A108",
+            "RGBColor":"255,182,193"
+        },
+        {
+            "ColorName":"A109 Traffic Purple",
+            "ColorCode":"A109",
+            "RGBColor":"128,0,128"
+        },
+        {
+            "ColorName":"A110 Violet",
+            "ColorCode":"A110",
+            "RGBColor":"148,0,211"
+        },
+        {
+            "ColorName":"A111 Sky Blue",
+            "ColorCode":"A111",
+            "RGBColor":"135,206,235"
+        },
+        {
+            "ColorName":"A112 Traffic Blue",
+            "ColorCode":"A112",
+            "RGBColor":"0,0,255"
+        },
+        {
+            "ColorName":"A113 Ultramarine Blue",
+            "ColorCode":"A113",
+            "RGBColor":"0,0,128"
+        },
+        {
+            "ColorName":"A114 Yellow Green",
+            "ColorCode":"A114",
+            "RGBColor":"173,255,47"
+        },
+        {
+            "ColorName":"A115 Pure Green",
+            "ColorCode":"A115",
+            "RGBColor":"0,255,0"
+        },
+        {
+            "ColorName":"A116 Chrome Green",
+            "ColorCode":"A116",
+            "RGBColor":"0,100,0"
+        },
+        {
+            "ColorName":"A117 Chocolate Brown",
+            "ColorCode":"A117",
+            "RGBColor":"139,69,19"
+        },
+        {
+            "ColorName":"A118 Telegrey",
+            "ColorCode":"A118",
+            "RGBColor":"105,105,105"
+        },
+        {
+            "ColorName":"A119 Signal Black",
+            "ColorCode":"A119",
+            "RGBColor":"0,0,0"
+        },
+        {
+            "ColorName":"A120 Pearl Gold",
+            "ColorCode":"A120",
+            "RGBColor":"218,165,32"
+        },
+        {
+            "ColorName":"A121 Pearl Ligh Grey",
+            "ColorCode":"A121",
+            "RGBColor":"211,211,211"
         }
     ]
 }

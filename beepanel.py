@@ -224,7 +224,7 @@ class BeePanel():
         """
         print("Drawing Interfaces")
         pygame.init()
-        pygame.mouse.set_visible(False)
+        pygame.mouse.set_visible(True)
         
         self.screen = self.BEEDisplay.GetBEEScreen()
         self.screen.fill(self.BEEDisplay.GetbgColor())
@@ -580,12 +580,12 @@ class BeePanel():
         if(self.ff is None):
             self.ff = FileFinder.FileFinder()
         
-        moovingImgPath = self.ff.GetAbsPath('/Images/mooving.png')
+        moovingImgPath = self.ff.GetAbsPath('/Images/moving.png')
         
         moovingImg = pygame.image.load(moovingImgPath)
 
         # Draw Image
-        self.screen.blit(moovingImg,(96,56))
+        self.screen.blit(moovingImg,(0,0))
         
         # update screen
         pygame.display.update()
@@ -611,6 +611,7 @@ def restart_app():
 *************************************************************************"""  
 if __name__ == '__main__':
     app = BeePanel()
+    #app.start()
     while(app.exitApp == False):
         try:
             app.start()

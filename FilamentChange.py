@@ -417,12 +417,12 @@ class FilamentChangeScreen():
         if(self.ff is None):
             self.ff = FileFinder.FileFinder()
         
-        moovingImgPath = self.ff.GetAbsPath('/Images/mooving.png')
+        moovingImgPath = self.ff.GetAbsPath('/Images/moving.png')
         
         moovingImg = pygame.image.load(moovingImgPath)
 
         # Draw Image
-        self.screen.blit(moovingImg,(96,56))
+        self.screen.blit(moovingImg,(0,0))
         
         # update screen
         pygame.display.update()
@@ -449,7 +449,7 @@ class FilamentChangeScreen():
         moovingImg = pygame.image.load(moovingImgPath)
 
         # Draw Image
-        self.screen.blit(moovingImg,(10,32))
+        self.screen.blit(moovingImg,(0,0))
         
         # update screen
         pygame.display.update()
@@ -476,7 +476,7 @@ class FilamentChangeScreen():
         moovingImg = pygame.image.load(moovingImgPath)
 
         # Draw Image
-        self.screen.blit(moovingImg,(10,30))
+        self.screen.blit(moovingImg,(0,0))
         
         # update screen
         pygame.display.update()

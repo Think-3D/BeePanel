@@ -120,8 +120,8 @@ class FileBrowserLoader():
             topLblFontType = topLbl['FontType']
             topLblFontSize = int(float(topLbl['FontSize'])*self.displayHeight)
             topLblFColor = topLbl['FontColor']
-            self.lblTopXPos.append(int(float(topLbl['X']))*self.displayWidth)
-            self.lblTopYPos.append(int(float(topLbl['Y']))*self.displayHeight)
+            self.lblTopXPos.append(int(float(topLbl['X'])*self.displayWidth))
+            self.lblTopYPos.append(int(float(topLbl['Y'])*self.displayHeight))
             self.topLbltext.append(topLbl['Text'])
             self.lblTopFont.append(self.GetFont(topLblFontType,topLblFontSize))
             

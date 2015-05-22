@@ -34,12 +34,23 @@ class SettingsLoader():
     
     interfaceButtons = None
     
+    displayWidth = 480
+    displayHeight = 320
+    
     """*************************************************************************
                                 Init Method 
     
     Inits current screen components
     *************************************************************************"""
-    def __init__(self, interfaceJson):
+    def __init__(self, interfaceJson, dispWidth, dispHeight):
+        r"""
+        __init__ method
+        
+        Initialization method. Loads configurations from the json file
+        """
+        
+        self.displayWidth = dispWidth
+        self.displayHeight = dispHeight
         
         self.interfaceJson = interfaceJson
         
@@ -61,10 +72,10 @@ class SettingsLoader():
             lblJson = json.loads(json.dumps(lbls))
             for lbl in lblJson:
                 lblFontType = lbl['FontType']
-                lblFontSize = int(lbl['FontSize'])
+                lblFontSize = int(float(lbl['FontSize'])*self.displayHeight)
                 lblFColor = lbl['FontColor']
-                self.lblXPos.append(int(lbl['X']))
-                self.lblYPos.append(int(lbl['Y']))
+                self.lblXPos.append(int(float(lbl['X'])*self.displayWidth))
+                self.lblYPos.append(int(float(lbl['Y'])*self.displayHeight))
                 self.lblText.append(lbl['Text'])
                 self.lblFont.append(self.GetFont(lblFontType,lblFontSize))
                 
@@ -79,10 +90,10 @@ class SettingsLoader():
         for btns in self.buttonsJson:
             filButtons = []
             for btn in btns:
-                btnX = int(btn['X'])
-                btnY = int(btn['Y'])
-                btnWidth = int(btn['Width'])
-                btnHeight = int(btn['Height'])
+                btnX = int(float(btn['X'])*self.displayWidth)
+                btnY = int(float(btn['Y'])*self.displayHeight)
+                btnWidth = int(float(btn['Width'])*self.displayWidth)
+                btnHeight = int(float(btn['Height'])*self.displayHeight)
                 btnType = btn['ButtonType']
                 
             
@@ -91,7 +102,7 @@ class SettingsLoader():
                     bgColor = btn['bgColor'].split(",")
                     fColor = btn['FontColor'].split(",")
                     fType = btn['FontType']
-                    fSize = int(btn['FontSize'])
+                    fSize = int(float(btn['FontSize'])*self.displayHeight)
                     btnName = btn['ButtonName']
                 
                     jogBtn = BeePanel_Button.Button(btnX,btnY,btnWidth,btnHeight,btnTitle,

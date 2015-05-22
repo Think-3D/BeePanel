@@ -69,12 +69,23 @@ class PrintingLoader():
     pickerFontColor = None
     pickerFont = None
     
+    displayWidth = 480
+    displayHeight = 320
+    
     """*************************************************************************
                                 Init Method 
     
     Inits current screen components
     *************************************************************************"""
-    def __init__(self, interfaceJson):
+    def __init__(self, interfaceJson, dispWidth, dispHeight):
+        r"""
+        __init__ method
+        
+        Initialization method. Loads configurations from the json file
+        """
+        
+        self.displayWidth = dispWidth
+        self.displayHeight = dispHeight
         
         ff = FileFinder.FileFinder()
         
@@ -128,11 +139,11 @@ class PrintingLoader():
         """
         timeLblJson = json.loads(json.dumps(self.interfaceJson['TimeLabel']))
         
-        self.timeLblXPos = int(timeLblJson['X'])
-        self.timeLblYPos = int(timeLblJson['Y'])
+        self.timeLblXPos = int(float(timeLblJson['X'])*self.displayWidth)
+        self.timeLblYPos = int(float(timeLblJson['Y'])*self.displayHeight)
         self.timeLblText = timeLblJson['Text']
         
-        self.timeLblFont = self.GetFont(timeLblJson['FontType'],int(timeLblJson['FontSize']))
+        self.timeLblFont = self.GetFont(timeLblJson['FontType'],int(float(timeLblJson['FontSize'])*self.displayHeight))
         
         timeFontColor = timeLblJson['FontColor']
         splitColor = timeFontColor.split(",")
@@ -143,11 +154,11 @@ class PrintingLoader():
         """
         colorLblJson = json.loads(json.dumps(self.interfaceJson['ColorLabel']))
         
-        self.colorLblXPos = int(colorLblJson['X'])
-        self.colorLblYPos = int(colorLblJson['Y'])
+        self.colorLblXPos = int(float(colorLblJson['X'])*self.displayWidth)
+        self.colorLblYPos = int(float(colorLblJson['Y'])*self.displayHeight)
         self.colorLblText = colorLblJson['Text']
         
-        self.colorLblFont = self.GetFont(colorLblJson['FontType'],int(colorLblJson['FontSize']))
+        self.colorLblFont = self.GetFont(colorLblJson['FontType'],int(float(colorLblJson['FontSize'])*self.displayHeight))
         
         colorFontColor = colorLblJson['FontColor']
         splitColor = colorFontColor.split(",")
@@ -160,10 +171,10 @@ class PrintingLoader():
             lblJson = json.loads(json.dumps(lbls))
             for lbl in lblJson:
                 lblFontType = lbl['FontType']
-                lblFontSize = int(lbl['FontSize'])
+                lblFontSize = int(float(lbl['FontSize'])*self.displayHeight)
                 lblFColor = lbl['FontColor']
-                self.lblXPos.append(int(lbl['X']))
-                self.lblYPos.append(int(lbl['Y']))
+                self.lblXPos.append(int(float(lbl['X'])*self.displayWidth))
+                self.lblYPos.append(int(float(lbl['Y'])*self.displayHeight))
                 self.lblText.append(lbl['Text'])
                 self.lblFont.append(self.GetFont(lblFontType,lblFontSize))
                 
@@ -177,10 +188,10 @@ class PrintingLoader():
         for btns in self.buttonsJson:
             filButtons = []
             for btn in btns:
-                btnX = int(btn['X'])
-                btnY = int(btn['Y'])
-                btnWidth = int(btn['Width'])
-                btnHeight = int(btn['Height'])
+                btnX = int(float(btn['X'])*self.displayWidth)
+                btnY = int(float(btn['Y'])*self.displayHeight)
+                btnWidth = int(float(btn['Width'])*self.displayHeight)
+                btnHeight = int(float(btn['Height'])*self.displayHeight)
                 btnType = btn['ButtonType']
                 
             
@@ -189,7 +200,7 @@ class PrintingLoader():
                     bgColor = btn['bgColor'].split(",")
                     fColor = btn['FontColor'].split(",")
                     fType = btn['FontType']
-                    fSize = int(btn['FontSize'])
+                    fSize = int(float(btn['FontSize'])*self.displayHeight)
                     btnName = btn['ButtonName']
                 
                     jogBtn = BeePanel_Button.Button(btnX,btnY,btnWidth,btnHeight,btnTitle,
@@ -226,8 +237,8 @@ class PrintingLoader():
                 imgJson = json.loads(json.dumps(img))
                 for img in imgJson:
                     self.imagePath.append(ff.GetAbsPath(img['ImgPath']))
-                    self.imageX.append(int(img['X']))
-                    self.imageY.append(int(img['Y']))
+                    self.imageX.append(int(float(img['X'])*self.displayHeight))
+                    self.imageY.append(int(float(img['Y'])*self.displayHeight))
             else:
                 self.imagePath.append('')
                 self.imageX.append('')
@@ -238,10 +249,10 @@ class PrintingLoader():
         Load Progress Bar Configuration
         """
         pBarJson = json.loads(json.dumps(self.interfaceJson['ProgressBar']))
-        pBarX = int(pBarJson['X'])
-        pBarY = int(pBarJson['Y'])
-        pBarWidth = int(pBarJson['Width'])
-        pBarHeight = int(pBarJson['Height'])
+        pBarX = int(float(pBarJson['X'])*self.displayWidth)
+        pBarY = int(float(pBarJson['Y'])*self.displayHeight)
+        pBarWidth = int(float(pBarJson['Width'])*self.displayWidth)
+        pBarHeight = int(float(pBarJson['Height'])*self.displayHeight)
         pBarThickness = int(pBarJson['Thickness'])
         pBarLineColorRGB = pBarJson['LineColor']
         pBarFillColorRGB = pBarJson['bgColor']
@@ -258,11 +269,11 @@ class PrintingLoader():
         Color Picker Configuration
         """
         colorPickerJson = json.loads(json.dumps(self.interfaceJson['ColorPicker']))
-        self.pickerX = int(colorPickerJson['X'])
-        self.pickerY = int(colorPickerJson['Y'])
-        self.pickerWidth = int(colorPickerJson['Width'])
-        self.pickerHeight = int(colorPickerJson['Height'])
-        self.pickerFontSize = int(colorPickerJson['FontSize'])
+        self.pickerX = int(float(colorPickerJson['X'])*self.displayWidth)
+        self.pickerY = int(float(colorPickerJson['Y'])*self.displayHeight)
+        self.pickerWidth = int(float(colorPickerJson['Width'])*self.displayWidth)
+        self.pickerHeight = int(float(colorPickerJson['Height'])*self.displayHeight)
+        self.pickerFontSize = int(float(colorPickerJson['FontSize'])*self.displayHeight)
         pickerFontColorRGB = colorPickerJson['FontColor']
         fontType = colorPickerJson['FontType']
             

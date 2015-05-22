@@ -144,9 +144,9 @@
             ],
             "FirstImage":
                     {
-                        "ImgPath":"/Images/beeBWVectorSmall.png",
-                        "X":"0.46875",
-                        "Y":"0.2"
+                        "ImgPath":"/Images/heating.png",
+                        "X":"0.34375",
+                        "Y":"0.0"
                     },
             "ProgressBar":
                     {
@@ -165,7 +165,7 @@
                         "Width":"0.46875",
                         "Height":"0.125",
                         "FontColor":"0,0,0",
-                        "FontSize":"0.05",
+                        "FontSize":"0.04",
                         "FontType":"Bold"
                     }
         }

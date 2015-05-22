@@ -354,8 +354,11 @@ class Cmd():
         
         #go to SECOND point
         self.move(0,0,10,0)
-        #self.beeCon.sendCmd("G1 X-31 Y-65\n","3")
+        #set feedrate
+        self.beeCon.sendCmd("G1 F10000\n")
         self.beeCon.sendCmd("G1 X-31 Y-65\n")
+        #set feedrate
+        self.beeCon.sendCmd("G1 F5000\n")
         self.move(0,0,-10,0)
         
         return
@@ -378,9 +381,11 @@ class Cmd():
         
         self.move(0,0,10,0)
         #go to SECOND point
-        #self.beeCon.sendCmd("G1 X35 Y-65\n","3")
+        #set feedrate
+        self.beeCon.sendCmd("G1 F10000\n")
         self.beeCon.sendCmd("G1 X35 Y-65\n")
-        
+        #set feedrate
+        self.beeCon.sendCmd("G1 F5000\n")
         self.move(0,0,-10,0)
         
         return
@@ -988,6 +993,17 @@ class Cmd():
                 printStatus['Executed Lines'] = int(s[1:])
         
         return printStatus
+    
+    """*************************************************************************
+                            SetBlowerSpeed Method 
+
+    *************************************************************************"""
+    def SetBlowerSpeed(self, speed):
+        
+        cmd = 'M106 S' + str(speed) + '\n'
+        self.beeCon.sendCmd(cmd)
+        
+        return
     
     """*************************************************************************
                                 FlashFirmware Method 

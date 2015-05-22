@@ -89,8 +89,8 @@ class PrinterInfoLoader():
             lblFontSize = int(float(lbl['FontSize'])*self.displayHeight)
             lblFColor = lbl['FontColor']
             
-            self.lblXPos.append(int(float(lbl['X']))*self.displayWidth)
-            self.lblYPos.append(int(float(lbl['Y']))*self.displayHeight)
+            self.lblXPos.append(int(float(lbl['X'])*self.displayWidth))
+            self.lblYPos.append(int(float(lbl['Y'])*self.displayHeight))
             self.lblText.append(lbl['Text'])
             
             font = self.GetFont(lblFontType,lblFontSize)

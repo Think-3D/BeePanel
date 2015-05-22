@@ -80,9 +80,9 @@
                 },
                 {
                     "ButtonName":"Next",
-                    "X":"0.85",
+                    "X":"0.89",
                     "Y":"0.27",
-                    "Width":"0.09",
+                    "Width":"0.08",
                     "Height":"0.63",
                     "ButtonType":"Img",
                     "Title":"Next",
@@ -122,14 +122,14 @@
             "RightBoltImg":[
                 {
                     "ImgPath":"/Images/rightBolt.png",
-                    "X":"0.34375",
+                    "X":"0.337",
                     "Y":"0.2"
                 }
             ],
             "LeftBoltImg":[
                 {
                     "ImgPath":"/Images/leftBolt.png",
-                    "X":"0.34375",
+                    "X":"0.337",
                     "Y":"0.2"
                 }
             ]
