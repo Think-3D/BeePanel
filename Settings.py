@@ -39,6 +39,7 @@ class SettingsScreen():
     exitNeedsHoming = False
     exitCallBackResp = None
     
+    ff = None
     fileFinder = None
     folderList = None
     fileList = None
