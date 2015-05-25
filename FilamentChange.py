@@ -169,7 +169,10 @@ class FilamentChangeScreen():
                             print("Selected Filament Code: ", self.selectedColorCode)
                     elif btnName == "OK":
                         if self.interfaceState == 1:
-                            self.exitCallBackResp = "Restart"
+                            if(self.selectedColorName == "Unknown"):
+                                self.interfaceState = 3
+                            else:
+                                self.exitCallBackResp = "Restart"
                     elif btnName == "Pick Color":
                         self.interfaceState = self.interfaceState + 1
                     elif btnName == "Load":
@@ -180,6 +183,7 @@ class FilamentChangeScreen():
                         print("Unload Filament")
                         self.ShowUnloadScreen()
                         self.beeCmd.Unload()
+                        self.selectedColorName = "Unknown"
                     elif btnName == "Up":
                         self.listPosition = self.listPosition - 1
                     elif btnName == "Down":

@@ -89,16 +89,16 @@ class FileFinder():
     #
     #
     #************************************************************************"""
-    def LoadUSBFolders(self):
+    def LoadUSBFolders(self,ext = '.gcode'):
         
         fileList = None
         
         pSystem = platform.system()
         
         if(pSystem == 'Darwin'):
-            fileList = self.FindOSXUSBDevices()
+            fileList = self.FindOSXUSBDevices(ext)
         elif(pSystem == 'Linux'):
-            fileList = self.FindLinuxUSBDevices()
+            fileList = self.FindLinuxUSBDevices(ext)
         
         
         
@@ -109,7 +109,7 @@ class FileFinder():
     #
     #
     #************************************************************************"""
-    def FindOSXUSBDevices(self):
+    def FindOSXUSBDevices(self,ext):
         
         fileList = {}
         
@@ -123,7 +123,7 @@ class FileFinder():
             folderPath = '/Volumes/' + f
             fileList['FolderList']['FileNames'].append(folderName)
             fileList['FolderList']['FilePaths'].append(folderPath)
-            folderFiles = [file for file in os.listdir(folderPath) if file.endswith('.gcode')]
+            folderFiles = [file for file in os.listdir(folderPath) if file.endswith(ext)]
             fileList[f] = {}
             fileList[f]['FileNames'] = []
             fileList[f]['FilePaths'] = []
@@ -141,7 +141,7 @@ class FileFinder():
     #
     #
     #************************************************************************"""
-    def FindLinuxUSBDevices(self):
+    def FindLinuxUSBDevices(self,ext):
         
         fileList = {}
         fileList['FolderList'] = {}
@@ -177,7 +177,7 @@ class FileFinder():
         for i in range(len(fileList['FolderList']['FileNames'])):
             folderPath = fileList['FolderList']['FilePaths'][i]
             f = fileList['FolderList']['FileNames'][i]
-            folderFiles = [file for file in os.listdir(folderPath) if file.endswith('.gcode')]
+            folderFiles = [file for file in os.listdir(folderPath) if file.endswith(ext)]
             fileList[f] = {}
             fileList[f]['FileNames'] = []
             fileList[f]['FilePaths'] = []

@@ -7,7 +7,7 @@
             "SplitLinePos":"0.3125",
             "SplitLineColor":"0,0,0",
             "SplitLineThickness":"3",
-            "DefaultScreen":"FileBrowser"
+            "DefaultScreen":"Settings"
         }
     ]
 }

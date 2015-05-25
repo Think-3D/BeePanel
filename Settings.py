@@ -16,7 +16,7 @@ __author__ = "Marcos Gomes"
 __license__ = "MIT"
 
 import os
-
+import FileFinder
 import pygame
 
 class SettingsScreen():
@@ -39,6 +39,10 @@ class SettingsScreen():
     exitNeedsHoming = False
     exitCallBackResp = None
     
+    fileFinder = None
+    folderList = None
+    fileList = None
+    wifiFile = None
     """*************************************************************************
                                 Init Method 
     
@@ -63,6 +67,11 @@ class SettingsScreen():
         
         self.buttons = self.interfaceLoader.GetButtonsList()
         
+        self.search4WifiConf();
+        
+        
+        
+        
         return
         
 
@@ -82,7 +91,12 @@ class SettingsScreen():
                     if btnName == "Update Cura":
                         print("Updating Cura...")
                     elif btnName == "Update WiFi":
-                        print("Updating WiFi...")
+                        self.search4WifiConf();
+                        if(self.wifiFile is not None):
+                            osCMD = 'sudo cp ' + self.wifiFile + ' /etc/wpa_supplicant/wpa_supplicant.conf'
+                            print("Updating WiFi...")
+                            print(osCMD)
+                            os.system(osCMD)
                     elif btnName == "Screen Calibration":
                         os.system("sudo TSLIB_FBDEVICE=/dev/fb1 TSLIB_TSDEVICE=/dev/input/touchscreen ts_calibrate")
                     elif btnName == "Quit BEETFT":
@@ -157,4 +171,29 @@ class SettingsScreen():
     def Pull(self):
         
             
+        return
+    
+    """*************************************************************************
+                                search4WifiConf Method 
+    
+    Pull variables
+    *************************************************************************""" 
+    def search4WifiConf(self):
+        
+        self.wifiFile = None
+        
+        #FILE LIST
+        self.fileFinder = FileFinder.FileFinder()
+        self.fileList = self.fileFinder.LoadUSBFolders('.conf')
+        self.folderList = self.fileList['FolderList']
+        
+        for folder in self.folderList['FileNames']:
+            files = self.fileList[folder]
+            for i in range(len(files['FileNames'])):
+                if(files['FileNames'][i] == 'wifi.conf'):
+                    self.wifiFile = files['FilePaths'][i]
+                    
+        if(self.wifiFile is not None):
+            print('Founf wifi.conf in: ',self.wifiFile);
+        
         return

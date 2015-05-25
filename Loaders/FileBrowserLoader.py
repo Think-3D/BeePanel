@@ -202,7 +202,7 @@ class FileBrowserLoader():
         filePickerJson = json.loads(json.dumps(self.interfaceJson['FilePicker']))
         self.pickerX = int(float(filePickerJson['X'])*self.displayWidth)
         self.pickerY = int(float(filePickerJson['Y'])*self.displayHeight)
-        self.pickerWidth = int(float(filePickerJson['Width'])*self.displayHeight)
+        self.pickerWidth = int(float(filePickerJson['Width'])*self.displayWidth)
         self.pickerHeight = int(float(filePickerJson['Height'])*self.displayHeight)
         self.pickerFontSize = int(float(filePickerJson['FontSize'])*self.displayHeight)
         self.pickerStrlen = int(filePickerJson['StringLen'])
