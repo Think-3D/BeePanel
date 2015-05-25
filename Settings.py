@@ -44,6 +44,7 @@ class SettingsScreen():
     folderList = None
     fileList = None
     wifiFile = None
+    
     """*************************************************************************
                                 Init Method 
     
