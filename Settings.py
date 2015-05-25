@@ -96,7 +96,9 @@ class SettingsScreen():
                             osCMD = 'sudo cp ' + self.wifiFile + ' /etc/wpa_supplicant/wpa_supplicant.conf'
                             print("Updating WiFi...")
                             print(osCMD)
+                            self.ShowUpdateScreen()
                             os.system(osCMD)
+                            os.system('sudo reboot')
                     elif btnName == "Screen Calibration":
                         os.system("sudo TSLIB_FBDEVICE=/dev/fb1 TSLIB_TSDEVICE=/dev/input/touchscreen ts_calibrate")
                     elif btnName == "Quit BEETFT":
@@ -195,5 +197,34 @@ class SettingsScreen():
                     
         if(self.wifiFile is not None):
             print('Founf wifi.conf in: ',self.wifiFile);
+        else:
+            print('wifi.conf not found')
+        
+        return
+    
+    """*************************************************************************
+                                ShowUpdateScreen Method 
+    
+    Shows Loading Screen 
+    *************************************************************************"""  
+    def ShowUpdateScreen(self):
+        
+        #Clear String
+        self.screen.fill(pygame.Color(255,255,255))
+        
+        if(self.ff is None):
+            self.ff = FileFinder.FileFinder()
+        
+        moovingImgPath = self.ff.GetAbsPath('/Images/updating.png')
+        
+        moovingImg = pygame.image.load(moovingImgPath)
+
+        # Draw Image
+        self.screen.blit(moovingImg,(0,0))
+        
+        # update screen
+        pygame.display.update()
+        
+        pygame.event.get()
         
         return
