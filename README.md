@@ -87,6 +87,7 @@ When asked if you want show console on the screen type "n" and press enter. Same
 
         sudo apt-get install libsdl-dev libsdl-image1.2-dev libsdl-mixer1.2-dev libsdl-ttf2.0-dev 
         sudo apt-get install libsmpeg-dev libportmidi-dev libavformat-dev libswscale-dev
+        sudo apt-get install python3-dev
 
         python3 setup.py build
         sudo python3 setup.py install
